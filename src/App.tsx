@@ -137,11 +137,11 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#08080A] text-neutral-100 flex flex-col font-sans selection:bg-[#C41E3A] selection:text-white relative overflow-x-hidden">
+    <div className="min-h-screen bg-[#08080A] text-neutral-100 flex flex-col font-sans selection:bg-[#C41E3A] selection:text-white relative overflow-x-hidden ambient-mesh-glow">
       
       {/* Luz ambiental sutil global */}
       <div 
-        className="pointer-events-none fixed top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-red-600/[0.035] blur-[160px] rounded-full -z-20"
+        className="pointer-events-none fixed top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-red-600/[0.04] blur-[160px] rounded-full -z-20"
         aria-hidden="true" 
       />
 
@@ -199,6 +199,8 @@ export default function App() {
               onStartQuote={() => handleNavigate('quote')}
               onExploreCatalog={() => handleNavigate('catalog')}
             />
+
+            <div className="gradient-divider max-w-6xl mx-auto my-8" />
             
             <CategoryGrid
               onSelectCategory={(cat) => {
@@ -207,6 +209,8 @@ export default function App() {
               }}
               onOpenQuoteWithCategory={handleOpenQuoteWithCategory}
             />
+
+            <div className="gradient-divider max-w-6xl mx-auto my-8" />
 
             {/* Sección de Casos / Trabajos Recientes con Identidad Inédita (Showroom Digital) */}
             <section className="py-24 relative">
@@ -309,6 +313,8 @@ export default function App() {
                 </div>
               </div>
             </section>
+
+            <div className="gradient-divider max-w-6xl mx-auto my-8" />
 
             {/* Banner de Sede Física */}
             <WorkshopShowcase

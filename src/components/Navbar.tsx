@@ -49,13 +49,13 @@ export const Navbar: React.FC<NavbarProps> = ({
         </button>
 
         {/* Zone 2: Navigation Links (Liquid Glass Segmented) */}
-        <nav className="hidden md:flex items-center gap-1.5 p-1 rounded-full bg-white/[0.03] border border-white/[0.06] text-xs font-semibold text-neutral-300">
+        <nav className="hidden md:flex items-center gap-1.5 p-1.5 rounded-full bg-white/[0.04] border border-white/[0.1] text-xs font-semibold text-neutral-300 backdrop-blur-md shadow-inner">
           <button
             onClick={() => handleNavClick('home')}
             className={`px-4 py-2 rounded-full transition-all duration-200 cursor-pointer whitespace-nowrap ${
               currentView === 'home'
-                ? 'bg-white/[0.1] text-white shadow-sm border border-white/10'
-                : 'text-neutral-400 hover:text-white hover:bg-white/[0.04]'
+                ? 'glass-pill-active text-white'
+                : 'text-neutral-400 hover:text-white hover:bg-white/[0.06]'
             }`}
           >
             Inicio
@@ -64,8 +64,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             onClick={() => handleNavClick('catalog')}
             className={`px-4 py-2 rounded-full transition-all duration-200 cursor-pointer whitespace-nowrap ${
               currentView === 'catalog'
-                ? 'bg-white/[0.1] text-white shadow-sm border border-white/10'
-                : 'text-neutral-400 hover:text-white hover:bg-white/[0.04]'
+                ? 'glass-pill-active text-white'
+                : 'text-neutral-400 hover:text-white hover:bg-white/[0.06]'
             }`}
           >
             Catálogo & Servicios
@@ -74,8 +74,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             onClick={() => handleNavClick('workshop')}
             className={`px-4 py-2 rounded-full transition-all duration-200 cursor-pointer whitespace-nowrap ${
               currentView === 'workshop'
-                ? 'bg-white/[0.1] text-white shadow-sm border border-white/10'
-                : 'text-neutral-400 hover:text-white hover:bg-white/[0.04]'
+                ? 'glass-pill-active text-white'
+                : 'text-neutral-400 hover:text-white hover:bg-white/[0.06]'
             }`}
           >
             Esquina Inédita
@@ -84,18 +84,18 @@ export const Navbar: React.FC<NavbarProps> = ({
             onClick={() => handleNavClick('quote')}
             className={`px-4 py-2 rounded-full transition-all duration-200 cursor-pointer whitespace-nowrap ${
               currentView === 'quote'
-                ? 'bg-red-950/60 text-red-300 shadow-sm border border-red-500/30'
-                : 'text-neutral-400 hover:text-white hover:bg-white/[0.04]'
+                ? 'glass-pill-active text-white'
+                : 'text-neutral-400 hover:text-white hover:bg-white/[0.06]'
             }`}
           >
             Cotizador Guiado
           </button>
           <button
             onClick={onToggleAdmin}
-            className={`px-3 py-2 rounded-full transition-all duration-200 cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
+            className={`px-3.5 py-2 rounded-full transition-all duration-200 cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
               isAdmin
-                ? 'bg-red-900/40 text-red-300 border border-red-500/40'
-                : 'text-neutral-500 hover:text-neutral-300 hover:bg-white/[0.04]'
+                ? 'glass-pill-active text-white font-bold'
+                : 'text-neutral-500 hover:text-neutral-300 hover:bg-white/[0.06]'
             }`}
             title="Alternar panel de gestión y taller"
           >

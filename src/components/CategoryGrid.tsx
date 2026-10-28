@@ -200,7 +200,7 @@ export const CategoryGrid: React.FC<CategoryGridProps> = ({
 
       </div>
 
-      <div className="gradient-divider-subtle max-w-6xl mx-auto mt-24" />
+      <div className="gradient-divider max-w-6xl mx-auto mt-24" />
     </section>
   );
 };

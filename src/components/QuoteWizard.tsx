@@ -241,10 +241,10 @@ ${clientEmail ? `📧 *Email:* ${clientEmail}\n` : ''}
                 <button
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.id)}
-                  className={`p-4 text-left rounded-2xl border text-xs transition-all cursor-pointer ${
+                  className={`p-4 text-left rounded-2xl text-xs transition-all cursor-pointer ${
                     selectedCategory === cat.id
-                      ? 'border-red-500/60 bg-red-950/40 text-white shadow-[0_0_20px_rgba(196,30,58,0.25)] ring-1 ring-red-500/40'
-                      : 'border-white/[0.07] bg-white/[0.02] text-neutral-400 hover:text-white hover:bg-white/[0.06]'
+                      ? 'glass-pill-active text-white'
+                      : 'glass-card text-neutral-400 hover:text-white'
                   }`}
                 >
                   <div className="font-bold text-sm mb-1 text-white">{cat.title}</div>
@@ -265,10 +265,10 @@ ${clientEmail ? `📧 *Email:* ${clientEmail}\n` : ''}
                     <button
                       key={p.id}
                       onClick={() => setSelectedProductId(p.id)}
-                      className={`p-5 rounded-2xl border text-left transition-all cursor-pointer ${
+                      className={`p-5 rounded-2xl text-left transition-all cursor-pointer ${
                         selectedProductId === p.id
-                          ? 'border-red-500/60 bg-red-950/30 text-white ring-1 ring-red-500/40 shadow-lg'
-                          : 'border-white/[0.07] bg-white/[0.02] text-neutral-400 hover:text-white hover:bg-white/[0.05]'
+                          ? 'glass-pill-active text-white ring-1 ring-red-500/40'
+                          : 'glass-card text-neutral-400 hover:text-white'
                       }`}
                     >
                       <div className="flex items-center justify-between mb-1.5">
@@ -325,10 +325,10 @@ ${clientEmail ? `📧 *Email:* ${clientEmail}\n` : ''}
                   <button
                     key={mat}
                     onClick={() => setSelectedMaterial(mat)}
-                    className={`p-4 text-left rounded-2xl border text-xs font-semibold transition-all cursor-pointer ${
+                    className={`p-4 text-left rounded-2xl text-xs font-semibold transition-all cursor-pointer ${
                       selectedMaterial === mat
-                        ? 'border-red-500/60 bg-red-950/30 text-white shadow-sm ring-1 ring-red-500/30'
-                        : 'border-white/[0.07] bg-white/[0.02] text-neutral-400 hover:text-white hover:bg-white/[0.05]'
+                        ? 'glass-pill-active text-white'
+                        : 'glass-card text-neutral-400 hover:text-white'
                     }`}
                   >
                     <div className="flex items-center justify-between">
@@ -350,10 +350,10 @@ ${clientEmail ? `📧 *Email:* ${clientEmail}\n` : ''}
                   <button
                     key={fin}
                     onClick={() => setSelectedFinish(fin)}
-                    className={`p-4 text-left rounded-2xl border text-xs font-semibold transition-all cursor-pointer ${
+                    className={`p-4 text-left rounded-2xl text-xs font-semibold transition-all cursor-pointer ${
                       selectedFinish === fin
-                        ? 'border-red-500/60 bg-red-950/30 text-white shadow-sm ring-1 ring-red-500/30'
-                        : 'border-white/[0.07] bg-white/[0.02] text-neutral-400 hover:text-white hover:bg-white/[0.05]'
+                        ? 'glass-pill-active text-white'
+                        : 'glass-card text-neutral-400 hover:text-white'
                     }`}
                   >
                     <div className="flex items-center justify-between">
@@ -518,7 +518,7 @@ ${clientEmail ? `📧 *Email:* ${clientEmail}\n` : ''}
             </div>
 
             {/* Desglose de Cotización en formato Proforma Glass */}
-            <div className="p-6 sm:p-7 rounded-3xl bg-white/[0.03] border border-white/10 space-y-5 shadow-inner">
+            <div className="glass-card p-6 sm:p-7 rounded-3xl space-y-5">
               <div className="flex items-center justify-between pb-4 border-b border-white/[0.08]">
                 <div>
                   <div className="text-[10px] text-neutral-400 uppercase tracking-widest font-mono">Ítem Configurado</div>

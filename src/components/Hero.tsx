@@ -41,15 +41,15 @@ export const Hero: React.FC<HeroProps> = ({ onStartQuote, onExploreCatalog }) =>
 
             {/* Titular Principal Imponente (Editorial Luxury 2026) */}
             <div className="space-y-4">
-              <h1 className="text-4xl sm:text-6xl lg:text-[4.25rem] font-black tracking-[-0.035em] text-white leading-[1.05] text-balance">
+              <h1 className="text-5xl sm:text-6xl lg:text-[4.75rem] font-black tracking-[-0.04em] text-white leading-[1.02] text-balance">
                 Imprimimos, vestimos, diseñamos y{' '}
                 <span className="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-500 to-[#C41E3A]">
                   construimos ideas.
-                  <span className="absolute -bottom-1 left-0 right-0 h-[3px] bg-gradient-to-r from-red-600 via-rose-500 to-transparent rounded-full opacity-80" />
+                  <span className="absolute -bottom-1.5 left-0 right-0 h-[3px] bg-gradient-to-r from-red-600 via-rose-500 to-transparent rounded-full opacity-90 shadow-[0_0_12px_rgba(229,57,53,0.8)]" />
                 </span>
               </h1>
 
-              <p className="text-base sm:text-lg text-neutral-300/90 max-w-2xl leading-relaxed font-normal pt-2">
+              <p className="text-base sm:text-xl text-neutral-300/75 max-w-2xl leading-relaxed font-normal pt-2">
                 De la pantalla al objeto físico. Transformamos la presencia de tu marca con corpóreos 3D, rotulación comercial, sublimación de alta gama, diseño POP y grabado láser en nuestro taller en Lechería.
               </p>
             </div>
@@ -73,10 +73,10 @@ export const Hero: React.FC<HeroProps> = ({ onStartQuote, onExploreCatalog }) =>
               </button>
             </div>
 
-            {/* Métricas Cuantitativas en Glass Cards */}
+            {/* Métricas Cuantitativas en Frosted Glass Cards */}
             <div className="pt-6">
               <div className="grid grid-cols-3 gap-3 sm:gap-4">
-                <div className="glass-card p-4 rounded-2xl">
+                <div className="glass-card p-4 sm:p-5 rounded-2xl relative group">
                   <div className="text-2xl sm:text-3xl font-black text-white font-mono-numbers tracking-tight">
                     39.2K
                   </div>
@@ -85,7 +85,7 @@ export const Hero: React.FC<HeroProps> = ({ onStartQuote, onExploreCatalog }) =>
                   </div>
                 </div>
 
-                <div className="glass-card p-4 rounded-2xl">
+                <div className="glass-card p-4 sm:p-5 rounded-2xl relative group">
                   <div className="text-2xl sm:text-3xl font-black text-white font-mono-numbers tracking-tight">
                     08
                   </div>
@@ -94,7 +94,7 @@ export const Hero: React.FC<HeroProps> = ({ onStartQuote, onExploreCatalog }) =>
                   </div>
                 </div>
 
-                <div className="glass-card p-4 rounded-2xl">
+                <div className="glass-card p-4 sm:p-5 rounded-2xl relative group">
                   <div className="text-2xl sm:text-3xl font-black text-white font-mono-numbers tracking-tight">
                     100%
                   </div>
