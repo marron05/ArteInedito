@@ -386,7 +386,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                     availableMaterials: ['Material Estándar'],
                     availableFinishes: ['Acabado Estándar'],
                     active: true,
-                    imageUrl: '/src/assets/images/corporeo_3d_signage_1793205547566.jpg'
+                    imageUrl: '/assets/images/corporeo_3d_signage_1793205547566.jpg'
                   });
                   setIsNewProduct(true);
                 }}

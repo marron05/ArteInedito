@@ -24,7 +24,7 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
     availableMaterials: ["PVC Espumado 10mm", "PVC Espumado 20mm", "Acrílico Cristal 3mm", "Aluminio Compuesto (ACM)"],
     availableFinishes: ["Luz LED cálida trasera (Halo)", "Luz LED blanca frontal", "Pintura automotriz satinada", "Acabado mate sin luz"],
     badge: "Más Solicitado",
-    imageUrl: "/src/assets/images/corporeo_3d_signage_1793205547566.jpg",
+    imageUrl: "/assets/images/corporeo_3d_signage_1793205547566.jpg",
     active: true
   },
   {
@@ -40,7 +40,7 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
     availableMaterials: ["Vinil Polimérico con Laminado UV", "Microperforado homologado para vidrios", "Vinil de Corte Alta Resistencia"],
     availableFinishes: ["Brillante protector", "Mate antirreflejo", "Combinado corte + impresión"],
     badge: "Flotas & Marcas",
-    imageUrl: "/src/assets/images/rotulacion_vehicular_wrap_1793205547214.jpg",
+    imageUrl: "/assets/images/rotulacion_vehicular_wrap_1793205547214.jpg",
     active: true
   },
   {
@@ -55,7 +55,7 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
     turnaroundDays: "2 a 4 días hábiles",
     availableMaterials: ["Vinil Esmerilado (Frosted)", "Microperforado One-Way", "Vinil Adhesivo Full Color"],
     availableFinishes: ["Corte troquelado de logo", "Impresión continua con protección"],
-    imageUrl: "/src/assets/images/hero_workshop_craft_1793205546075.jpg",
+    imageUrl: "/assets/images/hero_workshop_craft_1793205546075.jpg",
     active: true
   },
   {
@@ -71,7 +71,7 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
     availableMaterials: ["Poliéster Dry-Fit deportivo", "Tacto Algodón (Poly-Cotton)", "Microfibra elástica"],
     availableFinishes: ["Cuello redondo clásico", "Cuello en V", "Costura reforzada con vivos de contraste"],
     badge: "Mundial & Eventos",
-    imageUrl: "/src/assets/images/sublimacion_merch_showcase_1793205546710.jpg",
+    imageUrl: "/assets/images/sublimacion_merch_showcase_1793205546710.jpg",
     active: true
   },
   {
@@ -87,7 +87,7 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
     availableMaterials: ["Tela Piqué 65/35 Algodón-Poliéster", "Piqué 100% Algodón Peinado"],
     availableFinishes: ["Bordado en pecho (10 cm)", "Bordado doble (pecho + manga)", "Bordado gigante espalda"],
     badge: "Empresarial",
-    imageUrl: "/src/assets/images/sublimacion_merch_showcase_1793205546710.jpg",
+    imageUrl: "/assets/images/sublimacion_merch_showcase_1793205546710.jpg",
     active: true
   },
   {
@@ -103,7 +103,7 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
     availableMaterials: ["Fleece Polar Ultra Suave", "Sherpa Térmica con Forro"],
     availableFinishes: ["Bordado de lujo con iniciales", "Estampado full diseño"],
     badge: "Exclusivo Inédito",
-    imageUrl: "/src/assets/images/hero_workshop_craft_1793205546075.jpg",
+    imageUrl: "/assets/images/hero_workshop_craft_1793205546075.jpg",
     active: true
   },
   {
@@ -119,7 +119,7 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
     availableMaterials: ["Madera Teca / Samán", "Acero Inoxidable y Metal Anodizado", "Acrílico Cristal 5mm", "Cuero Genuino / Semipiel"],
     availableFinishes: ["Grabado oscuro quemado", "Grabado plateado en metal", "Corte perimetral a medida"],
     badge: "Rápido & Detallado",
-    imageUrl: "/src/assets/images/sublimacion_merch_showcase_1793205546710.jpg",
+    imageUrl: "/assets/images/sublimacion_merch_showcase_1793205546710.jpg",
     active: true
   },
   {
@@ -135,7 +135,7 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
     availableMaterials: ["Powerbank Carcasa Metálica 10,000 mAh", "Termo Acero Inoxidable Doble Pared 750ml", "Taza Mágica Térmica"],
     availableFinishes: ["Grabado láser monocromo", "Impresión UV a full color", "Caja de regalo corporativa"],
     badge: "Top Merchandising",
-    imageUrl: "/src/assets/images/sublimacion_merch_showcase_1793205546710.jpg",
+    imageUrl: "/assets/images/sublimacion_merch_showcase_1793205546710.jpg",
     active: true
   },
   {
@@ -151,7 +151,7 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
     availableMaterials: ["Acrílico Plegado en Caliente", "MDF con Enchape Gráfico", "Sintra (PVC expandido)"],
     availableFinishes: ["Rotulación con vinil laminado", "Bolsillos transparentes para folletos", "Top iluminado LED"],
     badge: "Punto de Venta",
-    imageUrl: "/src/assets/images/corporeo_3d_signage_1793205547566.jpg",
+    imageUrl: "/assets/images/corporeo_3d_signage_1793205547566.jpg",
     active: true
   },
   {
@@ -167,7 +167,7 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
     availableMaterials: ["Lona Frontlit 13oz de alta densidad", "Lona Mesh microperforada para viento", "Banner Roll-Up con soporte de aluminio"],
     availableFinishes: ["Refuerzo perimetral térmico y ojetes cada 50cm", "Bolsillo para tubos superior/inferior"],
     badge: "Entrega Express",
-    imageUrl: "/src/assets/images/hero_workshop_craft_1793205546075.jpg",
+    imageUrl: "/assets/images/hero_workshop_craft_1793205546075.jpg",
     active: true
   }
 ];

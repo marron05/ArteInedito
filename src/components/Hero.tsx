@@ -77,7 +77,7 @@ export const Hero: React.FC<HeroProps> = ({ onStartQuote, onExploreCatalog }) =>
           <div className="lg:col-span-5 flex items-center">
             <div className="relative w-full h-[380px] sm:h-[440px] lg:h-full rounded-2xl overflow-hidden border border-neutral-800 group shadow-2xl bg-neutral-900">
               <img
-                src="/src/assets/images/hero_workshop_craft_1793205546075.jpg"
+                src="/assets/images/hero_workshop_craft_1793205546075.jpg"
                 alt="Taller y Showroom de Arte Inédito en Lechería"
                 referrerPolicy="no-referrer"
                 className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"

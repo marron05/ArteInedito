@@ -72,7 +72,7 @@ app.post('/api/products', (req, res) => {
       JSON.stringify(p.availableMaterials || []),
       JSON.stringify(p.availableFinishes || []),
       p.badge ?? null,
-      p.imageUrl || '/src/assets/images/hero_workshop_craft_1793205546075.jpg',
+      p.imageUrl || '/assets/images/hero_workshop_craft_1793205546075.jpg',
       p.active !== false ? 1 : 0
     );
 

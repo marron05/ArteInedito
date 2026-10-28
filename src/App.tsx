@@ -220,7 +220,7 @@ export default function App() {
                   <div className="bg-neutral-900/60 border border-neutral-800 rounded-xl overflow-hidden group">
                     <div className="h-56 overflow-hidden">
                       <img
-                        src="/src/assets/images/corporeo_3d_signage_1793205547566.jpg"
+                        src="/assets/images/corporeo_3d_signage_1793205547566.jpg"
                         alt="Corpóreo 3D para ATECO Global"
                         referrerPolicy="no-referrer"
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
@@ -239,7 +239,7 @@ export default function App() {
                   <div className="bg-neutral-900/60 border border-neutral-800 rounded-xl overflow-hidden group">
                     <div className="h-56 overflow-hidden">
                       <img
-                        src="/src/assets/images/rotulacion_vehicular_wrap_1793205547214.jpg"
+                        src="/assets/images/rotulacion_vehicular_wrap_1793205547214.jpg"
                         alt="Rotulación vehicular comercial"
                         referrerPolicy="no-referrer"
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
@@ -258,7 +258,7 @@ export default function App() {
                   <div className="bg-neutral-900/60 border border-neutral-800 rounded-xl overflow-hidden group">
                     <div className="h-56 overflow-hidden">
                       <img
-                        src="/src/assets/images/sublimacion_merch_showcase_1793205546710.jpg"
+                        src="/assets/images/sublimacion_merch_showcase_1793205546710.jpg"
                         alt="Powerbanks y Termos con Grabado Láser"
                         referrerPolicy="no-referrer"
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
