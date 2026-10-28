@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { ProductCategory, ProductItem, CompanySettings } from '../types';
 import { CATEGORIES } from './CategoryGrid';
+import { glassCardStyle, glassPillStyle, glassPillActiveStyle, glassPanelStyle } from '../styles/glass';
 
 interface QuoteWizardProps {
   products: ProductItem[];
@@ -185,7 +186,10 @@ ${clientEmail ? `📧 *Email:* ${clientEmail}\n` : ''}
 
       {/* Encabezado del cotizador */}
       <div className="text-center mb-12 space-y-3">
-        <div className="glass-pill inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold text-neutral-300">
+        <div 
+          style={glassPillStyle}
+          className="glass-pill inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold text-neutral-300"
+        >
           <span className="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_8px_rgba(229,57,53,0.8)]" />
           <span>De la Idea al Objeto</span>
         </div>
@@ -198,7 +202,10 @@ ${clientEmail ? `📧 *Email:* ${clientEmail}\n` : ''}
       </div>
 
       {/* Stepper de 4 pasos estilo Liquid Glass */}
-      <div className="mb-10 p-1.5 rounded-2xl glass-pill max-w-xl mx-auto">
+      <div 
+        style={glassPillStyle}
+        className="mb-10 p-1.5 rounded-2xl glass-pill max-w-xl mx-auto"
+      >
         <div className="grid grid-cols-4 gap-1.5 text-center text-xs font-bold">
           {[
             { stepNum: 1, title: '1. Servicio' },
@@ -223,7 +230,10 @@ ${clientEmail ? `📧 *Email:* ${clientEmail}\n` : ''}
       </div>
 
       {/* Tarjeta contenedora de pasos (Frosted Glass Panel) */}
-      <div className="glass-panel rounded-3xl p-6 sm:p-10 relative">
+      <div 
+        style={glassPanelStyle}
+        className="glass-panel rounded-3xl p-6 sm:p-10 relative"
+      >
         
         {/* ===================== PASO 1: SELECCIÓN DE PRODUCTO/SERVICIO ===================== */}
         {step === 1 && (
@@ -241,6 +251,7 @@ ${clientEmail ? `📧 *Email:* ${clientEmail}\n` : ''}
                 <button
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.id)}
+                  style={selectedCategory === cat.id ? glassPillActiveStyle : glassCardStyle}
                   className={`p-4 text-left rounded-2xl text-xs transition-all cursor-pointer ${
                     selectedCategory === cat.id
                       ? 'glass-pill-active text-white'
@@ -261,33 +272,40 @@ ${clientEmail ? `📧 *Email:* ${clientEmail}\n` : ''}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 {products
                   .filter(p => p.category === selectedCategory && p.active)
-                  .map((p) => (
-                    <button
-                      key={p.id}
-                      onClick={() => setSelectedProductId(p.id)}
-                      className={`p-5 rounded-2xl text-left transition-all cursor-pointer ${
-                        selectedProductId === p.id
-                          ? 'glass-pill-active text-white ring-1 ring-red-500/40'
-                          : 'glass-card text-neutral-400 hover:text-white'
-                      }`}
-                    >
-                      <div className="flex items-center justify-between mb-1.5">
-                        <span className="font-bold text-sm text-white">{p.name}</span>
-                        {p.badge && (
-                          <span className="glass-pill px-2.5 py-0.5 rounded-full text-[10px] text-red-400 font-mono-numbers">
-                            {p.badge}
-                          </span>
-                        )}
-                      </div>
-                      <p className="text-xs text-neutral-400 line-clamp-2 mt-1 leading-relaxed">
-                        {p.tagline}
-                      </p>
-                      <div className="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs text-neutral-400">
-                        <span className="text-neutral-300 font-semibold">Desde ${p.basePriceUsd} USD</span>
-                        <span className="font-mono text-[11px]">{p.turnaroundDays}</span>
-                      </div>
-                    </button>
-                  ))}
+                  .map((p) => {
+                    const isSelected = selectedProductId === p.id;
+                    return (
+                      <button
+                        key={p.id}
+                        onClick={() => setSelectedProductId(p.id)}
+                        style={isSelected ? glassPillActiveStyle : glassCardStyle}
+                        className={`p-5 rounded-2xl text-left transition-all cursor-pointer ${
+                          isSelected
+                            ? 'glass-pill-active text-white ring-1 ring-red-500/40'
+                            : 'glass-card text-neutral-400 hover:text-white'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between mb-1.5">
+                          <span className="font-bold text-sm text-white">{p.name}</span>
+                          {p.badge && (
+                            <span 
+                              style={glassPillStyle}
+                              className="glass-pill px-2.5 py-0.5 rounded-full text-[10px] text-red-400 font-mono-numbers"
+                            >
+                              {p.badge}
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-xs text-neutral-400 line-clamp-2 mt-1 leading-relaxed">
+                          {p.tagline}
+                        </p>
+                        <div className="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs text-neutral-400">
+                          <span className="text-neutral-300 font-semibold">Desde ${p.basePriceUsd} USD</span>
+                          <span className="font-mono text-[11px]">{p.turnaroundDays}</span>
+                        </div>
+                      </button>
+                    );
+                  })}
               </div>
             </div>
 
@@ -325,6 +343,7 @@ ${clientEmail ? `📧 *Email:* ${clientEmail}\n` : ''}
                   <button
                     key={mat}
                     onClick={() => setSelectedMaterial(mat)}
+                    style={selectedMaterial === mat ? glassPillActiveStyle : glassCardStyle}
                     className={`p-4 text-left rounded-2xl text-xs font-semibold transition-all cursor-pointer ${
                       selectedMaterial === mat
                         ? 'glass-pill-active text-white'
@@ -350,6 +369,7 @@ ${clientEmail ? `📧 *Email:* ${clientEmail}\n` : ''}
                   <button
                     key={fin}
                     onClick={() => setSelectedFinish(fin)}
+                    style={selectedFinish === fin ? glassPillActiveStyle : glassCardStyle}
                     className={`p-4 text-left rounded-2xl text-xs font-semibold transition-all cursor-pointer ${
                       selectedFinish === fin
                         ? 'glass-pill-active text-white'
@@ -435,7 +455,10 @@ ${clientEmail ? `📧 *Email:* ${clientEmail}\n` : ''}
             </div>
 
             {/* Dropzone de Carga de Arte en Glass */}
-            <div className="border-2 border-dashed border-white/15 hover:border-red-500/40 rounded-3xl p-8 sm:p-10 text-center bg-white/[0.02] hover:bg-red-950/[0.08] transition-all relative">
+            <div 
+              style={glassCardStyle}
+              className="glass-card border-2 border-dashed border-white/15 hover:border-red-500/40 rounded-3xl p-8 sm:p-10 text-center transition-all relative"
+            >
               <input
                 type="file"
                 accept=".png,.jpg,.jpeg,.ai,.pdf,.svg,.eps,.psd"
@@ -458,7 +481,10 @@ ${clientEmail ? `📧 *Email:* ${clientEmail}\n` : ''}
             </div>
 
             {/* Check de vector */}
-            <div className="glass-pill p-4 rounded-2xl flex items-center gap-3 text-xs">
+            <div 
+              style={glassPillStyle}
+              className="glass-pill p-4 rounded-2xl flex items-center gap-3 text-xs"
+            >
               <input
                 type="checkbox"
                 id="vectorCheck"
@@ -518,7 +544,10 @@ ${clientEmail ? `📧 *Email:* ${clientEmail}\n` : ''}
             </div>
 
             {/* Desglose de Cotización en formato Proforma Glass */}
-            <div className="glass-card p-6 sm:p-7 rounded-3xl space-y-5">
+            <div 
+              style={glassCardStyle}
+              className="glass-card p-6 sm:p-7 rounded-3xl space-y-5"
+            >
               <div className="flex items-center justify-between pb-4 border-b border-white/[0.08]">
                 <div>
                   <div className="text-[10px] text-neutral-400 uppercase tracking-widest font-mono">Ítem Configurado</div>

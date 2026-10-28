@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowRight, MapPin, Flame, Sparkles, Compass } from 'lucide-react';
+import { glassCardStyle, glassPillStyle, glassHeaderStyle } from '../styles/glass';
 
 interface HeroProps {
   onStartQuote: () => void;
@@ -27,14 +28,23 @@ export const Hero: React.FC<HeroProps> = ({ onStartQuote, onExploreCatalog }) =>
             
             {/* Pills de Glass con metadata */}
             <div className="flex flex-wrap items-center gap-2.5">
-              <div className="glass-pill px-3.5 py-1.5 rounded-full flex items-center gap-2 text-xs font-semibold text-neutral-300">
+              <div 
+                style={glassPillStyle}
+                className="glass-pill px-3.5 py-1.5 rounded-full flex items-center gap-2 text-xs font-semibold text-neutral-300"
+              >
                 <span className="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_8px_rgba(229,57,53,0.8)]" />
                 <span className="text-white font-bold tracking-wide">Propuestas de Valor</span>
               </div>
-              <div className="glass-pill px-3.5 py-1.5 rounded-full text-xs font-medium text-neutral-400">
+              <div 
+                style={glassPillStyle}
+                className="glass-pill px-3.5 py-1.5 rounded-full text-xs font-medium text-neutral-400"
+              >
                 <span>Esquina Inédita · Lechería</span>
               </div>
-              <div className="glass-pill px-3 py-1.5 rounded-full text-[11px] font-mono text-neutral-400 font-mono-numbers">
+              <div 
+                style={glassPillStyle}
+                className="glass-pill px-3 py-1.5 rounded-full text-[11px] font-mono text-neutral-400 font-mono-numbers"
+              >
                 RIF J-412848798
               </div>
             </div>
@@ -76,7 +86,10 @@ export const Hero: React.FC<HeroProps> = ({ onStartQuote, onExploreCatalog }) =>
             {/* Métricas Cuantitativas en Frosted Glass Cards */}
             <div className="pt-6">
               <div className="grid grid-cols-3 gap-3 sm:gap-4">
-                <div className="glass-card p-4 sm:p-5 rounded-2xl relative group">
+                <div 
+                  style={glassCardStyle}
+                  className="glass-card p-4 sm:p-5 rounded-2xl relative group"
+                >
                   <div className="text-2xl sm:text-3xl font-black text-white font-mono-numbers tracking-tight">
                     39.2K
                   </div>
@@ -85,7 +98,10 @@ export const Hero: React.FC<HeroProps> = ({ onStartQuote, onExploreCatalog }) =>
                   </div>
                 </div>
 
-                <div className="glass-card p-4 sm:p-5 rounded-2xl relative group">
+                <div 
+                  style={glassCardStyle}
+                  className="glass-card p-4 sm:p-5 rounded-2xl relative group"
+                >
                   <div className="text-2xl sm:text-3xl font-black text-white font-mono-numbers tracking-tight">
                     08
                   </div>
@@ -94,7 +110,10 @@ export const Hero: React.FC<HeroProps> = ({ onStartQuote, onExploreCatalog }) =>
                   </div>
                 </div>
 
-                <div className="glass-card p-4 sm:p-5 rounded-2xl relative group">
+                <div 
+                  style={glassCardStyle}
+                  className="glass-card p-4 sm:p-5 rounded-2xl relative group"
+                >
                   <div className="text-2xl sm:text-3xl font-black text-white font-mono-numbers tracking-tight">
                     100%
                   </div>
@@ -109,7 +128,10 @@ export const Hero: React.FC<HeroProps> = ({ onStartQuote, onExploreCatalog }) =>
 
           {/* Columna Derecha: Visual Carrier con Marco Glass y Reflejo Especular */}
           <div className="lg:col-span-5 flex items-center">
-            <div className="relative w-full h-[400px] sm:h-[480px] lg:h-[560px] rounded-3xl overflow-hidden glass-card p-2 group">
+            <div 
+              style={glassCardStyle}
+              className="relative w-full h-[400px] sm:h-[480px] lg:h-[560px] rounded-3xl overflow-hidden glass-card p-2 group"
+            >
               <div className="relative w-full h-full rounded-2xl overflow-hidden">
                 <img
                   src="/assets/images/hero_workshop_craft_1793205546075.jpg"
@@ -122,7 +144,10 @@ export const Hero: React.FC<HeroProps> = ({ onStartQuote, onExploreCatalog }) =>
                 <div className="absolute inset-0 bg-gradient-to-t from-[#08080A] via-black/20 to-transparent opacity-90 pointer-events-none" />
 
                 {/* Sello de Ubicación en Liquid Glass */}
-                <div className="absolute bottom-4 left-4 right-4 p-4 rounded-2xl liquid-glass-nav border border-white/10">
+                <div 
+                  style={glassHeaderStyle}
+                  className="absolute bottom-4 left-4 right-4 p-4 rounded-2xl liquid-glass-nav border border-white/10"
+                >
                   <div className="flex items-center justify-between text-xs font-semibold text-neutral-300">
                     <span className="flex items-center gap-2 text-white font-bold">
                       <MapPin className="w-4 h-4 text-red-500" />

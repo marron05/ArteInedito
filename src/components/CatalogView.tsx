@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ProductItem, ProductCategory } from '../types';
 import { CATEGORIES } from './CategoryGrid';
 import { Search, ArrowRight, X, Clock, Layers, Sparkles, Check, SlidersHorizontal } from 'lucide-react';
+import { glassCardStyle, glassPillStyle, glassPillActiveStyle, glassPanelStyle } from '../styles/glass';
 
 interface CatalogViewProps {
   products: ProductItem[];
@@ -42,7 +43,10 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
         {/* Cabecera de catálogo */}
         <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-8">
           <div className="space-y-3">
-            <div className="glass-pill inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold text-neutral-300">
+            <div 
+              style={glassPillStyle}
+              className="glass-pill inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold text-neutral-300"
+            >
               <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
               <span>Showroom Digital</span>
             </div>
@@ -62,7 +66,8 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
               placeholder="Buscar corpóreo, vinil, franela..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 rounded-2xl bg-white/[0.04] border border-white/10 text-white text-xs placeholder-neutral-500 focus:outline-none focus:border-red-500/60 focus:ring-1 focus:ring-red-500/40 backdrop-blur-md transition-all shadow-inner"
+              style={glassPillStyle}
+              className="w-full pl-11 pr-4 py-3 rounded-2xl text-white text-xs placeholder-neutral-500 focus:outline-none focus:border-red-500/60 focus:ring-1 focus:ring-red-500/40 transition-all shadow-inner"
             />
           </div>
         </div>
@@ -71,6 +76,7 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
         <div className="mb-10 flex items-center gap-2 overflow-x-auto pb-3 scrollbar-none">
           <button
             onClick={() => setSelectedCategory('all')}
+            style={selectedCategory === 'all' ? glassPillActiveStyle : glassPillStyle}
             className={`px-4 py-2 text-xs font-bold rounded-full transition-all duration-200 whitespace-nowrap shrink-0 cursor-pointer ${
               selectedCategory === 'all'
                 ? 'glass-pill-active text-white'
@@ -81,12 +87,14 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
           </button>
           {CATEGORIES.map((cat) => {
             const count = products.filter(p => p.category === cat.id && p.active).length;
+            const isSelected = selectedCategory === cat.id;
             return (
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
+                style={isSelected ? glassPillActiveStyle : glassPillStyle}
                 className={`px-4 py-2 text-xs font-semibold rounded-full transition-all duration-200 whitespace-nowrap shrink-0 cursor-pointer ${
-                  selectedCategory === cat.id
+                  isSelected
                     ? 'glass-pill-active text-white'
                     : 'glass-pill text-neutral-400 hover:text-white hover:bg-white/[0.06]'
                 }`}
@@ -99,7 +107,10 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
 
         {/* Grid de Productos */}
         {filteredProducts.length === 0 ? (
-          <div className="py-24 text-center glass-panel rounded-3xl p-8 border border-white/10">
+          <div 
+            style={glassPanelStyle}
+            className="py-24 text-center glass-panel rounded-3xl p-8 border border-white/10"
+          >
             <p className="text-neutral-400 text-sm">
               No se encontraron productos que coincidan con la búsqueda.
             </p>
@@ -118,6 +129,7 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
             {filteredProducts.map((product) => (
               <div
                 key={product.id}
+                style={glassCardStyle}
                 className="glass-card group flex flex-col justify-between rounded-3xl overflow-hidden relative"
               >
                 <div>
@@ -134,7 +146,10 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
                       
                       {/* Badge Glass pill */}
                       {product.badge && (
-                        <div className="absolute top-3 right-3 glass-pill px-3 py-1 rounded-full text-[10px] font-bold text-white uppercase tracking-wider font-mono">
+                        <div 
+                          style={glassPillStyle}
+                          className="absolute top-3 right-3 glass-pill px-3 py-1 rounded-full text-[10px] font-bold text-white uppercase tracking-wider font-mono"
+                        >
                           {product.badge}
                         </div>
                       )}
@@ -197,9 +212,13 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
       {/* Modal de Ficha Técnica Detallada (Liquid Glass 2026) */}
       {activeModalProduct && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in duration-200">
-          <div className="glass-panel rounded-3xl max-w-2xl w-full p-6 sm:p-8 relative max-h-[90vh] overflow-y-auto">
+          <div 
+            style={glassPanelStyle}
+            className="glass-panel rounded-3xl max-w-2xl w-full p-6 sm:p-8 relative max-h-[90vh] overflow-y-auto"
+          >
             <button
               onClick={() => setActiveModalProduct(null)}
+              style={glassPillStyle}
               className="absolute top-5 right-5 p-2 rounded-xl glass-pill text-neutral-400 hover:text-white cursor-pointer"
               aria-label="Cerrar modal"
             >
@@ -217,7 +236,10 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
               </div>
 
               <div className="w-full sm:w-1/2 space-y-4">
-                <div className="glass-pill inline-flex px-3 py-1 rounded-full text-[11px] font-mono uppercase text-red-400">
+                <div 
+                  style={glassPillStyle}
+                  className="glass-pill inline-flex px-3 py-1 rounded-full text-[11px] font-mono uppercase text-red-400"
+                >
                   {activeModalProduct.category}
                 </div>
                 <h3 className="text-2xl font-black text-white tracking-tight">

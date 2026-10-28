@@ -7,6 +7,7 @@ import {
   ProductCategory 
 } from '../types';
 import { CATEGORIES } from './CategoryGrid';
+import { glassCardStyle, glassPillStyle, glassPanelStyle } from '../styles/glass';
 import { 
   Inbox, 
   Package, 
@@ -177,7 +178,10 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pb-6 border-b border-white/[0.08]">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2">
-              <span className="glass-pill px-3 py-1 rounded-full text-xs font-mono font-bold text-red-400 uppercase">
+              <span 
+                style={glassPillStyle}
+                className="glass-pill px-3 py-1 rounded-full text-xs font-mono font-bold text-red-400 uppercase"
+              >
                 Panel de Taller
               </span>
               <span className="text-xs text-neutral-400">Esquina Inédita Lechería</span>
@@ -188,7 +192,10 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
           </div>
 
           {/* Navegación por Pestañas Liquid Glass */}
-          <div className="flex items-center gap-1.5 p-1.5 rounded-2xl glass-pill">
+          <div 
+            style={glassPillStyle}
+            className="flex items-center gap-1.5 p-1.5 rounded-2xl glass-pill"
+          >
             <button
               onClick={() => setActiveTab('quotes')}
               className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-xl transition-all cursor-pointer ${

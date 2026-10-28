@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Menu, X, ArrowUpRight, ShieldCheck, Sparkles } from 'lucide-react';
+import { glassHeaderStyle, glassPillStyle, glassPillActiveStyle } from '../styles/glass';
 
 interface NavbarProps {
   currentView: 'home' | 'catalog' | 'quote' | 'workshop' | 'admin';
@@ -23,7 +24,10 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <div className="sticky top-0 sm:top-3 z-50 w-full px-2 sm:px-6 max-w-7xl mx-auto transition-all duration-300">
-      <header className="liquid-glass-nav rounded-2xl sm:rounded-3xl px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-6 transition-all">
+      <header 
+        style={glassHeaderStyle}
+        className="liquid-glass-nav rounded-2xl sm:rounded-3xl px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-6 transition-all"
+      >
         
         {/* Zone 1: Brand Wordmark with refined glow */}
         <button
@@ -49,12 +53,16 @@ export const Navbar: React.FC<NavbarProps> = ({
         </button>
 
         {/* Zone 2: Navigation Links (Liquid Glass Segmented) */}
-        <nav className="hidden md:flex items-center gap-1.5 p-1.5 rounded-full bg-white/[0.04] border border-white/[0.1] text-xs font-semibold text-neutral-300 backdrop-blur-md shadow-inner">
+        <nav 
+          style={glassPillStyle}
+          className="hidden md:flex items-center gap-1.5 p-1.5 rounded-full text-xs font-semibold text-neutral-300 shadow-inner"
+        >
           <button
             onClick={() => handleNavClick('home')}
+            style={currentView === 'home' ? glassPillActiveStyle : undefined}
             className={`px-4 py-2 rounded-full transition-all duration-200 cursor-pointer whitespace-nowrap ${
               currentView === 'home'
-                ? 'glass-pill-active text-white'
+                ? 'glass-pill-active text-white font-bold'
                 : 'text-neutral-400 hover:text-white hover:bg-white/[0.06]'
             }`}
           >
@@ -62,9 +70,10 @@ export const Navbar: React.FC<NavbarProps> = ({
           </button>
           <button
             onClick={() => handleNavClick('catalog')}
+            style={currentView === 'catalog' ? glassPillActiveStyle : undefined}
             className={`px-4 py-2 rounded-full transition-all duration-200 cursor-pointer whitespace-nowrap ${
               currentView === 'catalog'
-                ? 'glass-pill-active text-white'
+                ? 'glass-pill-active text-white font-bold'
                 : 'text-neutral-400 hover:text-white hover:bg-white/[0.06]'
             }`}
           >
@@ -72,9 +81,10 @@ export const Navbar: React.FC<NavbarProps> = ({
           </button>
           <button
             onClick={() => handleNavClick('workshop')}
+            style={currentView === 'workshop' ? glassPillActiveStyle : undefined}
             className={`px-4 py-2 rounded-full transition-all duration-200 cursor-pointer whitespace-nowrap ${
               currentView === 'workshop'
-                ? 'glass-pill-active text-white'
+                ? 'glass-pill-active text-white font-bold'
                 : 'text-neutral-400 hover:text-white hover:bg-white/[0.06]'
             }`}
           >
@@ -82,9 +92,10 @@ export const Navbar: React.FC<NavbarProps> = ({
           </button>
           <button
             onClick={() => handleNavClick('quote')}
+            style={currentView === 'quote' ? glassPillActiveStyle : undefined}
             className={`px-4 py-2 rounded-full transition-all duration-200 cursor-pointer whitespace-nowrap ${
               currentView === 'quote'
-                ? 'glass-pill-active text-white'
+                ? 'glass-pill-active text-white font-bold'
                 : 'text-neutral-400 hover:text-white hover:bg-white/[0.06]'
             }`}
           >
@@ -92,6 +103,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </button>
           <button
             onClick={onToggleAdmin}
+            style={isAdmin ? glassPillActiveStyle : undefined}
             className={`px-3.5 py-2 rounded-full transition-all duration-200 cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
               isAdmin
                 ? 'glass-pill-active text-white font-bold'
@@ -119,7 +131,8 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="flex md:hidden items-center gap-2">
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 text-neutral-400 hover:text-white rounded-xl bg-white/[0.04] border border-white/10"
+            style={glassPillStyle}
+            className="p-2 text-neutral-400 hover:text-white rounded-xl"
             aria-label="Abrir menú"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -130,7 +143,10 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden mt-2 p-5 rounded-2xl liquid-glass-nav space-y-3 animate-in fade-in slide-in-from-top-2 duration-200">
+        <div 
+          style={glassHeaderStyle}
+          className="md:hidden mt-2 p-5 rounded-2xl liquid-glass-nav space-y-3 animate-in fade-in slide-in-from-top-2 duration-200"
+        >
           <button
             onClick={() => handleNavClick('home')}
             className="block w-full text-left py-2.5 px-3 rounded-lg text-sm font-semibold text-neutral-200 hover:bg-white/[0.06]"

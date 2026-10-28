@@ -11,6 +11,7 @@ import {
   Store,
   ArrowRight
 } from 'lucide-react';
+import { glassCardStyle, glassPillStyle } from '../styles/glass';
 
 interface CategoryGridProps {
   onSelectCategory: (category: ProductCategory) => void;
@@ -113,7 +114,10 @@ export const CategoryGrid: React.FC<CategoryGridProps> = ({
         {/* Encabezado Editorial */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
           <div className="max-w-2xl space-y-3">
-            <div className="glass-pill inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold text-neutral-300">
+            <div 
+              style={glassPillStyle}
+              className="glass-pill inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold text-neutral-300"
+            >
               <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
               <span>Capacidades de Taller</span>
             </div>
@@ -126,8 +130,8 @@ export const CategoryGrid: React.FC<CategoryGridProps> = ({
           </div>
 
           <div className="flex items-center gap-2 text-xs text-neutral-400 font-mono-numbers">
-            <span className="glass-pill px-3 py-1.5 rounded-full">08 Técnicas Integradas</span>
-            <span className="glass-pill px-3 py-1.5 rounded-full">Sede Lechería</span>
+            <span style={glassPillStyle} className="glass-pill px-3 py-1.5 rounded-full">08 Técnicas Integradas</span>
+            <span style={glassPillStyle} className="glass-pill px-3 py-1.5 rounded-full">Sede Lechería</span>
           </div>
         </div>
 
@@ -138,6 +142,7 @@ export const CategoryGrid: React.FC<CategoryGridProps> = ({
             return (
               <div
                 key={cat.id}
+                style={glassCardStyle}
                 className="glass-card group flex flex-col justify-between p-6 sm:p-7 rounded-3xl relative overflow-hidden"
               >
                 {/* Iluminación de fondo sutil al hover */}
@@ -148,7 +153,10 @@ export const CategoryGrid: React.FC<CategoryGridProps> = ({
                     <div className="w-12 h-12 rounded-2xl bg-white/[0.04] border border-white/10 flex items-center justify-center text-red-500 group-hover:bg-gradient-to-br group-hover:from-red-500 group-hover:to-[#C41E3A] group-hover:text-white transition-all duration-300 shadow-inner">
                       <Icon className="w-5 h-5 transition-transform group-hover:scale-110" />
                     </div>
-                    <span className="glass-pill px-2.5 py-1 rounded-full text-[11px] font-mono text-neutral-400 font-mono-numbers">
+                    <span 
+                      style={glassPillStyle}
+                      className="glass-pill px-2.5 py-1 rounded-full text-[11px] font-mono text-neutral-400 font-mono-numbers"
+                    >
                       0{idx + 1}
                     </span>
                   </div>

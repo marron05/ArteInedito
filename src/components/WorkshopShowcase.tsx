@@ -1,6 +1,7 @@
 import React from 'react';
 import { MapPin, Clock, Instagram, Phone, Award, Shield, CheckCircle2, ArrowRight } from 'lucide-react';
 import { CompanySettings } from '../types';
+import { glassCardStyle, glassPillStyle, glassPanelStyle } from '../styles/glass';
 
 interface WorkshopShowcaseProps {
   settings: CompanySettings;
@@ -23,7 +24,10 @@ export const WorkshopShowcase: React.FC<WorkshopShowcaseProps> = ({
         
         {/* Encabezado Principal */}
         <div className="max-w-3xl space-y-3">
-          <div className="glass-pill inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold text-neutral-300">
+          <div 
+            style={glassPillStyle}
+            className="glass-pill inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold text-neutral-300"
+          >
             <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
             <span>Showroom Físico & Taller</span>
           </div>
@@ -39,7 +43,10 @@ export const WorkshopShowcase: React.FC<WorkshopShowcaseProps> = ({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* Tarjeta de Ubicación e Información en Glass Panel */}
-          <div className="lg:col-span-5 glass-panel rounded-3xl p-6 sm:p-8 space-y-6">
+          <div 
+            style={glassPanelStyle}
+            className="lg:col-span-5 glass-panel rounded-3xl p-6 sm:p-8 space-y-6"
+          >
             <div className="flex items-center gap-4 pb-6 border-b border-white/[0.08]">
               <div className="relative">
                 <div className="absolute -inset-1 rounded-xl bg-red-600/30 blur-sm" />
@@ -120,7 +127,10 @@ export const WorkshopShowcase: React.FC<WorkshopShowcaseProps> = ({
           {/* Columna Derecha: Equipamiento y Garantías del Taller */}
           <div className="lg:col-span-7 space-y-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="glass-card p-6 rounded-3xl">
+              <div 
+                style={glassCardStyle}
+                className="glass-card p-6 rounded-3xl"
+              >
                 <div className="text-red-400 text-xs font-bold font-mono uppercase mb-1.5">
                   Maquinaria Propia
                 </div>
@@ -130,7 +140,10 @@ export const WorkshopShowcase: React.FC<WorkshopShowcaseProps> = ({
                 </p>
               </div>
 
-              <div className="glass-card p-6 rounded-3xl">
+              <div 
+                style={glassCardStyle}
+                className="glass-card p-6 rounded-3xl"
+              >
                 <div className="text-red-400 text-xs font-bold font-mono uppercase mb-1.5">
                   Colorimetría Textil
                 </div>
@@ -140,7 +153,10 @@ export const WorkshopShowcase: React.FC<WorkshopShowcaseProps> = ({
                 </p>
               </div>
 
-              <div className="glass-card p-6 rounded-3xl">
+              <div 
+                style={glassCardStyle}
+                className="glass-card p-6 rounded-3xl"
+              >
                 <div className="text-red-400 text-xs font-bold font-mono uppercase mb-1.5">
                   Resistencia Costera
                 </div>
@@ -150,7 +166,10 @@ export const WorkshopShowcase: React.FC<WorkshopShowcaseProps> = ({
                 </p>
               </div>
 
-              <div className="glass-card p-6 rounded-3xl">
+              <div 
+                style={glassCardStyle}
+                className="glass-card p-6 rounded-3xl"
+              >
                 <div className="text-red-400 text-xs font-bold font-mono uppercase mb-1.5">
                   Servicio Integral
                 </div>
@@ -162,7 +181,10 @@ export const WorkshopShowcase: React.FC<WorkshopShowcaseProps> = ({
             </div>
 
             {/* Testimonio en Liquid Glass */}
-            <div className="glass-panel p-8 rounded-3xl flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div 
+              style={glassPanelStyle}
+              className="glass-panel p-8 rounded-3xl flex flex-col sm:flex-row items-center justify-between gap-6"
+            >
               <div className="space-y-2">
                 <p className="text-sm italic text-neutral-200 leading-relaxed">
                   “Cada lona, cada corpóreo, cada taza o uniforme sale de nuestras manos… porque aquí las ideas no se quedan en pantalla: se materializan.”
