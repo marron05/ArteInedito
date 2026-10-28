@@ -164,29 +164,36 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   };
 
   return (
-    <div className="py-12 bg-neutral-950 min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+    <div className="py-16 sm:py-24 relative min-h-screen">
+      {/* Luz de fondo sutil */}
+      <div 
+        className="pointer-events-none absolute top-10 right-1/4 w-[600px] h-[350px] bg-red-600/[0.04] blur-[140px] rounded-full -z-10" 
+        aria-hidden="true" 
+      />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         
         {/* Cabecera del Panel */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-neutral-800">
-          <div>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pb-6 border-b border-white/[0.08]">
+          <div className="space-y-1.5">
             <div className="flex items-center gap-2">
-              <span className="text-xs font-mono font-bold text-red-500 uppercase">Panel de Control</span>
-              <span className="text-neutral-600">/</span>
+              <span className="glass-pill px-3 py-1 rounded-full text-xs font-mono font-bold text-red-400 uppercase">
+                Panel de Taller
+              </span>
               <span className="text-xs text-neutral-400">Esquina Inédita Lechería</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-white mt-1">
-              Gestión de Taller & Cotizaciones
+            <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
+              Gestión de Cotizaciones & Producción
             </h1>
           </div>
 
-          {/* Navegación por Pestañas */}
-          <div className="flex items-center gap-1 bg-neutral-900 p-1 rounded-xl border border-neutral-800">
+          {/* Navegación por Pestañas Liquid Glass */}
+          <div className="flex items-center gap-1.5 p-1.5 rounded-2xl glass-pill">
             <button
               onClick={() => setActiveTab('quotes')}
-              className={`flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-lg transition-colors cursor-pointer ${
+              className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-xl transition-all cursor-pointer ${
                 activeTab === 'quotes'
-                  ? 'bg-neutral-800 text-white shadow-sm'
+                  ? 'bg-white/[0.1] text-white shadow-sm border border-white/10'
                   : 'text-neutral-400 hover:text-white'
               }`}
             >
@@ -196,9 +203,9 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
             <button
               onClick={() => setActiveTab('products')}
-              className={`flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-lg transition-colors cursor-pointer ${
+              className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-xl transition-all cursor-pointer ${
                 activeTab === 'products'
-                  ? 'bg-neutral-800 text-white shadow-sm'
+                  ? 'bg-white/[0.1] text-white shadow-sm border border-white/10'
                   : 'text-neutral-400 hover:text-white'
               }`}
             >
@@ -208,9 +215,9 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
             <button
               onClick={() => setActiveTab('settings')}
-              className={`flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-lg transition-colors cursor-pointer ${
+              className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-xl transition-all cursor-pointer ${
                 activeTab === 'settings'
-                  ? 'bg-neutral-800 text-white shadow-sm'
+                  ? 'bg-white/[0.1] text-white shadow-sm border border-white/10'
                   : 'text-neutral-400 hover:text-white'
               }`}
             >
@@ -222,39 +229,39 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
         {/* ======================= PESTAÑA 1: COTIZACIONES ======================= */}
         {activeTab === 'quotes' && (
-          <div className="space-y-6">
+          <div className="space-y-8">
             
-            {/* KPI Cards de Cotizaciones */}
+            {/* KPI Cards en Frosted Glass */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              <div className="p-4 rounded-xl bg-neutral-900/60 border border-neutral-800">
-                <span className="text-[11px] font-mono uppercase text-neutral-400">Total Solicitudes</span>
-                <div className="text-2xl font-black text-white mt-1 font-mono-numbers">{totalCount}</div>
+              <div className="glass-card p-5 rounded-2xl">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400">Total Solicitudes</span>
+                <div className="text-3xl font-black text-white mt-1 font-mono-numbers">{totalCount}</div>
               </div>
-              <div className="p-4 rounded-xl bg-neutral-900/60 border border-neutral-800">
-                <span className="text-[11px] font-mono uppercase text-blue-400">Nuevas por Revisar</span>
-                <div className="text-2xl font-black text-white mt-1 font-mono-numbers">{newCount}</div>
+              <div className="glass-card p-5 rounded-2xl">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-blue-400">Nuevas por Revisar</span>
+                <div className="text-3xl font-black text-blue-400 mt-1 font-mono-numbers">{newCount}</div>
               </div>
-              <div className="p-4 rounded-xl bg-neutral-900/60 border border-neutral-800">
-                <span className="text-[11px] font-mono uppercase text-amber-400">En Taller / Producción</span>
-                <div className="text-2xl font-black text-white mt-1 font-mono-numbers">{inProdCount}</div>
+              <div className="glass-card p-5 rounded-2xl">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-amber-400">En Taller</span>
+                <div className="text-3xl font-black text-amber-400 mt-1 font-mono-numbers">{inProdCount}</div>
               </div>
-              <div className="p-4 rounded-xl bg-neutral-900/60 border border-neutral-800">
-                <span className="text-[11px] font-mono uppercase text-emerald-400">Total Referencial</span>
-                <div className="text-2xl font-black text-white mt-1 font-mono-numbers">${totalValuation} USD</div>
+              <div className="glass-card p-5 rounded-2xl">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-emerald-400">Valor Referencial</span>
+                <div className="text-3xl font-black text-emerald-400 mt-1 font-mono-numbers">${totalValuation} USD</div>
               </div>
             </div>
 
             {/* Filtros y Buscador */}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
-              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+              <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
                 {['all', 'Nueva', 'En Revisión', 'En Producción', 'Entregada'].map((st) => (
                   <button
                     key={st}
                     onClick={() => setStatusFilter(st)}
-                    className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors cursor-pointer whitespace-nowrap ${
+                    className={`px-4 py-2 text-xs font-bold rounded-full transition-all cursor-pointer whitespace-nowrap ${
                       statusFilter === st
-                        ? 'bg-[#C41E3A] text-white'
-                        : 'bg-neutral-900 text-neutral-400 hover:text-white'
+                        ? 'glass-pill-active text-white'
+                        : 'glass-pill text-neutral-400 hover:text-white'
                     }`}
                   >
                     {st === 'all' ? 'Todas' : st}
@@ -264,94 +271,94 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
               <div className="flex items-center gap-3">
                 <div className="relative flex-1 sm:w-64">
-                  <Search className="w-4 h-4 text-neutral-500 absolute left-3 top-2.5" />
+                  <Search className="w-4 h-4 text-neutral-400 absolute left-3.5 top-3" />
                   <input
                     type="text"
                     placeholder="Buscar cliente, folio..."
                     value={quoteSearch}
                     onChange={(e) => setQuoteSearch(e.target.value)}
-                    className="w-full pl-9 pr-3 py-2 text-xs rounded-lg bg-neutral-900 border border-neutral-800 text-white placeholder-neutral-500 focus:outline-none focus:border-red-500"
+                    className="w-full pl-10 pr-4 py-2.5 text-xs rounded-2xl bg-white/[0.04] border border-white/10 text-white placeholder-neutral-500 focus:outline-none focus:border-red-500/60"
                   />
                 </div>
                 <button
                   onClick={handleExportCsv}
-                  className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-neutral-300 bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 rounded-lg transition-colors cursor-pointer"
-                  title="Descargar reporte en formato CSV"
+                  className="btn-secondary-glass inline-flex items-center gap-2 px-4 py-2.5 text-xs font-semibold text-neutral-200 cursor-pointer"
+                  title="Descargar reporte en CSV"
                 >
-                  <Download className="w-3.5 h-3.5" />
+                  <Download className="w-4 h-4" />
                   <span className="hidden sm:inline">Exportar CSV</span>
                 </button>
               </div>
             </div>
 
-            {/* Tabla de Cotizaciones */}
-            <div className="bg-neutral-950 border border-neutral-800 rounded-xl overflow-hidden shadow-xl">
+            {/* Tabla de Cotizaciones en Glass Panel */}
+            <div className="glass-panel rounded-3xl overflow-hidden shadow-2xl">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-neutral-900/80 border-b border-neutral-800 text-neutral-400 uppercase font-mono tracking-wider">
+                  <thead className="bg-white/[0.03] border-b border-white/[0.08] text-neutral-400 uppercase font-mono tracking-wider text-[10px]">
                     <tr>
-                      <th className="px-4 py-3.5">Folio</th>
-                      <th className="px-4 py-3.5">Cliente / Empresa</th>
-                      <th className="px-4 py-3.5">Servicio & Soporte</th>
-                      <th className="px-4 py-3.5 text-center">Cant.</th>
-                      <th className="px-4 py-3.5">Total Ref.</th>
-                      <th className="px-4 py-3.5">Estado</th>
-                      <th className="px-4 py-3.5 text-right">Acción</th>
+                      <th className="px-5 py-4">Folio</th>
+                      <th className="px-5 py-4">Cliente / Empresa</th>
+                      <th className="px-5 py-4">Servicio & Soporte</th>
+                      <th className="px-5 py-4 text-center">Cant.</th>
+                      <th className="px-5 py-4">Total Ref.</th>
+                      <th className="px-5 py-4">Estado</th>
+                      <th className="px-5 py-4 text-right">Acción</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-neutral-900 text-neutral-300">
+                  <tbody className="divide-y divide-white/[0.06] text-neutral-300">
                     {filteredQuotes.length === 0 ? (
                       <tr>
-                        <td colSpan={7} className="px-4 py-12 text-center text-neutral-500">
+                        <td colSpan={7} className="px-5 py-16 text-center text-neutral-500">
                           No se encontraron cotizaciones con los criterios seleccionados.
                         </td>
                       </tr>
                     ) : (
                       filteredQuotes.map((q) => (
-                        <tr key={q.id} className="hover:bg-neutral-900/40 transition-colors">
-                          <td className="px-4 py-3.5 font-mono text-white font-bold whitespace-nowrap">
+                        <tr key={q.id} className="hover:bg-white/[0.03] transition-colors">
+                          <td className="px-5 py-4 font-mono text-white font-bold whitespace-nowrap">
                             {q.id}
                           </td>
-                          <td className="px-4 py-3.5">
+                          <td className="px-5 py-4">
                             <div className="font-semibold text-white">{q.clientName}</div>
                             <div className="text-[11px] text-neutral-400">
                               {q.clientCompany || 'Particular'} · {q.clientPhone}
                             </div>
                           </td>
-                          <td className="px-4 py-3.5">
-                            <div className="font-medium text-white">{q.productName}</div>
+                          <td className="px-5 py-4">
+                            <div className="font-semibold text-white">{q.productName}</div>
                             <div className="text-[11px] text-neutral-400">
                               {q.material} · {q.finish}
                             </div>
                           </td>
-                          <td className="px-4 py-3.5 text-center font-mono-numbers">
+                          <td className="px-5 py-4 text-center font-mono-numbers font-bold">
                             {q.quantity}
                           </td>
-                          <td className="px-4 py-3.5 font-mono-numbers font-semibold text-white">
+                          <td className="px-5 py-4 font-mono-numbers font-bold text-white">
                             ${q.estimatedTotalUsd || 0} USD
                           </td>
-                          <td className="px-4 py-3.5">
+                          <td className="px-5 py-4">
                             <span
-                              className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider font-mono ${
+                              className={`glass-pill px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider font-mono ${
                                 q.status === 'Nueva'
-                                  ? 'bg-blue-950 text-blue-300 border border-blue-800'
+                                  ? 'text-blue-400 border-blue-500/30 bg-blue-950/40'
                                   : q.status === 'En Revisión'
-                                  ? 'bg-amber-950 text-amber-300 border border-amber-800'
+                                  ? 'text-amber-400 border-amber-500/30 bg-amber-950/40'
                                   : q.status === 'En Producción'
-                                  ? 'bg-red-950 text-red-300 border border-red-800'
-                                  : 'bg-emerald-950 text-emerald-300 border border-emerald-800'
+                                  ? 'text-red-400 border-red-500/40 bg-red-950/40'
+                                  : 'text-emerald-400 border-emerald-500/30 bg-emerald-950/40'
                               }`}
                             >
                               {q.status}
                             </span>
                           </td>
-                          <td className="px-4 py-3.5 text-right whitespace-nowrap">
+                          <td className="px-5 py-4 text-right whitespace-nowrap">
                             <button
                               onClick={() => {
                                 setSelectedQuoteDetail(q);
                                 setEditNotesText(q.adminNotes || '');
                               }}
-                              className="px-2.5 py-1.5 text-xs font-semibold text-white bg-neutral-900 hover:bg-[#C41E3A] border border-neutral-700/80 rounded transition-colors cursor-pointer"
+                              className="btn-secondary-glass px-3.5 py-1.5 text-xs font-semibold text-white cursor-pointer"
                             >
                               Ver Ficha
                             </button>
@@ -369,11 +376,11 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
         {/* ======================= PESTAÑA 2: CATÁLOGO DE PRODUCTOS ======================= */}
         {activeTab === 'products' && (
-          <div className="space-y-6">
+          <div className="space-y-8">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-lg font-bold text-white">Líneas y Productos de Taller</h3>
-                <p className="text-xs text-neutral-400">
+                <h3 className="text-2xl font-bold text-white tracking-tight">Catálogo de Productos</h3>
+                <p className="text-xs sm:text-sm text-neutral-400">
                   Agrega, edita o desactiva productos del catálogo público de Arte Inédito.
                 </p>
               </div>
@@ -390,7 +397,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                   });
                   setIsNewProduct(true);
                 }}
-                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold uppercase tracking-wider text-white bg-[#C41E3A] hover:bg-[#a6172f] rounded-lg transition-colors cursor-pointer"
+                className="btn-primary-material inline-flex items-center gap-2 px-5 py-3 text-xs font-bold uppercase tracking-wider text-white cursor-pointer"
               >
                 <Plus className="w-4 h-4" />
                 <span>Nuevo Producto</span>
@@ -398,34 +405,32 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
             </div>
 
             {/* Listado de Productos */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {products.map((prod) => (
                 <div
                   key={prod.id}
-                  className={`p-4 rounded-xl border transition-all ${
-                    prod.active
-                      ? 'bg-neutral-900/60 border-neutral-800'
-                      : 'bg-neutral-950 border-neutral-900 opacity-60'
+                  className={`glass-card p-6 rounded-3xl ${
+                    prod.active ? '' : 'opacity-50'
                   }`}
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <span className="text-[10px] font-mono uppercase text-red-400 block">
+                      <span className="glass-pill px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase text-red-400">
                         {prod.category}
                       </span>
-                      <h4 className="font-bold text-sm text-white mt-0.5">{prod.name}</h4>
+                      <h4 className="font-bold text-lg text-white mt-2">{prod.name}</h4>
                     </div>
-                    <span className="text-xs font-mono-numbers font-bold text-white">
+                    <span className="text-sm font-mono-numbers font-black text-white">
                       ${prod.basePriceUsd} USD
                     </span>
                   </div>
 
-                  <p className="text-xs text-neutral-400 mt-2 line-clamp-2">
+                  <p className="text-xs text-neutral-400 mt-2 line-clamp-2 leading-relaxed">
                     {prod.tagline}
                   </p>
 
-                  <div className="mt-4 pt-3 border-t border-neutral-800 flex items-center justify-between text-xs">
-                    <span className="text-neutral-500 font-mono text-[11px]">
+                  <div className="mt-5 pt-4 border-t border-white/[0.08] flex items-center justify-between text-xs">
+                    <span className="text-neutral-400 font-mono text-[11px]">
                       {prod.turnaroundDays}
                     </span>
                     <div className="flex items-center gap-2">
@@ -434,14 +439,14 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                           setEditingProduct({ ...prod });
                           setIsNewProduct(false);
                         }}
-                        className="p-1.5 text-neutral-400 hover:text-white rounded hover:bg-neutral-800"
+                        className="btn-secondary-glass p-2 text-neutral-300 hover:text-white rounded-xl cursor-pointer"
                         title="Editar"
                       >
                         <Edit3 className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => onDeleteProduct(prod.id)}
-                        className="p-1.5 text-neutral-500 hover:text-red-400 rounded hover:bg-neutral-800"
+                        className="btn-secondary-glass p-2 text-neutral-400 hover:text-red-400 rounded-xl cursor-pointer"
                         title="Eliminar"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -456,77 +461,87 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
         {/* ======================= PESTAÑA 3: CONFIGURACIÓN ======================= */}
         {activeTab === 'settings' && (
-          <div className="max-w-2xl bg-neutral-900/60 border border-neutral-800 rounded-2xl p-6 sm:p-8 space-y-6">
+          <div className="max-w-2xl glass-panel rounded-3xl p-8 sm:p-10 space-y-8">
             <div>
-              <h3 className="text-lg font-bold text-white">Datos de la Empresa & Taller</h3>
-              <p className="text-xs text-neutral-400 mt-1">
-                Configura los números de contacto para la integración con WhatsApp y la información comercial.
+              <h3 className="text-2xl font-bold text-white tracking-tight">Datos del Taller</h3>
+              <p className="text-xs sm:text-sm text-neutral-400 mt-1">
+                Configura los números de contacto para la integración con WhatsApp y la sede en Lechería.
               </p>
             </div>
 
             {settingsSavedMsg && (
-              <div className="p-3 bg-emerald-950/60 border border-emerald-800 text-emerald-300 text-xs rounded-lg flex items-center gap-2">
-                <CheckCircle className="w-4 h-4" />
-                <span>Configuración guardada exitosamente en la base de datos SQLite.</span>
+              <div className="p-4 bg-emerald-950/40 border border-emerald-800/80 text-emerald-300 text-xs rounded-2xl flex items-center gap-2.5">
+                <CheckCircle className="w-4 h-4 shrink-0" />
+                <span>Configuración guardada exitosamente.</span>
               </div>
             )}
 
-            <form onSubmit={handleSaveSettings} className="space-y-4 text-xs">
+            <form onSubmit={handleSaveSettings} className="space-y-5 text-xs">
               <div>
-                <label className="block text-neutral-300 font-semibold mb-1">Nombre Comercial</label>
+                <label className="block text-neutral-300 font-bold mb-1.5 font-mono text-[11px] uppercase tracking-wider">
+                  Nombre Comercial
+                </label>
                 <input
                   type="text"
                   value={formSettings.companyName}
                   onChange={(e) => setFormSettings({ ...formSettings, companyName: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg bg-neutral-900 border border-neutral-800 text-white focus:outline-none focus:border-red-500"
+                  className="w-full px-4 py-3 rounded-2xl bg-white/[0.04] border border-white/10 text-white focus:outline-none focus:border-red-500/60"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-neutral-300 font-semibold mb-1">RIF</label>
+                  <label className="block text-neutral-300 font-bold mb-1.5 font-mono text-[11px] uppercase tracking-wider">
+                    RIF
+                  </label>
                   <input
                     type="text"
                     value={formSettings.rif}
                     onChange={(e) => setFormSettings({ ...formSettings, rif: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg bg-neutral-900 border border-neutral-800 text-white focus:outline-none focus:border-red-500"
+                    className="w-full px-4 py-3 rounded-2xl bg-white/[0.04] border border-white/10 text-white focus:outline-none focus:border-red-500/60"
                   />
                 </div>
                 <div>
-                  <label className="block text-neutral-300 font-semibold mb-1">Teléfono WhatsApp</label>
+                  <label className="block text-neutral-300 font-bold mb-1.5 font-mono text-[11px] uppercase tracking-wider">
+                    WhatsApp Comercial
+                  </label>
                   <input
                     type="text"
                     value={formSettings.whatsappPhone}
                     onChange={(e) => setFormSettings({ ...formSettings, whatsappPhone: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg bg-neutral-900 border border-neutral-800 text-white focus:outline-none focus:border-red-500 font-mono"
+                    className="w-full px-4 py-3 rounded-2xl bg-white/[0.04] border border-white/10 text-white focus:outline-none focus:border-red-500/60 font-mono"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-neutral-300 font-semibold mb-1">Dirección Sede (Esquina Inédita)</label>
+                <label className="block text-neutral-300 font-bold mb-1.5 font-mono text-[11px] uppercase tracking-wider">
+                  Dirección Sede (Esquina Inédita)
+                </label>
                 <input
                   type="text"
                   value={formSettings.address}
                   onChange={(e) => setFormSettings({ ...formSettings, address: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg bg-neutral-900 border border-neutral-800 text-white focus:outline-none focus:border-red-500"
+                  className="w-full px-4 py-3 rounded-2xl bg-white/[0.04] border border-white/10 text-white focus:outline-none focus:border-red-500/60"
                 />
               </div>
 
               <div>
-                <label className="block text-neutral-300 font-semibold mb-1">Horario de Atención</label>
+                <label className="block text-neutral-300 font-bold mb-1.5 font-mono text-[11px] uppercase tracking-wider">
+                  Horario de Atención
+                </label>
                 <input
                   type="text"
                   value={formSettings.openingHours}
                   onChange={(e) => setFormSettings({ ...formSettings, openingHours: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg bg-neutral-900 border border-neutral-800 text-white focus:outline-none focus:border-red-500"
+                  className="w-full px-4 py-3 rounded-2xl bg-white/[0.04] border border-white/10 text-white focus:outline-none focus:border-red-500/60"
                 />
               </div>
 
               <div className="pt-4 flex justify-end">
                 <button
                   type="submit"
-                  className="inline-flex items-center gap-2 px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white bg-[#C41E3A] hover:bg-[#a6172f] rounded-lg transition-colors cursor-pointer"
+                  className="btn-primary-material inline-flex items-center gap-2 px-7 py-3.5 text-xs font-bold uppercase tracking-wider text-white cursor-pointer"
                 >
                   <Save className="w-4 h-4" />
                   <span>Guardar Cambios</span>
@@ -538,26 +553,27 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
       </div>
 
-      {/* Modal de Detalle de Cotización */}
+      {/* Modal de Detalle de Cotización en Liquid Glass */}
       {selectedQuoteDetail && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="bg-neutral-950 border border-neutral-800 rounded-2xl max-w-xl w-full p-6 relative max-h-[90vh] overflow-y-auto space-y-6">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in">
+          <div className="glass-panel rounded-3xl max-w-xl w-full p-6 sm:p-8 relative max-h-[90vh] overflow-y-auto space-y-6">
             <button
               onClick={() => setSelectedQuoteDetail(null)}
-              className="absolute top-4 right-4 p-2 text-neutral-400 hover:text-white"
+              className="absolute top-5 right-5 p-2 rounded-xl glass-pill text-neutral-400 hover:text-white cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
 
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-xs font-mono font-bold text-red-500">{selectedQuoteDetail.id}</span>
-                <span className="text-neutral-600">·</span>
+                <span className="glass-pill px-3 py-1 rounded-full text-xs font-mono font-bold text-red-400">
+                  {selectedQuoteDetail.id}
+                </span>
                 <span className="text-xs text-neutral-400 font-mono-numbers">
                   {new Date(selectedQuoteDetail.createdAt).toLocaleDateString()}
                 </span>
               </div>
-              <h3 className="text-xl font-bold text-white mt-1">
+              <h3 className="text-2xl font-black text-white mt-2">
                 {selectedQuoteDetail.clientName}
               </h3>
               <p className="text-xs text-neutral-400">
@@ -566,17 +582,17 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
             </div>
 
             {/* Ficha técnica del pedido */}
-            <div className="p-4 rounded-xl bg-neutral-900 border border-neutral-800 text-xs space-y-2">
+            <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/10 text-xs space-y-2.5">
               <div className="flex justify-between">
-                <span className="text-neutral-400">Servicio Solicitado:</span>
+                <span className="text-neutral-400">Servicio:</span>
                 <span className="text-white font-bold">{selectedQuoteDetail.productName}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-neutral-400">Soporte / Material:</span>
+                <span className="text-neutral-400">Soporte:</span>
                 <span className="text-white font-medium">{selectedQuoteDetail.material}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-neutral-400">Acabado / Técnica:</span>
+                <span className="text-neutral-400">Acabado:</span>
                 <span className="text-white font-medium">{selectedQuoteDetail.finish}</span>
               </div>
               <div className="flex justify-between">
@@ -587,21 +603,20 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 <span className="text-neutral-400">Cantidad:</span>
                 <span className="text-white font-bold font-mono-numbers">{selectedQuoteDetail.quantity}</span>
               </div>
-              <div className="flex justify-between border-t border-neutral-800 pt-2">
+              <div className="flex justify-between border-t border-white/[0.08] pt-2.5">
                 <span className="text-neutral-400">Total Referencial:</span>
-                <span className="text-red-400 font-bold font-mono-numbers">
+                <span className="text-red-400 font-bold font-mono-numbers text-sm">
                   ${selectedQuoteDetail.estimatedTotalUsd || 0} USD
                 </span>
               </div>
             </div>
 
-            {/* Notas del cliente */}
             {selectedQuoteDetail.notes && (
               <div>
-                <label className="block text-xs font-semibold text-neutral-400 mb-1">
-                  Indicaciones del Cliente / Arte
+                <label className="block text-xs font-bold text-neutral-300 uppercase tracking-wider mb-1 font-mono">
+                  Indicaciones del Cliente
                 </label>
-                <div className="p-3 bg-neutral-900 rounded-lg text-xs text-neutral-300">
+                <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] text-xs text-neutral-300">
                   {selectedQuoteDetail.notes}
                 </div>
               </div>
@@ -609,18 +624,18 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
             {/* Selector de Estado */}
             <div>
-              <label className="block text-xs font-semibold text-neutral-400 mb-2">
-                Cambiar Estado de la Cotización
+              <label className="block text-xs font-bold text-neutral-300 uppercase tracking-wider mb-2 font-mono">
+                Actualizar Estado
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 {(['Nueva', 'En Revisión', 'En Producción', 'Entregada'] as QuoteStatus[]).map((st) => (
                   <button
                     key={st}
                     onClick={() => handleStatusChange(selectedQuoteDetail.id, st)}
-                    className={`py-2 text-xs font-bold rounded-lg border transition-all cursor-pointer ${
+                    className={`py-2 px-2 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
                       selectedQuoteDetail.status === st
-                        ? 'bg-[#C41E3A] text-white border-red-500 shadow-sm'
-                        : 'bg-neutral-900 text-neutral-400 border-neutral-800 hover:text-white'
+                        ? 'btn-primary-material text-white'
+                        : 'glass-pill text-neutral-400 hover:text-white'
                     }`}
                   >
                     {st}
@@ -631,19 +646,19 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
             {/* Notas Internas de Taller */}
             <div>
-              <label className="block text-xs font-semibold text-neutral-400 mb-1">
-                Notas Internas de Taller (para el equipo de Arte Inédito)
+              <label className="block text-xs font-bold text-neutral-300 uppercase tracking-wider mb-1 font-mono">
+                Notas Internas de Taller
               </label>
               <textarea
                 rows={2}
                 value={editNotesText}
                 onChange={(e) => setEditNotesText(e.target.value)}
-                placeholder="Ej: Cliente solicitó prueba de color antes del viernes..."
-                className="w-full px-3 py-2 text-xs rounded-lg bg-neutral-900 border border-neutral-800 text-white focus:outline-none focus:border-red-500"
+                placeholder="Ej: Prueba de corte lista, se envió muestra de acrílico..."
+                className="w-full px-4 py-2.5 text-xs rounded-2xl bg-white/[0.04] border border-white/10 text-white focus:outline-none focus:border-red-500/60"
               />
               <button
                 onClick={handleSaveAdminNotes}
-                className="mt-2 px-3 py-1.5 text-xs font-medium text-white bg-neutral-800 hover:bg-neutral-700 rounded cursor-pointer"
+                className="mt-2 btn-secondary-glass px-4 py-2 text-xs font-semibold text-white cursor-pointer"
               >
                 Guardar Notas Internas
               </button>
@@ -657,7 +672,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full inline-flex items-center justify-center gap-2 py-3 text-xs font-bold uppercase tracking-wider text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-colors cursor-pointer"
+                className="w-full inline-flex items-center justify-center gap-2 py-3.5 text-xs font-bold uppercase tracking-wider text-white bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 rounded-2xl transition-all cursor-pointer shadow-lg shadow-emerald-950/40"
               >
                 <MessageSquare className="w-4 h-4" />
                 <span>Contactar Cliente por WhatsApp</span>
@@ -669,26 +684,26 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
       {/* Modal Crear / Editar Producto */}
       {editingProduct && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="bg-neutral-950 border border-neutral-800 rounded-2xl max-w-lg w-full p-6 relative max-h-[90vh] overflow-y-auto space-y-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in">
+          <div className="glass-panel rounded-3xl max-w-lg w-full p-6 sm:p-8 relative max-h-[90vh] overflow-y-auto space-y-5">
             <button
               onClick={() => setEditingProduct(null)}
-              className="absolute top-4 right-4 p-2 text-neutral-400 hover:text-white"
+              className="absolute top-5 right-5 p-2 rounded-xl glass-pill text-neutral-400 hover:text-white cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
 
-            <h3 className="text-lg font-bold text-white">
+            <h3 className="text-xl font-bold text-white">
               {isNewProduct ? 'Nuevo Producto / Servicio' : 'Editar Producto'}
             </h3>
 
-            <form onSubmit={handleSaveProduct} className="space-y-3 text-xs">
+            <form onSubmit={handleSaveProduct} className="space-y-4 text-xs">
               <div>
-                <label className="block text-neutral-400 mb-1">Categoría</label>
+                <label className="block text-neutral-400 mb-1 font-medium">Categoría</label>
                 <select
                   value={editingProduct.category}
                   onChange={(e) => setEditingProduct({ ...editingProduct, category: e.target.value as ProductCategory })}
-                  className="w-full px-3 py-2 rounded-lg bg-neutral-900 border border-neutral-800 text-white focus:outline-none"
+                  className="w-full px-4 py-2.5 rounded-2xl bg-neutral-900 border border-white/10 text-white focus:outline-none"
                 >
                   {CATEGORIES.map((c) => (
                     <option key={c.id} value={c.id}>
@@ -699,68 +714,68 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
               </div>
 
               <div>
-                <label className="block text-neutral-400 mb-1">Nombre</label>
+                <label className="block text-neutral-400 mb-1 font-medium">Nombre</label>
                 <input
                   type="text"
                   required
                   value={editingProduct.name || ''}
                   onChange={(e) => setEditingProduct({ ...editingProduct, name: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg bg-neutral-900 border border-neutral-800 text-white focus:outline-none"
+                  className="w-full px-4 py-2.5 rounded-2xl bg-white/[0.04] border border-white/10 text-white focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-neutral-400 mb-1">Subtítulo / Tagline</label>
+                <label className="block text-neutral-400 mb-1 font-medium">Subtítulo / Tagline</label>
                 <input
                   type="text"
                   value={editingProduct.tagline || ''}
                   onChange={(e) => setEditingProduct({ ...editingProduct, tagline: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg bg-neutral-900 border border-neutral-800 text-white focus:outline-none"
+                  className="w-full px-4 py-2.5 rounded-2xl bg-white/[0.04] border border-white/10 text-white focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-neutral-400 mb-1">Descripción</label>
+                <label className="block text-neutral-400 mb-1 font-medium">Descripción</label>
                 <textarea
                   rows={2}
                   value={editingProduct.description || ''}
                   onChange={(e) => setEditingProduct({ ...editingProduct, description: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg bg-neutral-900 border border-neutral-800 text-white focus:outline-none"
+                  className="w-full px-4 py-2.5 rounded-2xl bg-white/[0.04] border border-white/10 text-white focus:outline-none"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-neutral-400 mb-1">Precio Base (USD)</label>
+                  <label className="block text-neutral-400 mb-1 font-medium">Precio Base (USD)</label>
                   <input
                     type="number"
                     value={editingProduct.basePriceUsd || 0}
                     onChange={(e) => setEditingProduct({ ...editingProduct, basePriceUsd: parseFloat(e.target.value) || 0 })}
-                    className="w-full px-3 py-2 rounded-lg bg-neutral-900 border border-neutral-800 text-white focus:outline-none"
+                    className="w-full px-4 py-2.5 rounded-2xl bg-white/[0.04] border border-white/10 text-white focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-neutral-400 mb-1">Tiempo de Entrega</label>
+                  <label className="block text-neutral-400 mb-1 font-medium">Tiempo de Entrega</label>
                   <input
                     type="text"
                     value={editingProduct.turnaroundDays || '3 a 5 días'}
                     onChange={(e) => setEditingProduct({ ...editingProduct, turnaroundDays: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg bg-neutral-900 border border-neutral-800 text-white focus:outline-none"
+                    className="w-full px-4 py-2.5 rounded-2xl bg-white/[0.04] border border-white/10 text-white focus:outline-none"
                   />
                 </div>
               </div>
 
-              <div className="pt-4 flex justify-end gap-2">
+              <div className="pt-4 flex justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setEditingProduct(null)}
-                  className="px-4 py-2 text-neutral-400 hover:text-white"
+                  className="btn-secondary-glass px-5 py-2.5 text-neutral-300 hover:text-white cursor-pointer"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 text-xs font-bold uppercase tracking-wider text-white bg-[#C41E3A] hover:bg-[#a6172f] rounded-lg"
+                  className="btn-primary-material px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white cursor-pointer"
                 >
                   Guardar
                 </button>

@@ -163,7 +163,6 @@ ${clientEmail ? `📧 *Email:* ${clientEmail}\n` : ''}
     } catch (err: any) {
       setIsSubmitting(false);
       setErrorMsg('No se pudo guardar la cotización. Puedes enviarla directamente por WhatsApp.');
-      // Generar folio de respaldo local
       const backupFolio = `AI-2026-${Math.floor(1000 + Math.random() * 9000)}`;
       setGeneratedFolio(backupFolio);
     }
@@ -177,23 +176,30 @@ ${clientEmail ? `📧 *Email:* ${clientEmail}\n` : ''}
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-12">
+    <div className="max-w-4xl mx-auto px-4 py-16 sm:py-24 relative">
+      {/* Luz ambiental sutil */}
+      <div 
+        className="pointer-events-none absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-red-600/[0.06] blur-[130px] rounded-full -z-10" 
+        aria-hidden="true" 
+      />
+
       {/* Encabezado del cotizador */}
-      <div className="text-center mb-10">
-        <span className="text-xs font-bold uppercase tracking-widest text-[#E53935]">
-          Cotizador Guiado · De la Idea al Objeto
-        </span>
-        <h2 className="text-3xl font-extrabold text-white mt-2 tracking-tight">
-          Configura tu propuesta de valor
+      <div className="text-center mb-12 space-y-3">
+        <div className="glass-pill inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold text-neutral-300">
+          <span className="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_8px_rgba(229,57,53,0.8)]" />
+          <span>De la Idea al Objeto</span>
+        </div>
+        <h2 className="text-3xl sm:text-5xl font-black text-white tracking-[-0.03em]">
+          Cotizador Guiado
         </h2>
-        <p className="text-neutral-400 text-sm mt-2 max-w-xl mx-auto">
-          Genera una proforma detallada con materiales de taller, medidas y acabados lista para revisión técnica y WhatsApp.
+        <p className="text-neutral-400 text-sm max-w-lg mx-auto leading-relaxed">
+          Configura materiales, acabados y medidas para generar una proforma oficial lista para el taller y WhatsApp.
         </p>
       </div>
 
-      {/* Stepper de 4 pasos */}
-      <div className="mb-10">
-        <div className="grid grid-cols-4 gap-2 text-center text-xs font-semibold">
+      {/* Stepper de 4 pasos estilo Liquid Glass */}
+      <div className="mb-10 p-1.5 rounded-2xl glass-pill max-w-xl mx-auto">
+        <div className="grid grid-cols-4 gap-1.5 text-center text-xs font-bold">
           {[
             { stepNum: 1, title: '1. Servicio' },
             { stepNum: 2, title: '2. Técnica' },
@@ -202,12 +208,12 @@ ${clientEmail ? `📧 *Email:* ${clientEmail}\n` : ''}
           ].map((s) => (
             <div 
               key={s.stepNum} 
-              className={`pb-2 border-b-2 transition-all ${
+              className={`py-2 px-2 rounded-xl transition-all ${
                 step === s.stepNum 
-                  ? 'border-[#C41E3A] text-white font-bold' 
+                  ? 'bg-gradient-to-r from-red-600 to-[#C41E3A] text-white shadow-md' 
                   : step > s.stepNum 
-                    ? 'border-neutral-700 text-neutral-400' 
-                    : 'border-neutral-900 text-neutral-600'
+                    ? 'text-neutral-300 bg-white/[0.04]' 
+                    : 'text-neutral-500'
               }`}
             >
               {s.title}
@@ -216,69 +222,69 @@ ${clientEmail ? `📧 *Email:* ${clientEmail}\n` : ''}
         </div>
       </div>
 
-      {/* Tarjeta contenedora de pasos */}
-      <div className="bg-neutral-950 border border-neutral-800 rounded-2xl p-6 sm:p-8 shadow-2xl relative">
+      {/* Tarjeta contenedora de pasos (Frosted Glass Panel) */}
+      <div className="glass-panel rounded-3xl p-6 sm:p-10 relative">
         
         {/* ===================== PASO 1: SELECCIÓN DE PRODUCTO/SERVICIO ===================== */}
         {step === 1 && (
-          <div className="space-y-6">
+          <div className="space-y-8">
             <div>
-              <h3 className="text-xl font-bold text-white">¿Qué idea deseas materializar?</h3>
-              <p className="text-xs text-neutral-400 mt-1">
-                Selecciona la categoría principal y el producto base para tu proyecto.
+              <h3 className="text-2xl font-bold text-white tracking-tight">¿Qué deseas materializar?</h3>
+              <p className="text-xs sm:text-sm text-neutral-400 mt-1">
+                Selecciona la categoría principal y el producto base de nuestro taller.
               </p>
             </div>
 
-            {/* Categorías en pill-free segmented grid */}
+            {/* Categorías en Frosted Glass */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {CATEGORIES.map((cat) => (
                 <button
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.id)}
-                  className={`p-3 text-left rounded-xl border text-xs transition-all cursor-pointer ${
+                  className={`p-4 text-left rounded-2xl border text-xs transition-all cursor-pointer ${
                     selectedCategory === cat.id
-                      ? 'border-[#C41E3A] bg-red-950/20 text-white shadow-sm'
-                      : 'border-neutral-800 bg-neutral-900/60 text-neutral-400 hover:text-neutral-200 hover:border-neutral-700'
+                      ? 'border-red-500/60 bg-red-950/40 text-white shadow-[0_0_20px_rgba(196,30,58,0.25)] ring-1 ring-red-500/40'
+                      : 'border-white/[0.07] bg-white/[0.02] text-neutral-400 hover:text-white hover:bg-white/[0.06]'
                   }`}
                 >
                   <div className="font-bold text-sm mb-1 text-white">{cat.title}</div>
-                  <div className="text-[11px] text-neutral-400 line-clamp-1">{cat.subtitle}</div>
+                  <div className="text-[11px] text-neutral-400/80 line-clamp-1">{cat.subtitle}</div>
                 </button>
               ))}
             </div>
 
-            {/* Selector de Producto específico dentro de la categoría */}
-            <div className="pt-4 border-t border-neutral-800">
-              <label className="block text-xs font-semibold text-neutral-300 uppercase tracking-wider mb-3">
-                Producto o Variante Específica
+            {/* Selector de Producto específico */}
+            <div className="pt-6 border-t border-white/[0.08]">
+              <label className="block text-xs font-bold text-neutral-300 uppercase tracking-wider mb-4 font-mono">
+                Variante o Producto Específico
               </label>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 {products
                   .filter(p => p.category === selectedCategory && p.active)
                   .map((p) => (
                     <button
                       key={p.id}
                       onClick={() => setSelectedProductId(p.id)}
-                      className={`p-4 rounded-xl border text-left transition-all cursor-pointer ${
+                      className={`p-5 rounded-2xl border text-left transition-all cursor-pointer ${
                         selectedProductId === p.id
-                          ? 'border-[#C41E3A] bg-neutral-900 text-white ring-1 ring-[#C41E3A]'
-                          : 'border-neutral-800 bg-neutral-900/40 text-neutral-400 hover:text-white hover:border-neutral-700'
+                          ? 'border-red-500/60 bg-red-950/30 text-white ring-1 ring-red-500/40 shadow-lg'
+                          : 'border-white/[0.07] bg-white/[0.02] text-neutral-400 hover:text-white hover:bg-white/[0.05]'
                       }`}
                     >
-                      <div className="flex items-center justify-between mb-1">
+                      <div className="flex items-center justify-between mb-1.5">
                         <span className="font-bold text-sm text-white">{p.name}</span>
                         {p.badge && (
-                          <span className="text-[10px] text-red-400 font-mono-numbers">
+                          <span className="glass-pill px-2.5 py-0.5 rounded-full text-[10px] text-red-400 font-mono-numbers">
                             {p.badge}
                           </span>
                         )}
                       </div>
-                      <p className="text-xs text-neutral-400 line-clamp-2 mt-1">
+                      <p className="text-xs text-neutral-400 line-clamp-2 mt-1 leading-relaxed">
                         {p.tagline}
                       </p>
-                      <div className="mt-3 flex items-center justify-between text-xs text-neutral-400">
-                        <span>Desde ${p.basePriceUsd} USD</span>
-                        <span>{p.turnaroundDays}</span>
+                      <div className="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs text-neutral-400">
+                        <span className="text-neutral-300 font-semibold">Desde ${p.basePriceUsd} USD</span>
+                        <span className="font-mono text-[11px]">{p.turnaroundDays}</span>
                       </div>
                     </button>
                   ))}
@@ -290,7 +296,7 @@ ${clientEmail ? `📧 *Email:* ${clientEmail}\n` : ''}
               <button
                 disabled={!canProceedStep1}
                 onClick={() => setStep(2)}
-                className="inline-flex items-center gap-2 px-6 py-3 text-xs font-bold uppercase tracking-wider text-white bg-[#C41E3A] hover:bg-[#a6172f] disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-colors cursor-pointer"
+                className="btn-primary-material inline-flex items-center gap-2 px-7 py-3.5 text-xs font-bold uppercase tracking-wider text-white disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
               >
                 <span>Continuar a Especificaciones</span>
                 <ArrowRight className="w-4 h-4" />
@@ -301,28 +307,28 @@ ${clientEmail ? `📧 *Email:* ${clientEmail}\n` : ''}
 
         {/* ===================== PASO 2: TÉCNICA Y ESPECIFICACIONES ===================== */}
         {step === 2 && currentProduct && (
-          <div className="space-y-6">
+          <div className="space-y-8">
             <div>
-              <h3 className="text-xl font-bold text-white">Especificaciones de Taller</h3>
-              <p className="text-xs text-neutral-400 mt-1">
+              <h3 className="text-2xl font-bold text-white tracking-tight">Especificaciones de Taller</h3>
+              <p className="text-xs sm:text-sm text-neutral-400 mt-1">
                 Configurando para: <strong className="text-white">{currentProduct.name}</strong>
               </p>
             </div>
 
             {/* Selección de Material / Soporte */}
             <div>
-              <label className="block text-xs font-semibold text-neutral-300 uppercase tracking-wider mb-2">
+              <label className="block text-xs font-bold text-neutral-300 uppercase tracking-wider mb-3 font-mono">
                 1. Material o Soporte de Fabricación
               </label>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {currentProduct.availableMaterials.map((mat) => (
                   <button
                     key={mat}
                     onClick={() => setSelectedMaterial(mat)}
-                    className={`p-3 text-left rounded-lg border text-xs font-medium transition-all cursor-pointer ${
+                    className={`p-4 text-left rounded-2xl border text-xs font-semibold transition-all cursor-pointer ${
                       selectedMaterial === mat
-                        ? 'border-[#C41E3A] bg-red-950/20 text-white'
-                        : 'border-neutral-800 bg-neutral-900/50 text-neutral-400 hover:text-white'
+                        ? 'border-red-500/60 bg-red-950/30 text-white shadow-sm ring-1 ring-red-500/30'
+                        : 'border-white/[0.07] bg-white/[0.02] text-neutral-400 hover:text-white hover:bg-white/[0.05]'
                     }`}
                   >
                     <div className="flex items-center justify-between">
@@ -336,18 +342,18 @@ ${clientEmail ? `📧 *Email:* ${clientEmail}\n` : ''}
 
             {/* Selección de Acabado / Iluminación */}
             <div>
-              <label className="block text-xs font-semibold text-neutral-300 uppercase tracking-wider mb-2">
+              <label className="block text-xs font-bold text-neutral-300 uppercase tracking-wider mb-3 font-mono">
                 2. Acabado o Técnica de Personalización
               </label>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {currentProduct.availableFinishes.map((fin) => (
                   <button
                     key={fin}
                     onClick={() => setSelectedFinish(fin)}
-                    className={`p-3 text-left rounded-lg border text-xs font-medium transition-all cursor-pointer ${
+                    className={`p-4 text-left rounded-2xl border text-xs font-semibold transition-all cursor-pointer ${
                       selectedFinish === fin
-                        ? 'border-[#C41E3A] bg-red-950/20 text-white'
-                        : 'border-neutral-800 bg-neutral-900/50 text-neutral-400 hover:text-white'
+                        ? 'border-red-500/60 bg-red-950/30 text-white shadow-sm ring-1 ring-red-500/30'
+                        : 'border-white/[0.07] bg-white/[0.02] text-neutral-400 hover:text-white hover:bg-white/[0.05]'
                     }`}
                   >
                     <div className="flex items-center justify-between">
@@ -360,47 +366,47 @@ ${clientEmail ? `📧 *Email:* ${clientEmail}\n` : ''}
             </div>
 
             {/* Medidas y Cantidad */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-2">
               <div>
-                <label className="block text-xs font-semibold text-neutral-300 uppercase tracking-wider mb-2">
-                  3. Medidas Estimadas (Alto x Ancho)
+                <label className="block text-xs font-bold text-neutral-300 uppercase tracking-wider mb-2 font-mono">
+                  3. Medidas Estimadas
                 </label>
                 <input
                   type="text"
                   placeholder="Ej: 120 x 60 cm o modelo de vehículo"
                   value={dimensions}
                   onChange={(e) => setDimensions(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-lg bg-neutral-900 border border-neutral-800 text-white text-xs placeholder-neutral-500 focus:outline-none focus:border-red-500"
+                  className="w-full px-4 py-3 rounded-2xl bg-white/[0.04] border border-white/10 text-white text-xs placeholder-neutral-500 focus:outline-none focus:border-red-500/60"
                 />
-                <span className="text-[11px] text-neutral-500 mt-1 block">
-                  Si no estás seguro de las medidas, el equipo puede realizar el levantamiento en tu local.
+                <span className="text-[11px] text-neutral-500 mt-1.5 block">
+                  Si no tienes medidas exactas, nuestro equipo puede medirlas en sitio.
                 </span>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-neutral-300 uppercase tracking-wider mb-2">
+                <label className="block text-xs font-bold text-neutral-300 uppercase tracking-wider mb-2 font-mono">
                   4. Cantidad Requerida ({currentProduct.unit})
                 </label>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-4">
                   <input
                     type="number"
                     min={1}
                     value={quantity}
                     onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
-                    className="w-32 px-4 py-2.5 rounded-lg bg-neutral-900 border border-neutral-800 text-white text-sm font-bold font-mono-numbers focus:outline-none focus:border-red-500 text-center"
+                    className="w-32 px-4 py-3 rounded-2xl bg-white/[0.04] border border-white/10 text-white text-sm font-bold font-mono-numbers focus:outline-none focus:border-red-500/60 text-center"
                   />
                   <span className="text-xs text-neutral-400">
-                    Tiempo de taller: <strong className="text-neutral-300">{currentProduct.turnaroundDays}</strong>
+                    Tiempo de taller: <strong className="text-neutral-200">{currentProduct.turnaroundDays}</strong>
                   </span>
                 </div>
               </div>
             </div>
 
             {/* Botones de navegación */}
-            <div className="pt-6 border-t border-neutral-800 flex items-center justify-between">
+            <div className="pt-6 border-t border-white/[0.08] flex items-center justify-between">
               <button
                 onClick={() => setStep(1)}
-                className="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-medium text-neutral-400 hover:text-white cursor-pointer"
+                className="btn-secondary-glass inline-flex items-center gap-2 px-5 py-3 text-xs font-medium text-neutral-300 cursor-pointer"
               >
                 <ArrowLeft className="w-4 h-4" />
                 <span>Volver a Servicios</span>
@@ -409,7 +415,7 @@ ${clientEmail ? `📧 *Email:* ${clientEmail}\n` : ''}
               <button
                 disabled={!canProceedStep2}
                 onClick={() => setStep(3)}
-                className="inline-flex items-center gap-2 px-6 py-3 text-xs font-bold uppercase tracking-wider text-white bg-[#C41E3A] hover:bg-[#a6172f] disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-colors cursor-pointer"
+                className="btn-primary-material inline-flex items-center gap-2 px-7 py-3.5 text-xs font-bold uppercase tracking-wider text-white disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
               >
                 <span>Continuar a Diseño</span>
                 <ArrowRight className="w-4 h-4" />
@@ -420,37 +426,39 @@ ${clientEmail ? `📧 *Email:* ${clientEmail}\n` : ''}
 
         {/* ===================== PASO 3: DISEÑO Y ARCHIVOS ===================== */}
         {step === 3 && (
-          <div className="space-y-6">
+          <div className="space-y-8">
             <div>
-              <h3 className="text-xl font-bold text-white">Diseño, Arte y Archivos</h3>
-              <p className="text-xs text-neutral-400 mt-1">
-                Cuéntanos cómo imaginas el arte o adjunta tu archivo vectorial / boceto para que el taller prepare el render.
+              <h3 className="text-2xl font-bold text-white tracking-tight">Diseño, Arte y Archivos</h3>
+              <p className="text-xs sm:text-sm text-neutral-400 mt-1">
+                Sube tu logo vectorial o cuéntanos la idea para que el taller prepare la muestra digital.
               </p>
             </div>
 
-            {/* Dropzone de Carga de Arte */}
-            <div className="border-2 border-dashed border-neutral-800 hover:border-neutral-700 rounded-xl p-8 text-center bg-neutral-900/40 relative">
+            {/* Dropzone de Carga de Arte en Glass */}
+            <div className="border-2 border-dashed border-white/15 hover:border-red-500/40 rounded-3xl p-8 sm:p-10 text-center bg-white/[0.02] hover:bg-red-950/[0.08] transition-all relative">
               <input
                 type="file"
                 accept=".png,.jpg,.jpeg,.ai,.pdf,.svg,.eps,.psd"
                 onChange={handleFileUpload}
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               />
-              <Upload className="w-8 h-8 text-neutral-500 mx-auto mb-2" />
-              <div className="text-sm font-medium text-white">
+              <div className="w-14 h-14 rounded-2xl bg-white/[0.05] border border-white/10 flex items-center justify-center text-red-500 mx-auto mb-3 shadow-inner">
+                <Upload className="w-6 h-6" />
+              </div>
+              <div className="text-sm font-semibold text-white">
                 {artFileName ? (
-                  <span className="text-red-400 font-semibold">{artFileName}</span>
+                  <span className="text-red-400 font-bold">{artFileName}</span>
                 ) : (
-                  <span>Arrastra tu logotipo o haz clic para subir</span>
+                  <span>Arrastra tu logotipo o haz clic para cargar archivo</span>
                 )}
               </div>
-              <p className="text-xs text-neutral-500 mt-1">
-                Formatos aceptados: .AI, .PDF, .SVG, .EPS o imágenes en alta resolución .PNG/.JPG
+              <p className="text-xs text-neutral-500 mt-1.5">
+                Formatos: .AI, .PDF, .SVG, .EPS o imágenes en alta resolución .PNG/.JPG
               </p>
             </div>
 
-            {/* Estado de vector */}
-            <div className="flex items-center gap-3 p-3 bg-neutral-900/60 border border-neutral-800 rounded-lg text-xs">
+            {/* Check de vector */}
+            <div className="glass-pill p-4 rounded-2xl flex items-center gap-3 text-xs">
               <input
                 type="checkbox"
                 id="vectorCheck"
@@ -458,30 +466,30 @@ ${clientEmail ? `📧 *Email:* ${clientEmail}\n` : ''}
                 onChange={(e) => setHasVector(e.target.checked)}
                 className="rounded accent-red-600 w-4 h-4 cursor-pointer"
               />
-              <label htmlFor="vectorCheck" className="text-neutral-300 cursor-pointer">
-                Ya cuento con el logo en formato editable/vectorial (AI, PDF o SVG). Si no lo tienes, nuestro equipo de diseño gráfico puede vectorizarlo.
+              <label htmlFor="vectorCheck" className="text-neutral-300 cursor-pointer font-medium">
+                Cuento con el logo en vector editable (AI, PDF o SVG). Si no lo tienes, nuestro equipo de diseño gráfico puede adaptarlo.
               </label>
             </div>
 
-            {/* Descripción / Requerimientos de color */}
+            {/* Observaciones de color */}
             <div>
-              <label className="block text-xs font-semibold text-neutral-300 uppercase tracking-wider mb-2">
-                Indicaciones de Colores, Ubicación o Observaciones
+              <label className="block text-xs font-bold text-neutral-300 uppercase tracking-wider mb-2 font-mono">
+                Indicaciones de Color, Posición o Especificaciones
               </label>
               <textarea
                 rows={4}
-                placeholder="Indica colores corporativos Pantone, posición del logo, tipografía deseada o detalles especiales para el taller..."
+                placeholder="Indica colores Pantone corporativos, posición del logotipo, tipografías deseadas o detalles del montaje..."
                 value={artDescription}
                 onChange={(e) => setArtDescription(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg bg-neutral-900 border border-neutral-800 text-white text-xs placeholder-neutral-500 focus:outline-none focus:border-red-500"
+                className="w-full px-4 py-3.5 rounded-2xl bg-white/[0.04] border border-white/10 text-white text-xs placeholder-neutral-500 focus:outline-none focus:border-red-500/60 leading-relaxed"
               />
             </div>
 
             {/* Botones de navegación */}
-            <div className="pt-6 border-t border-neutral-800 flex items-center justify-between">
+            <div className="pt-6 border-t border-white/[0.08] flex items-center justify-between">
               <button
                 onClick={() => setStep(2)}
-                className="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-medium text-neutral-400 hover:text-white cursor-pointer"
+                className="btn-secondary-glass inline-flex items-center gap-2 px-5 py-3 text-xs font-medium text-neutral-300 cursor-pointer"
               >
                 <ArrowLeft className="w-4 h-4" />
                 <span>Volver a Especificaciones</span>
@@ -490,7 +498,7 @@ ${clientEmail ? `📧 *Email:* ${clientEmail}\n` : ''}
               <button
                 disabled={!canProceedStep3}
                 onClick={() => setStep(4)}
-                className="inline-flex items-center gap-2 px-6 py-3 text-xs font-bold uppercase tracking-wider text-white bg-[#C41E3A] hover:bg-[#a6172f] disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-colors cursor-pointer"
+                className="btn-primary-material inline-flex items-center gap-2 px-7 py-3.5 text-xs font-bold uppercase tracking-wider text-white disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
               >
                 <span>Ver Resumen & Proforma</span>
                 <ArrowRight className="w-4 h-4" />
@@ -501,127 +509,128 @@ ${clientEmail ? `📧 *Email:* ${clientEmail}\n` : ''}
 
         {/* ===================== PASO 4: RESUMEN Y GENERACIÓN DE PROFORMA ===================== */}
         {step === 4 && (
-          <div className="space-y-6">
+          <div className="space-y-8">
             <div>
-              <h3 className="text-xl font-bold text-white">Resumen de Proforma & Envío</h3>
-              <p className="text-xs text-neutral-400 mt-1">
-                Revisa los datos de tu cotización antes de enviarla al equipo técnico de Arte Inédito en Lechería.
+              <h3 className="text-2xl font-bold text-white tracking-tight">Resumen de Proforma</h3>
+              <p className="text-xs sm:text-sm text-neutral-400 mt-1">
+                Revisa los datos de tu cotización antes de archivarla en sistema y enviarla a WhatsApp.
               </p>
             </div>
 
-            {/* Desglose de Cotización en formato Proforma */}
-            <div className="bg-neutral-900/80 border border-neutral-800 rounded-xl p-5 space-y-4">
-              <div className="flex items-center justify-between pb-3 border-b border-neutral-800">
+            {/* Desglose de Cotización en formato Proforma Glass */}
+            <div className="p-6 sm:p-7 rounded-3xl bg-white/[0.03] border border-white/10 space-y-5 shadow-inner">
+              <div className="flex items-center justify-between pb-4 border-b border-white/[0.08]">
                 <div>
-                  <div className="text-xs text-neutral-500 uppercase tracking-widest font-mono">Ítem Configurado</div>
-                  <div className="text-base font-bold text-white">{currentProduct?.name}</div>
+                  <div className="text-[10px] text-neutral-400 uppercase tracking-widest font-mono">Ítem Configurado</div>
+                  <div className="text-lg font-bold text-white mt-0.5">{currentProduct?.name}</div>
                 </div>
                 <div className="text-right">
-                  <div className="text-xs text-neutral-500 uppercase tracking-widest font-mono">Estimado Ref.</div>
-                  <div className="text-lg font-black text-red-400 font-mono-numbers">~${estimatedTotal} USD</div>
+                  <div className="text-[10px] text-neutral-400 uppercase tracking-widest font-mono">Estimado Ref.</div>
+                  <div className="text-xl font-black text-red-400 font-mono-numbers">~${estimatedTotal} USD</div>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
                 <div>
-                  <span className="text-neutral-500 block">Soporte:</span>
-                  <span className="text-neutral-200 font-medium">{selectedMaterial}</span>
+                  <span className="text-neutral-500 block text-[10px] uppercase font-mono">Soporte:</span>
+                  <span className="text-neutral-200 font-semibold">{selectedMaterial}</span>
                 </div>
                 <div>
-                  <span className="text-neutral-500 block">Acabado:</span>
-                  <span className="text-neutral-200 font-medium">{selectedFinish}</span>
+                  <span className="text-neutral-500 block text-[10px] uppercase font-mono">Acabado:</span>
+                  <span className="text-neutral-200 font-semibold">{selectedFinish}</span>
                 </div>
                 <div>
-                  <span className="text-neutral-500 block">Medidas:</span>
-                  <span className="text-neutral-200 font-medium">{dimensions || 'A convenir'}</span>
+                  <span className="text-neutral-500 block text-[10px] uppercase font-mono">Medidas:</span>
+                  <span className="text-neutral-200 font-semibold">{dimensions || 'A convenir'}</span>
                 </div>
                 <div>
-                  <span className="text-neutral-500 block">Cantidad:</span>
-                  <span className="text-neutral-200 font-medium font-mono-numbers">{quantity} {currentProduct?.unit}</span>
+                  <span className="text-neutral-500 block text-[10px] uppercase font-mono">Cantidad:</span>
+                  <span className="text-neutral-200 font-bold font-mono-numbers">{quantity} {currentProduct?.unit}</span>
                 </div>
               </div>
 
               {artFileName && (
-                <div className="pt-2 text-xs text-neutral-400 border-t border-neutral-800/60">
-                  <span className="text-neutral-500">Arte adjunto:</span> <span className="text-neutral-300 font-mono">{artFileName}</span>
+                <div className="pt-3 text-xs border-t border-white/[0.06] flex items-center gap-2">
+                  <span className="text-neutral-500">Arte adjunto:</span> 
+                  <span className="text-red-400 font-mono font-medium">{artFileName}</span>
                 </div>
               )}
             </div>
 
             {/* Formulario de Datos de Contacto */}
             <div className="space-y-4 pt-2">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-neutral-300">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-neutral-300 font-mono">
                 Datos de Contacto para la Proforma
               </h4>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-neutral-400 mb-1">
+                  <label className="block text-xs font-semibold text-neutral-400 mb-1.5">
                     Nombre y Apellido *
                   </label>
                   <div className="relative">
-                    <User className="w-4 h-4 text-neutral-500 absolute left-3 top-3" />
+                    <User className="w-4 h-4 text-neutral-500 absolute left-4 top-3.5" />
                     <input
                       type="text"
                       placeholder="Ej: Carlos Silva"
                       value={clientName}
                       onChange={(e) => setClientName(e.target.value)}
-                      className="w-full pl-9 pr-4 py-2.5 rounded-lg bg-neutral-900 border border-neutral-800 text-white text-xs placeholder-neutral-500 focus:outline-none focus:border-red-500"
+                      className="w-full pl-10 pr-4 py-3 rounded-2xl bg-white/[0.04] border border-white/10 text-white text-xs placeholder-neutral-500 focus:outline-none focus:border-red-500/60"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-neutral-400 mb-1">
+                  <label className="block text-xs font-semibold text-neutral-400 mb-1.5">
                     Empresa o Marca (Opcional)
                   </label>
                   <div className="relative">
-                    <Building2 className="w-4 h-4 text-neutral-500 absolute left-3 top-3" />
+                    <Building2 className="w-4 h-4 text-neutral-500 absolute left-4 top-3.5" />
                     <input
                       type="text"
                       placeholder="Ej: Restaurante Sol & Mar"
                       value={clientCompany}
                       onChange={(e) => setClientCompany(e.target.value)}
-                      className="w-full pl-9 pr-4 py-2.5 rounded-lg bg-neutral-900 border border-neutral-800 text-white text-xs placeholder-neutral-500 focus:outline-none focus:border-red-500"
+                      className="w-full pl-10 pr-4 py-3 rounded-2xl bg-white/[0.04] border border-white/10 text-white text-xs placeholder-neutral-500 focus:outline-none focus:border-red-500/60"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-neutral-400 mb-1">
+                  <label className="block text-xs font-semibold text-neutral-400 mb-1.5">
                     Número de WhatsApp *
                   </label>
                   <div className="relative">
-                    <Phone className="w-4 h-4 text-neutral-500 absolute left-3 top-3" />
+                    <Phone className="w-4 h-4 text-neutral-500 absolute left-4 top-3.5" />
                     <input
                       type="tel"
                       placeholder="Ej: +58 414-1234567"
                       value={clientPhone}
                       onChange={(e) => setClientPhone(e.target.value)}
-                      className="w-full pl-9 pr-4 py-2.5 rounded-lg bg-neutral-900 border border-neutral-800 text-white text-xs placeholder-neutral-500 focus:outline-none focus:border-red-500"
+                      className="w-full pl-10 pr-4 py-3 rounded-2xl bg-white/[0.04] border border-white/10 text-white text-xs placeholder-neutral-500 focus:outline-none focus:border-red-500/60"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-neutral-400 mb-1">
+                  <label className="block text-xs font-semibold text-neutral-400 mb-1.5">
                     Correo Electrónico (Opcional)
                   </label>
                   <div className="relative">
-                    <Mail className="w-4 h-4 text-neutral-500 absolute left-3 top-3" />
+                    <Mail className="w-4 h-4 text-neutral-500 absolute left-4 top-3.5" />
                     <input
                       type="email"
                       placeholder="contacto@tuempresa.com"
                       value={clientEmail}
                       onChange={(e) => setClientEmail(e.target.value)}
-                      className="w-full pl-9 pr-4 py-2.5 rounded-lg bg-neutral-900 border border-neutral-800 text-white text-xs placeholder-neutral-500 focus:outline-none focus:border-red-500"
+                      className="w-full pl-10 pr-4 py-3 rounded-2xl bg-white/[0.04] border border-white/10 text-white text-xs placeholder-neutral-500 focus:outline-none focus:border-red-500/60"
                     />
                   </div>
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-neutral-400 mb-1">
+                <label className="block text-xs font-semibold text-neutral-400 mb-1.5">
                   Notas adicionales para el taller
                 </label>
                 <input
@@ -629,54 +638,52 @@ ${clientEmail ? `📧 *Email:* ${clientEmail}\n` : ''}
                   placeholder="Ej: Requerimos factura fiscal o entrega antes del viernes..."
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-lg bg-neutral-900 border border-neutral-800 text-white text-xs placeholder-neutral-500 focus:outline-none focus:border-red-500"
+                  className="w-full px-4 py-3 rounded-2xl bg-white/[0.04] border border-white/10 text-white text-xs placeholder-neutral-500 focus:outline-none focus:border-red-500/60"
                 />
               </div>
             </div>
 
-            {/* Error si falta algún dato */}
             {errorMsg && (
-              <div className="p-3 bg-red-950/40 border border-red-800/80 rounded-lg text-xs text-red-300 flex items-center gap-2">
+              <div className="p-4 bg-red-950/40 border border-red-800/80 rounded-2xl text-xs text-red-300 flex items-center gap-2.5">
                 <AlertCircle className="w-4 h-4 shrink-0 text-red-400" />
                 <span>{errorMsg}</span>
               </div>
             )}
 
-            {/* Estado una vez enviado con folio generado */}
+            {/* Éxito: Proforma Generada */}
             {generatedFolio ? (
-              <div className="p-6 bg-red-950/20 border border-red-800/60 rounded-xl space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-[#C41E3A] flex items-center justify-center text-white shrink-0">
+              <div className="p-8 rounded-3xl bg-red-950/30 border border-red-800/60 space-y-5 animate-in fade-in">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-2xl bg-red-600 flex items-center justify-center text-white shrink-0 shadow-lg shadow-red-950/60">
                     <Check className="w-6 h-6" />
                   </div>
                   <div>
-                    <h4 className="text-base font-bold text-white">
+                    <h4 className="text-lg font-bold text-white">
                       ¡Cotización Registrada con Éxito!
                     </h4>
-                    <p className="text-xs text-neutral-300">
+                    <p className="text-xs text-neutral-300 mt-0.5">
                       Folio oficial asignado: <strong className="text-red-400 font-mono-numbers">{generatedFolio}</strong>. Ha quedado archivada en el sistema del taller.
                     </p>
                   </div>
                 </div>
 
-                <p className="text-xs text-neutral-400">
-                  Para agilizar la producción y coordinar la entrega o prueba de color, haz clic en el botón a continuación para enviar la proforma estructurada directamente al WhatsApp oficial de Arte Inédito.
+                <p className="text-xs text-neutral-400 leading-relaxed">
+                  Para coordinar la fabricación o recibir render 3D preliminar, envía la proforma estructurada directamente al WhatsApp oficial de Arte Inédito en Lechería.
                 </p>
 
                 <button
                   onClick={handleOpenWhatsApp}
-                  className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 text-xs font-bold uppercase tracking-wider text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-lg shadow-emerald-950/40 transition-colors cursor-pointer"
+                  className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-4 text-xs font-bold uppercase tracking-wider text-white bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 rounded-2xl shadow-xl shadow-emerald-950/50 transition-all cursor-pointer"
                 >
-                  <MessageCircle className="w-4 h-4" />
+                  <MessageCircle className="w-5 h-5" />
                   <span>Enviar Proforma a WhatsApp (wa.link/alpo7z)</span>
                 </button>
               </div>
             ) : (
-              /* Botón de Enviar Cotización Inicial */
-              <div className="pt-6 border-t border-neutral-800 flex items-center justify-between">
+              <div className="pt-6 border-t border-white/[0.08] flex items-center justify-between">
                 <button
                   onClick={() => setStep(3)}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-medium text-neutral-400 hover:text-white cursor-pointer"
+                  className="btn-secondary-glass inline-flex items-center gap-2 px-5 py-3 text-xs font-medium text-neutral-300 cursor-pointer"
                 >
                   <ArrowLeft className="w-4 h-4" />
                   <span>Volver a Diseño</span>
@@ -685,7 +692,7 @@ ${clientEmail ? `📧 *Email:* ${clientEmail}\n` : ''}
                 <button
                   disabled={!canProceedStep4 || isSubmitting}
                   onClick={handleFinalSubmit}
-                  className="inline-flex items-center gap-2 px-8 py-3.5 text-xs font-bold uppercase tracking-wider text-white bg-[#C41E3A] hover:bg-[#a6172f] disabled:opacity-50 disabled:cursor-not-allowed rounded-lg shadow-lg shadow-red-950/40 transition-colors cursor-pointer"
+                  className="btn-primary-material inline-flex items-center gap-2 px-8 py-4 text-xs font-bold uppercase tracking-wider text-white disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                 >
                   {isSubmitting ? (
                     <span>Registrando en Sistema...</span>

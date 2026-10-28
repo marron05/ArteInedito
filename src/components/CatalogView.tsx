@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ProductItem, ProductCategory } from '../types';
 import { CATEGORIES } from './CategoryGrid';
-import { Search, ArrowRight, X, Clock, Layers, Sparkles, Check } from 'lucide-react';
+import { Search, ArrowRight, X, Clock, Layers, Sparkles, Check, SlidersHorizontal } from 'lucide-react';
 
 interface CatalogViewProps {
   products: ProductItem[];
@@ -30,44 +30,51 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
   });
 
   return (
-    <section className="py-16 bg-neutral-950 min-h-screen">
+    <section className="py-16 sm:py-24 relative min-h-screen">
+      {/* Luz ambiental sutil */}
+      <div 
+        className="pointer-events-none absolute top-10 left-1/4 w-[500px] h-[350px] bg-red-600/[0.05] blur-[120px] rounded-full -z-10" 
+        aria-hidden="true" 
+      />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Cabecera de catálogo */}
-        <div className="mb-10 text-center sm:text-left flex flex-col sm:flex-row sm:items-end justify-between gap-6">
-          <div>
-            <span className="text-xs font-bold uppercase tracking-widest text-[#E53935]">
+        <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-8">
+          <div className="space-y-3">
+            <div className="glass-pill inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold text-neutral-300">
+              <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+              <span>Showroom Digital</span>
+            </div>
+            <h1 className="text-3xl sm:text-5xl font-black text-white tracking-[-0.03em]">
               Catálogo de Producción
-            </span>
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-white mt-1 tracking-tight">
-              Soluciones Publicitarias & Textiles
             </h1>
-            <p className="text-neutral-400 text-sm mt-2 max-w-xl">
-              Explora las soluciones reales fabricadas en nuestro taller en Lechería. Cada producto cuenta con especificaciones de materiales y opciones de acabado.
+            <p className="text-neutral-400 text-sm sm:text-base max-w-xl leading-relaxed">
+              Materializamos ideas con especificaciones industriales y acabados premium. Selecciona un producto para consultar fichas técnicas o cotizar.
             </p>
           </div>
 
-          {/* Buscador */}
-          <div className="w-full sm:w-72 relative">
-            <Search className="w-4 h-4 text-neutral-500 absolute left-3 top-3.5" />
+          {/* Buscador Glass */}
+          <div className="w-full md:w-80 relative">
+            <Search className="w-4 h-4 text-neutral-400 absolute left-4 top-3.5" />
             <input
               type="text"
               placeholder="Buscar corpóreo, vinil, franela..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2.5 rounded-lg bg-neutral-900 border border-neutral-800 text-white text-xs placeholder-neutral-500 focus:outline-none focus:border-red-500"
+              className="w-full pl-11 pr-4 py-3 rounded-2xl bg-white/[0.04] border border-white/10 text-white text-xs placeholder-neutral-500 focus:outline-none focus:border-red-500/60 focus:ring-1 focus:ring-red-500/40 backdrop-blur-md transition-all shadow-inner"
             />
           </div>
         </div>
 
-        {/* Filtros por Categoría (Segmented Controls sin Badges Garish) */}
-        <div className="mb-8 flex items-center gap-1.5 overflow-x-auto pb-2 scrollbar-none">
+        {/* Filtros por Categoría en Glass Pills */}
+        <div className="mb-10 flex items-center gap-2 overflow-x-auto pb-3 scrollbar-none">
           <button
             onClick={() => setSelectedCategory('all')}
-            className={`px-3.5 py-2 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+            className={`px-4 py-2 text-xs font-bold rounded-full transition-all duration-200 whitespace-nowrap shrink-0 cursor-pointer ${
               selectedCategory === 'all'
-                ? 'bg-neutral-100 text-neutral-950 font-bold'
-                : 'bg-neutral-900 text-neutral-400 hover:text-white hover:bg-neutral-800'
+                ? 'glass-pill-active text-white'
+                : 'glass-pill text-neutral-400 hover:text-white hover:bg-white/[0.06]'
             }`}
           >
             Todos los Productos ({products.filter(p => p.active).length})
@@ -78,10 +85,10 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`px-3.5 py-2 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                className={`px-4 py-2 text-xs font-semibold rounded-full transition-all duration-200 whitespace-nowrap shrink-0 cursor-pointer ${
                   selectedCategory === cat.id
-                    ? 'bg-[#C41E3A] text-white font-bold'
-                    : 'bg-neutral-900 text-neutral-400 hover:text-white hover:bg-neutral-800'
+                    ? 'glass-pill-active text-white'
+                    : 'glass-pill text-neutral-400 hover:text-white hover:bg-white/[0.06]'
                 }`}
               >
                 {cat.title} ({count})
@@ -92,7 +99,7 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
 
         {/* Grid de Productos */}
         {filteredProducts.length === 0 ? (
-          <div className="py-20 text-center border border-dashed border-neutral-800 rounded-2xl">
+          <div className="py-24 text-center glass-panel rounded-3xl p-8 border border-white/10">
             <p className="text-neutral-400 text-sm">
               No se encontraron productos que coincidan con la búsqueda.
             </p>
@@ -101,44 +108,46 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
                 setSelectedCategory('all');
                 setSearchQuery('');
               }}
-              className="mt-4 px-4 py-2 text-xs font-semibold text-white bg-neutral-800 hover:bg-neutral-700 rounded-lg cursor-pointer"
+              className="mt-4 btn-secondary-glass px-5 py-2.5 text-xs font-semibold text-white cursor-pointer"
             >
               Restablecer filtros
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredProducts.map((product) => (
               <div
                 key={product.id}
-                className="group flex flex-col justify-between bg-neutral-950 border border-neutral-800/80 rounded-xl overflow-hidden hover:border-red-900/60 transition-all duration-300 hover:shadow-xl hover:shadow-red-950/20"
+                className="glass-card group flex flex-col justify-between rounded-3xl overflow-hidden relative"
               >
                 <div>
-                  {/* Imagen de Producto con fallback seguro */}
-                  <div className="relative h-48 w-full overflow-hidden bg-neutral-900">
-                    <img
-                      src={product.imageUrl}
-                      alt={product.name}
-                      referrerPolicy="no-referrer"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-transparent to-transparent opacity-80" />
-                    
-                    {/* Badge editorial no-pill */}
-                    {product.badge && (
-                      <div className="absolute top-3 right-3 text-[11px] font-bold text-white bg-black/70 backdrop-blur-md px-2.5 py-1 rounded border border-white/10 uppercase tracking-wider font-mono">
-                        {product.badge}
-                      </div>
-                    )}
+                  {/* Imagen de Producto con contenedor estilizado */}
+                  <div className="relative h-56 w-full overflow-hidden bg-neutral-900 p-2">
+                    <div className="w-full h-full rounded-2xl overflow-hidden relative">
+                      <img
+                        src={product.imageUrl}
+                        alt={product.name}
+                        referrerPolicy="no-referrer"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#08080A] via-black/20 to-transparent opacity-85" />
+                      
+                      {/* Badge Glass pill */}
+                      {product.badge && (
+                        <div className="absolute top-3 right-3 glass-pill px-3 py-1 rounded-full text-[10px] font-bold text-white uppercase tracking-wider font-mono">
+                          {product.badge}
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   {/* Contenido de Ficha */}
-                  <div className="p-6">
-                    <div className="text-xs font-medium text-neutral-500 uppercase tracking-wider mb-1 font-mono">
+                  <div className="p-6 sm:p-7 pt-4">
+                    <div className="text-[11px] font-mono font-bold uppercase tracking-wider text-red-400 mb-1.5">
                       {product.category}
                     </div>
                     
-                    <h3 className="text-lg font-bold text-white group-hover:text-red-400 transition-colors">
+                    <h3 className="text-xl font-bold text-white tracking-tight group-hover:text-red-400 transition-colors">
                       {product.name}
                     </h3>
                     
@@ -146,15 +155,15 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
                       {product.tagline}
                     </p>
 
-                    {/* Metadata limpia sin cápsulas */}
-                    <div className="mt-4 pt-4 border-t border-neutral-900 flex items-center justify-between text-xs text-neutral-400">
+                    {/* Metadata con separadores elegantes */}
+                    <div className="mt-5 pt-4 border-t border-white/[0.06] flex items-center justify-between text-xs text-neutral-400">
                       <div>
-                        <span className="text-neutral-500 block text-[10px] uppercase font-mono">Entrega</span>
-                        <span className="text-neutral-300 font-medium">{product.turnaroundDays}</span>
+                        <span className="text-neutral-500 block text-[10px] uppercase font-mono tracking-wider">Entrega</span>
+                        <span className="text-neutral-200 font-semibold">{product.turnaroundDays}</span>
                       </div>
                       <div className="text-right">
-                        <span className="text-neutral-500 block text-[10px] uppercase font-mono">Precio Base Ref.</span>
-                        <span className="text-white font-bold font-mono-numbers">
+                        <span className="text-neutral-500 block text-[10px] uppercase font-mono tracking-wider">Base Ref.</span>
+                        <span className="text-white font-black text-sm font-mono-numbers">
                           {product.basePriceUsd ? `$${product.basePriceUsd} USD` : 'A Cotizar'}
                         </span>
                       </div>
@@ -163,16 +172,16 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
                 </div>
 
                 {/* Acciones de la Tarjeta */}
-                <div className="p-6 pt-0 grid grid-cols-2 gap-2">
+                <div className="p-6 sm:p-7 pt-0 grid grid-cols-2 gap-3">
                   <button
                     onClick={() => setActiveModalProduct(product)}
-                    className="px-3 py-2 text-xs font-semibold text-neutral-300 bg-neutral-900 hover:bg-neutral-800 rounded-lg text-center transition-colors cursor-pointer"
+                    className="btn-secondary-glass py-3 px-3 text-xs font-semibold text-neutral-200 text-center cursor-pointer"
                   >
                     Ficha Técnica
                   </button>
                   <button
                     onClick={() => onSelectProductForQuote(product)}
-                    className="px-3 py-2 text-xs font-bold text-white bg-[#C41E3A] hover:bg-[#a6172f] rounded-lg text-center flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                    className="btn-primary-material py-3 px-3 text-xs font-bold text-white text-center flex items-center justify-center gap-1.5 cursor-pointer"
                   >
                     <span>Cotizar</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -185,19 +194,20 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
 
       </div>
 
-      {/* Modal de Ficha Técnica Detallada */}
+      {/* Modal de Ficha Técnica Detallada (Liquid Glass 2026) */}
       {activeModalProduct && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="bg-neutral-950 border border-neutral-800 rounded-2xl max-w-2xl w-full p-6 sm:p-8 relative max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in duration-200">
+          <div className="glass-panel rounded-3xl max-w-2xl w-full p-6 sm:p-8 relative max-h-[90vh] overflow-y-auto">
             <button
               onClick={() => setActiveModalProduct(null)}
-              className="absolute top-4 right-4 p-2 text-neutral-400 hover:text-white rounded-lg cursor-pointer"
+              className="absolute top-5 right-5 p-2 rounded-xl glass-pill text-neutral-400 hover:text-white cursor-pointer"
+              aria-label="Cerrar modal"
             >
               <X className="w-5 h-5" />
             </button>
 
             <div className="flex flex-col sm:flex-row gap-6">
-              <div className="w-full sm:w-1/2 rounded-xl overflow-hidden bg-neutral-900 h-52 sm:h-auto">
+              <div className="w-full sm:w-1/2 rounded-2xl overflow-hidden bg-neutral-900 h-56 sm:h-auto border border-white/10">
                 <img
                   src={activeModalProduct.imageUrl}
                   alt={activeModalProduct.name}
@@ -207,10 +217,10 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
               </div>
 
               <div className="w-full sm:w-1/2 space-y-4">
-                <div className="text-xs font-mono uppercase text-[#E53935]">
+                <div className="glass-pill inline-flex px-3 py-1 rounded-full text-[11px] font-mono uppercase text-red-400">
                   {activeModalProduct.category}
                 </div>
-                <h3 className="text-xl font-bold text-white">
+                <h3 className="text-2xl font-black text-white tracking-tight">
                   {activeModalProduct.name}
                 </h3>
                 <p className="text-xs text-neutral-300 leading-relaxed">
@@ -219,12 +229,12 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
 
                 <div className="space-y-3 pt-2 text-xs">
                   <div>
-                    <span className="font-semibold text-neutral-400 block mb-1">
+                    <span className="font-bold text-neutral-400 block mb-1.5 uppercase text-[10px] tracking-wider font-mono">
                       Materiales Disponibles:
                     </span>
-                    <ul className="space-y-1">
+                    <ul className="space-y-1.5">
                       {activeModalProduct.availableMaterials.map((m) => (
-                        <li key={m} className="flex items-center gap-1.5 text-neutral-300">
+                        <li key={m} className="flex items-center gap-2 text-neutral-300">
                           <Check className="w-3.5 h-3.5 text-red-500 shrink-0" />
                           <span>{m}</span>
                         </li>
@@ -233,12 +243,12 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
                   </div>
 
                   <div>
-                    <span className="font-semibold text-neutral-400 block mb-1">
-                      Opciones de Acabado:
+                    <span className="font-bold text-neutral-400 block mb-1.5 uppercase text-[10px] tracking-wider font-mono">
+                      Acabados & Opciones:
                     </span>
-                    <ul className="space-y-1">
+                    <ul className="space-y-1.5">
                       {activeModalProduct.availableFinishes.map((f) => (
-                        <li key={f} className="flex items-center gap-1.5 text-neutral-300">
+                        <li key={f} className="flex items-center gap-2 text-neutral-300">
                           <Check className="w-3.5 h-3.5 text-red-500 shrink-0" />
                           <span>{f}</span>
                         </li>
@@ -246,9 +256,9 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
                     </ul>
                   </div>
 
-                  <div className="pt-2 border-t border-neutral-900 flex justify-between">
-                    <span className="text-neutral-400">Tiempo de producción:</span>
-                    <span className="text-white font-medium">{activeModalProduct.turnaroundDays}</span>
+                  <div className="pt-3 border-t border-white/[0.08] flex justify-between items-center">
+                    <span className="text-neutral-400 text-xs">Tiempo de producción:</span>
+                    <span className="text-white font-bold text-xs">{activeModalProduct.turnaroundDays}</span>
                   </div>
                 </div>
 
@@ -259,7 +269,7 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
                       setActiveModalProduct(null);
                       onSelectProductForQuote(prod);
                     }}
-                    className="w-full py-3 text-xs font-bold uppercase tracking-wider text-white bg-[#C41E3A] hover:bg-[#a6172f] rounded-lg transition-colors cursor-pointer flex items-center justify-center gap-2"
+                    className="btn-primary-material w-full py-3.5 text-xs font-bold uppercase tracking-wider text-white flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <span>Configurar y Cotizar Ahora</span>
                     <ArrowRight className="w-4 h-4" />

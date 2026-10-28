@@ -50,7 +50,7 @@ export const CATEGORIES: CategoryCardInfo[] = [
     id: 'textiles',
     title: 'Textiles & Uniformes',
     subtitle: 'Chemises & Franelas',
-    description: 'Confección y personalización con bordado digital y estampados. Incluye nuestra línea viral de cobijas y batas.',
+    description: 'Confección y personalización con bordado digital y estampados. Incluye nuestra línea de cobijas y batas.',
     icon: Shirt,
     materials: 'Piqué 65/35, Dry-Fit, Polar Fleece',
     turnaround: '4 a 7 días'
@@ -107,85 +107,89 @@ export const CategoryGrid: React.FC<CategoryGridProps> = ({
   onOpenQuoteWithCategory
 }) => {
   return (
-    <section className="py-20 bg-neutral-900/50 border-b border-neutral-800">
+    <section className="py-24 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Encabezado editorial sin slop ni comentarios */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
-          <div className="max-w-2xl">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#E53935]">
-              Líneas de Fabricación
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white mt-2 tracking-tight text-balance">
-              Capacidades técnicas de nuestro taller
+        {/* Encabezado Editorial */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+          <div className="max-w-2xl space-y-3">
+            <div className="glass-pill inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold text-neutral-300">
+              <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+              <span>Capacidades de Taller</span>
+            </div>
+            <h2 className="text-3xl sm:text-5xl font-black text-white tracking-[-0.03em] text-balance">
+              Líneas de Producción
             </h2>
-            <p className="text-neutral-400 mt-3 text-base leading-relaxed">
+            <p className="text-neutral-400 text-sm sm:text-base leading-relaxed">
               No tercerizamos la calidad: cada corpóreo, rotulación o uniforme sale de nuestras manos en la Esquina Inédita. Selecciona una línea para ver opciones y cotizar.
             </p>
           </div>
-          <div className="text-xs text-neutral-400 font-mono-numbers text-left md:text-right">
-            <span>08 Líneas Integradas</span>
-            <span className="mx-2">/</span>
-            <span>Taller Propio Lechería</span>
+
+          <div className="flex items-center gap-2 text-xs text-neutral-400 font-mono-numbers">
+            <span className="glass-pill px-3 py-1.5 rounded-full">08 Técnicas Integradas</span>
+            <span className="glass-pill px-3 py-1.5 rounded-full">Sede Lechería</span>
           </div>
         </div>
 
-        {/* Grid Asimétrico y estructurado */}
+        {/* Grid de Frosted Dark Glass Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {CATEGORIES.map((cat, idx) => {
             const Icon = cat.icon;
             return (
               <div
                 key={cat.id}
-                className="group relative flex flex-col justify-between p-6 rounded-xl bg-neutral-950 border border-neutral-800/80 hover:border-red-900/60 transition-all duration-300 hover:shadow-xl hover:shadow-red-950/20"
+                className="glass-card group flex flex-col justify-between p-6 sm:p-7 rounded-3xl relative overflow-hidden"
               >
+                {/* Iluminación de fondo sutil al hover */}
+                <div className="absolute top-0 right-0 w-32 h-32 bg-red-600/[0.04] group-hover:bg-red-600/[0.12] blur-2xl rounded-full transition-all duration-500 pointer-events-none" />
+
                 <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="w-10 h-10 rounded-lg bg-neutral-900 border border-neutral-800 flex items-center justify-center text-red-500 group-hover:bg-[#C41E3A] group-hover:text-white transition-colors">
-                      <Icon className="w-5 h-5" />
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="w-12 h-12 rounded-2xl bg-white/[0.04] border border-white/10 flex items-center justify-center text-red-500 group-hover:bg-gradient-to-br group-hover:from-red-500 group-hover:to-[#C41E3A] group-hover:text-white transition-all duration-300 shadow-inner">
+                      <Icon className="w-5 h-5 transition-transform group-hover:scale-110" />
                     </div>
-                    <span className="text-xs font-mono text-neutral-500 font-mono-numbers">
+                    <span className="glass-pill px-2.5 py-1 rounded-full text-[11px] font-mono text-neutral-400 font-mono-numbers">
                       0{idx + 1}
                     </span>
                   </div>
 
-                  <h3 className="text-lg font-bold text-white group-hover:text-red-400 transition-colors">
+                  <h3 className="text-xl font-bold text-white tracking-tight group-hover:text-red-400 transition-colors">
                     {cat.title}
                   </h3>
-                  <div className="text-xs font-medium text-neutral-400 mb-3">
+                  <div className="text-xs font-semibold text-neutral-400 mt-1 mb-3">
                     {cat.subtitle}
                   </div>
 
-                  <p className="text-xs text-neutral-400 leading-relaxed line-clamp-3">
+                  <p className="text-xs text-neutral-400/90 leading-relaxed line-clamp-3">
                     {cat.description}
                   </p>
                 </div>
 
-                <div className="pt-6 mt-6 border-t border-neutral-900">
-                  <div className="text-[11px] text-neutral-400 space-y-1 mb-4">
-                    <div className="flex justify-between">
-                      <span className="text-neutral-400">Material:</span>
-                      <span className="text-neutral-300 truncate max-w-[130px]">{cat.materials}</span>
+                <div className="pt-6 mt-6 border-t border-white/[0.06]">
+                  <div className="text-[11px] text-neutral-400 space-y-1.5 mb-5">
+                    <div className="flex justify-between items-center">
+                      <span className="text-neutral-500">Material:</span>
+                      <span className="text-neutral-300 truncate max-w-[130px] font-medium">{cat.materials}</span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-neutral-400">Tiempo:</span>
-                      <span className="text-neutral-300">{cat.turnaround}</span>
+                    <div className="flex justify-between items-center">
+                      <span className="text-neutral-500">Tiempo:</span>
+                      <span className="text-neutral-300 font-medium">{cat.turnaround}</span>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-2 gap-2.5">
                     <button
                       onClick={() => onSelectCategory(cat.id)}
-                      className="px-3 py-2 text-xs font-medium text-neutral-300 bg-neutral-900 hover:bg-neutral-800 rounded-lg text-center transition-colors cursor-pointer"
+                      className="btn-secondary-glass py-2.5 px-3 text-xs font-semibold text-neutral-300 text-center cursor-pointer"
                     >
-                      Ver Opciones
+                      Ver Ficha
                     </button>
                     <button
                       onClick={() => onOpenQuoteWithCategory(cat.id)}
-                      className="px-3 py-2 text-xs font-bold text-white bg-[#C41E3A] hover:bg-[#a6172f] rounded-lg text-center flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                      className="btn-primary-material py-2.5 px-3 text-xs font-bold text-white text-center flex items-center justify-center gap-1.5 cursor-pointer"
                     >
                       <span>Cotizar</span>
-                      <ArrowRight className="w-3 h-3" />
+                      <ArrowRight className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 </div>
@@ -195,6 +199,8 @@ export const CategoryGrid: React.FC<CategoryGridProps> = ({
         </div>
 
       </div>
+
+      <div className="gradient-divider-subtle max-w-6xl mx-auto mt-24" />
     </section>
   );
 };
