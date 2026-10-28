@@ -1,0 +1,6 @@
+{
+  "name": "Arte Inédito | Publicidad y Textiles",
+  "description": "Sistema de catálogo y cotización para Arte Inédito en Lechería. Corpóreos, rotulación, sublimación, diseño POP, grabado láser y textiles.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
