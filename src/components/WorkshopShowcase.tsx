@@ -24,14 +24,11 @@ export const WorkshopShowcase: React.FC<WorkshopShowcaseProps> = ({
         
         {/* Encabezado Principal */}
         <div className="max-w-3xl space-y-3">
-          <div 
-            style={glassPillStyle}
-            className="glass-pill inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold text-[#5C5C5C]"
-          >
+          <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#C41E3A] font-mono">
             <span className="w-1.5 h-1.5 rounded-full bg-[#C41E3A]" />
             <span>Showroom Físico & Taller</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-black text-[#1A1A1A] tracking-[-0.03em] text-balance">
+          <h2 className="text-3xl sm:text-5xl font-black text-[#1A1A1A] tracking-[-0.035em] leading-[1.05] text-balance">
             La Esquina Inédita en Lechería
           </h2>
           <p className="text-[#5C5C5C] text-sm sm:text-base leading-relaxed">

@@ -11,7 +11,7 @@ import {
   Store,
   ArrowRight
 } from 'lucide-react';
-import { glassCardStyle, glassPillStyle } from '../styles/glass';
+import { glassCardStyle } from '../styles/glass';
 
 interface CategoryGridProps {
   onSelectCategory: (category: ProductCategory) => void;
@@ -108,34 +108,39 @@ export const CategoryGrid: React.FC<CategoryGridProps> = ({
   onOpenQuoteWithCategory
 }) => {
   return (
-    <section className="py-20 relative">
+    <section className="py-20 lg:py-28 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Encabezado Editorial */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-14 gap-6">
-          <div className="max-w-2xl space-y-3">
-            <div 
-              style={glassPillStyle}
-              className="glass-pill inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold text-[#5C5C5C]"
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-[#C41E3A]" />
-              <span>Capacidades de Taller</span>
+        {/* Encabezado Editorial con Fuerte Contraste Tipográfico */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+          <div className="max-w-2xl space-y-4">
+            <div className="flex items-center gap-2 text-xs">
+              <span className="font-bold text-[#C41E3A] uppercase tracking-wider font-mono">
+                Capacidades de Taller
+              </span>
+              <span className="text-[#9A9A9A]" aria-hidden="true">·</span>
+              <span className="text-[#5C5C5C] font-medium">8 Técnicas Industriales Integradas</span>
             </div>
-            <h2 className="text-3xl sm:text-5xl font-black text-[#1A1A1A] tracking-[-0.03em] text-balance">
+            
+            <h2 className="text-3xl sm:text-5xl font-black text-[#1A1A1A] tracking-[-0.038em] leading-[1.08] text-balance">
               Líneas de Producción
             </h2>
-            <p className="text-[#5C5C5C] text-sm sm:text-base leading-relaxed">
+            <p className="text-[#5C5C5C] text-sm sm:text-base leading-relaxed font-normal">
               No tercerizamos la calidad: cada corpóreo, rotulación o uniforme sale de nuestras manos en la Esquina Inédita. Selecciona una línea para ver opciones y cotizar.
             </p>
           </div>
 
-          <div className="flex items-center gap-2 text-xs text-[#5C5C5C] font-mono-numbers">
-            <span style={glassPillStyle} className="glass-pill px-3 py-1.5 rounded-full">08 Técnicas Integradas</span>
-            <span style={glassPillStyle} className="glass-pill px-3 py-1.5 rounded-full">Sede Lechería</span>
+          <div className="flex items-center gap-2 text-xs text-[#5C5C5C] font-mono">
+            <span className="px-3.5 py-1.5 rounded-full bg-white border border-[#E8E4DF] shadow-sm">
+              08 Especialidades
+            </span>
+            <span className="px-3.5 py-1.5 rounded-full bg-white border border-[#E8E4DF] shadow-sm">
+              Sede Lechería
+            </span>
           </div>
         </div>
 
-        {/* Grid de Cards Claras */}
+        {/* Grid de Cards Claras con Elevación Realista */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {CATEGORIES.map((cat, idx) => {
             const Icon = cat.icon;
@@ -143,17 +148,14 @@ export const CategoryGrid: React.FC<CategoryGridProps> = ({
               <div
                 key={cat.id}
                 style={glassCardStyle}
-                className="glass-card group flex flex-col justify-between p-6 sm:p-7 rounded-3xl relative overflow-hidden bg-white border border-[#E8E4DF]"
+                className="glass-card group flex flex-col justify-between p-6 sm:p-7 rounded-3xl relative overflow-hidden bg-white border border-[#E8E4DF] transition-all duration-300 hover:-translate-y-1 hover:border-[#D5D0C9]"
               >
                 <div>
                   <div className="flex items-center justify-between mb-5">
                     <div className="w-12 h-12 rounded-2xl bg-[#FAF8F5] border border-[#E8E4DF] flex items-center justify-center text-[#C41E3A] group-hover:bg-[#C41E3A] group-hover:text-white transition-all duration-300 shadow-sm">
                       <Icon className="w-5 h-5 transition-transform group-hover:scale-110" />
                     </div>
-                    <span 
-                      style={glassPillStyle}
-                      className="glass-pill px-2.5 py-1 rounded-full text-[11px] font-mono text-[#9A9A9A] font-mono-numbers"
-                    >
+                    <span className="px-2.5 py-1 rounded-full bg-[#FAF8F5] border border-[#E8E4DF] text-[11px] font-mono text-[#9A9A9A] font-mono-numbers">
                       0{idx + 1}
                     </span>
                   </div>
@@ -165,7 +167,7 @@ export const CategoryGrid: React.FC<CategoryGridProps> = ({
                     {cat.subtitle}
                   </div>
 
-                  <p className="text-xs text-[#5C5C5C] leading-relaxed line-clamp-3">
+                  <p className="text-xs text-[#5C5C5C] leading-relaxed line-clamp-3 font-normal">
                     {cat.description}
                   </p>
                 </div>
@@ -173,11 +175,11 @@ export const CategoryGrid: React.FC<CategoryGridProps> = ({
                 <div className="pt-5 mt-5 border-t border-[#E8E4DF]">
                   <div className="text-[11px] text-[#5C5C5C] space-y-1.5 mb-4">
                     <div className="flex justify-between items-center">
-                      <span className="text-[#9A9A9A]">Material:</span>
+                      <span className="text-[#9A9A9A] font-mono text-[10px] uppercase">Material:</span>
                       <span className="text-[#1A1A1A] truncate max-w-[130px] font-medium">{cat.materials}</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-[#9A9A9A]">Tiempo:</span>
+                      <span className="text-[#9A9A9A] font-mono text-[10px] uppercase">Tiempo:</span>
                       <span className="text-[#1A1A1A] font-medium">{cat.turnaround}</span>
                     </div>
                   </div>
@@ -191,10 +193,10 @@ export const CategoryGrid: React.FC<CategoryGridProps> = ({
                     </button>
                     <button
                       onClick={() => onOpenQuoteWithCategory(cat.id)}
-                      className="btn-primary-material py-2.5 px-3 text-xs font-bold text-white text-center flex items-center justify-center gap-1.5 cursor-pointer shadow-sm"
+                      className="btn-primary-material py-2.5 px-3 text-xs font-bold text-white text-center flex items-center justify-center gap-1.5 cursor-pointer shadow-sm group/btn"
                     >
                       <span>Cotizar</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
+                      <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover/btn:translate-x-0.5" />
                     </button>
                   </div>
                 </div>
@@ -205,7 +207,7 @@ export const CategoryGrid: React.FC<CategoryGridProps> = ({
 
       </div>
 
-      <div className="gradient-divider max-w-6xl mx-auto mt-20" />
+      <div className="gradient-divider max-w-6xl mx-auto mt-20 lg:mt-28" />
     </section>
   );
 };
