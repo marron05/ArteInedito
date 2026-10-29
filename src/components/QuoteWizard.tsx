@@ -152,10 +152,10 @@ export const QuoteWizard: React.FC<QuoteWizardProps> = ({
     setArtFilePreview('');
   };
 
-  // Validación por paso
+  // Validación por paso: El archivo es 100% opcional; nunca bloquea el avance a la Proforma
   const canProceedStep1 = Boolean(selectedCategory && selectedProductId);
   const canProceedStep2 = Boolean(selectedMaterial && selectedFinish && quantity > 0);
-  const canProceedStep3 = Boolean(artDescription.trim().length > 3 || artFileName);
+  const canProceedStep3 = true;
   const canProceedStep4 = Boolean(clientName.trim() && clientPhone.trim());
 
   // Mensaje estructurado institucional para WhatsApp oficial (wa.link/alpo7z)
@@ -221,6 +221,10 @@ ${clientEmail.trim() ? `📧 *Email:* ${clientEmail.trim()}\n` : ''}
   const handleSendWhatsApp = async () => {
     if (!canProceedStep4) {
       setErrorMsg('Por favor ingresa tu Nombre y Número de WhatsApp para emitir la proforma oficial.');
+      const clientSec = document.getElementById('client-data-section');
+      if (clientSec) {
+        clientSec.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
       return;
     }
     setErrorMsg(null);
@@ -242,7 +246,14 @@ ${clientEmail.trim() ? `📧 *Email:* ${clientEmail.trim()}\n` : ''}
 
     const cleanPhone = companySettings.whatsappPhone.replace(/[^0-9]/g, '');
     const waUrl = `https://wa.me/${cleanPhone}?text=${generateWhatsAppMessage(targetFolio)}`;
-    window.open(waUrl, '_blank', 'noopener,noreferrer');
+    try {
+      const opened = window.open(waUrl, '_blank', 'noopener,noreferrer');
+      if (!opened) {
+        window.location.href = waUrl;
+      }
+    } catch {
+      window.location.href = waUrl;
+    }
   };
 
   // Guardar exclusivamente en sistema (sin salir a WhatsApp)
@@ -309,9 +320,17 @@ ${clientEmail.trim() ? `📧 *Email:* ${clientEmail.trim()}\n` : ''}
               <button
                 key={s.stepNum}
                 onClick={() => {
-                  if (s.stepNum < step) setStep(s.stepNum as any);
+                  if (s.stepNum <= step) {
+                    setStep(s.stepNum as any);
+                  } else if (s.stepNum === 4 && canProceedStep1 && canProceedStep2) {
+                    setStep(4);
+                  } else if (s.stepNum === 3 && canProceedStep1 && canProceedStep2) {
+                    setStep(3);
+                  } else if (s.stepNum === 2 && canProceedStep1) {
+                    setStep(2);
+                  }
                 }}
-                disabled={s.stepNum > step}
+                disabled={s.stepNum > 2 && (!canProceedStep1 || !canProceedStep2)}
                 className={`py-2.5 px-2 rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer disabled:cursor-not-allowed ${
                   isCurrent 
                     ? 'btn-primary-material text-white font-bold shadow-md' 
@@ -685,6 +704,10 @@ ${clientEmail.trim() ? `📧 *Email:* ${clientEmail.trim()}\n` : ''}
                   <p className="text-xs text-neutral-400 mt-1.5 max-w-sm mx-auto">
                     Formatos recomendados: <strong className="text-neutral-200">.AI, .PDF, .SVG, .EPS</strong> (vectorial) o imágenes en alta resolución <strong className="text-neutral-200">.PNG / .JPG</strong>
                   </p>
+                  <div className="mt-3.5 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/10 text-[11px] text-neutral-300">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                    <span>Opcional: Si no tienes el arte listo, puedes avanzar a la proforma y coordinarlo por WhatsApp</span>
+                  </div>
                 </>
               ) : (
                 <div className="flex flex-col items-center justify-center gap-3">
@@ -774,9 +797,8 @@ ${clientEmail.trim() ? `📧 *Email:* ${clientEmail.trim()}\n` : ''}
               </button>
 
               <button
-                disabled={!canProceedStep3}
                 onClick={() => setStep(4)}
-                className="btn-primary-material inline-flex items-center justify-center gap-2 px-7 py-3.5 text-xs font-bold uppercase tracking-wider text-white disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                className="btn-primary-material inline-flex items-center justify-center gap-2 px-7 py-3.5 text-xs font-bold uppercase tracking-wider text-white cursor-pointer shadow-lg hover:shadow-red-900/40"
               >
                 <span>Ver Proforma Oficial</span>
                 <ArrowRight className="w-4 h-4" />
@@ -937,6 +959,7 @@ ${clientEmail.trim() ? `📧 *Email:* ${clientEmail.trim()}\n` : ''}
 
             {/* 4. Datos del Cliente para la Proforma */}
             <div 
+              id="client-data-section"
               style={glassPanelStyle}
               className="glass-panel p-6 sm:p-8 rounded-3xl space-y-5"
             >
