@@ -65,7 +65,7 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
             </p>
           </div>
 
-          {/* Buscador Outlined Elegante */}
+          {/* Buscador Outlined Elegante con Limpieza Instantánea */}
           <div className="w-full md:w-80 relative">
             <Search className="w-4 h-4 text-[#9A9A9A] absolute left-4 top-3.5" />
             <input
@@ -73,8 +73,18 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
               placeholder="Buscar corpóreo, vinil, textil, láser..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 rounded-xl bg-white border border-[#E8E4DF] text-[#1A1A1A] text-xs placeholder-[#9A9A9A] focus:outline-none focus:border-[#C41E3A] focus:ring-1 focus:ring-[#C41E3A] transition-all shadow-[0_1px_3px_rgba(28,25,23,0.03)]"
+              className="w-full pl-11 pr-10 py-3 rounded-xl bg-white border border-[#E8E4DF] text-[#1A1A1A] text-xs placeholder-[#9A9A9A] focus:outline-none focus:border-[#C41E3A] focus:ring-1 focus:ring-[#C41E3A] transition-all shadow-[0_1px_3px_rgba(28,25,23,0.03)]"
             />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="absolute right-3 top-3 text-[#9A9A9A] hover:text-[#1A1A1A] p-0.5 rounded-lg hover:bg-[#FAF8F5] transition-colors cursor-pointer"
+                title="Limpiar búsqueda"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
           </div>
         </div>
 
@@ -109,32 +119,51 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
           })}
         </div>
 
-        {/* Grid de Productos o Estado Vacío */}
+        {/* Grid de Productos o Estado Vacío Elegante */}
         {filteredProducts.length === 0 ? (
           <div 
             style={glassPanelStyle}
-            className="py-16 px-6 sm:px-12 text-center rounded-3xl max-w-2xl mx-auto space-y-5 bg-white border border-[#E8E4DF] shadow-sm"
+            className="py-16 px-6 sm:px-12 text-center rounded-3xl max-w-xl mx-auto space-y-6 bg-white border border-[#E8E4DF] shadow-[0_8px_24px_-4px_rgba(28,25,23,0.04)] my-6 animate-in fade-in duration-200"
           >
-            <div className="w-14 h-14 rounded-2xl bg-[#FAF8F5] border border-[#E8E4DF] text-[#C41E3A] flex items-center justify-center mx-auto shadow-sm">
-              <Search className="w-6 h-6" />
+            {/* Icono / Ilustración simple editorial */}
+            <div className="relative mx-auto w-16 h-16">
+              <div className="absolute inset-0 bg-red-600/10 rounded-2xl blur-sm" />
+              <div className="relative w-16 h-16 rounded-2xl bg-[#FAF8F5] border border-[#E8E4DF] text-[#C41E3A] flex items-center justify-center shadow-xs">
+                <Search className="w-7 h-7 stroke-[1.75]" />
+              </div>
             </div>
-            <div className="space-y-2">
-              <h3 className="text-xl font-bold text-[#1A1A1A]">No encontramos productos para tu búsqueda</h3>
-              <p className="text-xs sm:text-sm text-[#5C5C5C] leading-relaxed">
-                No hay coincidencias para &ldquo;{searchQuery}&rdquo;. En nuestro taller fabricamos piezas personalizadas sin importar tamaño ni material.
+
+            <div className="space-y-2 max-w-md mx-auto">
+              <h3 className="text-2xl font-black text-[#1A1A1A] tracking-[-0.03em]">
+                No encontramos resultados
+              </h3>
+              <p className="text-xs sm:text-sm text-[#5C5C5C] leading-relaxed font-normal">
+                Prueba con otro término o explora todas las categorías
               </p>
+              {searchQuery && (
+                <div className="pt-1">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono text-[#5C5C5C] bg-[#FAF8F5] border border-[#E8E4DF]">
+                    Término buscado: &ldquo;<strong className="text-[#1A1A1A]">{searchQuery}</strong>&rdquo;
+                  </span>
+                </div>
+              )}
             </div>
+
+            {/* Acciones claras: Botón secundario para limpiar y botón de proyecto a medida */}
             <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
               <button
+                type="button"
                 onClick={() => {
-                  setSelectedCategory('all');
                   setSearchQuery('');
+                  setSelectedCategory('all');
                 }}
-                className="btn-secondary-glass px-5 py-2.5 text-xs font-semibold text-[#1A1A1A] cursor-pointer w-full sm:w-auto"
+                className="btn-secondary-glass px-6 py-3 text-xs font-bold text-[#1A1A1A] cursor-pointer w-full sm:w-auto"
               >
-                Ver todas las categorías
+                Ver todos los productos
               </button>
+
               <button
+                type="button"
                 onClick={() => onSelectProductForQuote({
                   id: 'custom-prod',
                   category: 'corporeos',
@@ -148,7 +177,7 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
                   imageUrl: '/assets/images/hero_workshop_craft_1793205546075.jpg',
                   active: true
                 })}
-                className="btn-primary-material px-5 py-2.5 text-xs font-bold text-white uppercase tracking-wider cursor-pointer w-full sm:w-auto flex items-center justify-center gap-1.5 shadow-sm"
+                className="btn-primary-material px-6 py-3 text-xs font-bold text-white uppercase tracking-wider cursor-pointer w-full sm:w-auto flex items-center justify-center gap-1.5 shadow-sm"
               >
                 <span>Cotizar Proyecto Especial</span>
                 <ArrowRight className="w-3.5 h-3.5" />

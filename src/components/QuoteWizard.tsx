@@ -302,13 +302,13 @@ ${clientEmail.trim() ? `📧 *Email:* ${clientEmail.trim()}\n` : ''}
           />
         </div>
 
-        {/* Píldoras del Stepper */}
+        {/* Píldoras del Stepper con Estados Claros */}
         <div className="p-1.5 rounded-2xl bg-white border border-[#E8E4DF] shadow-[0_1px_3px_rgba(28,25,23,0.03)] grid grid-cols-4 gap-1.5 text-center text-xs font-bold">
           {[
-            { stepNum: 1, title: '1. Servicio', icon: Box },
-            { stepNum: 2, title: '2. Técnica', icon: Flame },
-            { stepNum: 3, title: '3. Diseño', icon: Palette },
-            { stepNum: 4, title: '4. Proforma', icon: FileText }
+            { stepNum: 1, title: '1. Servicio', short: 'Servicio', icon: Box },
+            { stepNum: 2, title: '2. Técnica', short: 'Técnica', icon: Flame },
+            { stepNum: 3, title: '3. Diseño', short: 'Diseño', icon: Palette },
+            { stepNum: 4, title: '4. Proforma', short: 'Proforma', icon: FileText }
           ].map((s) => {
             const Icon = s.icon;
             const isCurrent = step === s.stepNum;
@@ -328,17 +328,23 @@ ${clientEmail.trim() ? `📧 *Email:* ${clientEmail.trim()}\n` : ''}
                   }
                 }}
                 disabled={s.stepNum > 2 && (!canProceedStep1 || !canProceedStep2)}
-                className={`py-2.5 px-2 rounded-xl transition-all duration-200 flex items-center justify-center gap-1.5 cursor-pointer disabled:cursor-not-allowed ${
+                className={`py-2.5 px-2 rounded-xl transition-all duration-300 flex items-center justify-center gap-1.5 cursor-pointer disabled:cursor-not-allowed ${
                   isCurrent 
-                    ? 'bg-[#C41E3A] text-white font-bold shadow-[0_2px_8px_rgba(196,30,58,0.25)]' 
+                    ? 'bg-[#C41E3A] text-white font-bold shadow-[0_4px_14px_rgba(196,30,58,0.28)] ring-2 ring-red-100 scale-[1.01]' 
                     : isCompleted 
                       ? 'text-[#1A1A1A] bg-[#FAF8F5] border border-[#E8E4DF] hover:bg-[#F0EEEC]' 
                       : 'text-[#9A9A9A] opacity-70 hover:opacity-100'
                 }`}
               >
-                {isCompleted ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Icon className="w-3.5 h-3.5" />}
+                {isCompleted ? (
+                  <span className="w-4 h-4 rounded-full bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+                    <Check className="w-2.5 h-2.5 stroke-[3]" />
+                  </span>
+                ) : (
+                  <Icon className={`w-3.5 h-3.5 shrink-0 ${isCurrent ? 'text-white' : 'text-[#9A9A9A]'}`} />
+                )}
                 <span className="hidden sm:inline">{s.title}</span>
-                <span className="sm:hidden">{s.stepNum}</span>
+                <span className="sm:hidden text-[11px]">{s.short}</span>
               </button>
             );
           })}
@@ -348,12 +354,12 @@ ${clientEmail.trim() ? `📧 *Email:* ${clientEmail.trim()}\n` : ''}
       {/* Tarjeta contenedora de pasos con Sombra Táctil */}
       <div 
         style={glassPanelStyle}
-        className="glass-panel rounded-3xl p-6 sm:p-10 relative bg-white border border-[#E8E4DF] shadow-[0_12px_36px_-6px_rgba(28,25,23,0.06)]"
+        className="glass-panel rounded-3xl p-6 sm:p-10 relative bg-white border border-[#E8E4DF] shadow-[0_12px_36px_-6px_rgba(28,25,23,0.06)] overflow-hidden"
       >
         
         {/* ===================== PASO 1: SELECCIÓN DE PRODUCTO/SERVICIO ===================== */}
         {step === 1 && (
-          <div className="space-y-8 animate-in fade-in duration-200">
+          <div key="step-1" className="space-y-8 step-transition">
             <div>
               <h3 className="text-2xl font-black text-[#1A1A1A] tracking-[-0.03em]">¿Qué deseas materializar?</h3>
               <p className="text-xs sm:text-sm text-[#5C5C5C] mt-1 font-normal">
@@ -460,7 +466,7 @@ ${clientEmail.trim() ? `📧 *Email:* ${clientEmail.trim()}\n` : ''}
 
         {/* ===================== PASO 2: TÉCNICA Y ESPECIFICACIONES DINÁMICAS ===================== */}
         {step === 2 && currentProduct && (
-          <div className="space-y-8 animate-in fade-in duration-200">
+          <div key="step-2" className="space-y-8 step-transition">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#E8E4DF]">
               <div>
                 <div className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#C41E3A] mb-1">
@@ -665,15 +671,18 @@ ${clientEmail.trim() ? `📧 *Email:* ${clientEmail.trim()}\n` : ''}
 
         {/* ===================== PASO 3: DISEÑO Y ARCHIVOS ===================== */}
         {step === 3 && (
-          <div className="space-y-8 animate-in fade-in duration-200">
+          <div key="step-3" className="space-y-8 step-transition">
             <div>
+              <div className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#C41E3A] mb-1">
+                Paso 3 / Arte & Preparación
+              </div>
               <h3 className="text-2xl font-black text-[#1A1A1A] tracking-[-0.03em]">Diseño, Arte y Archivos</h3>
               <p className="text-xs sm:text-sm text-[#5C5C5C] mt-1 font-normal">
                 Sube tu logotipo o describe los requerimientos para que el taller prepare la muestra digital.
               </p>
             </div>
 
-            {/* Dropzone Claro con Micro-interacción de Arrastre */}
+            {/* Dropzone Claro con Micro-interacción de Arrastre Refinada */}
             <div
               onDragOver={(e) => {
                 e.preventDefault();
@@ -682,8 +691,10 @@ ${clientEmail.trim() ? `📧 *Email:* ${clientEmail.trim()}\n` : ''}
               onDragLeave={() => setIsDragging(false)}
               onDrop={handleDrop}
               style={glassCardStyle}
-              className={`border-2 border-dashed rounded-3xl p-7 sm:p-9 text-center transition-all duration-200 relative ${
-                isDragging ? 'border-[#C41E3A] bg-red-50/50 scale-[1.005]' : 'border-[#E8E4DF] bg-[#FAF8F5] hover:border-[#C41E3A]'
+              className={`border-2 border-dashed rounded-3xl p-7 sm:p-9 text-center transition-all duration-300 relative ${
+                isDragging 
+                  ? 'border-[#C41E3A] bg-red-50/80 scale-[1.01] ring-4 ring-red-200/80 shadow-lg' 
+                  : 'border-[#E8E4DF] bg-[#FAF8F5] hover:border-[#C41E3A] hover:bg-white shadow-[0_1px_3px_rgba(28,25,23,0.02)]'
               }`}
             >
               {!artFileName ? (
@@ -694,25 +705,30 @@ ${clientEmail.trim() ? `📧 *Email:* ${clientEmail.trim()}\n` : ''}
                     onChange={handleFileInputChange}
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                   />
-                  <div className="w-14 h-14 rounded-2xl bg-white border border-[#E8E4DF] flex items-center justify-center text-[#C41E3A] mx-auto mb-3 shadow-sm">
-                    <Upload className="w-6 h-6" />
+                  <div className="w-16 h-16 rounded-2xl bg-white border border-[#E8E4DF] flex items-center justify-center text-[#C41E3A] mx-auto mb-3.5 shadow-sm group-hover:scale-105 transition-transform duration-200">
+                    <Upload className="w-7 h-7 stroke-[1.75]" />
                   </div>
-                  <div className="text-sm font-semibold text-[#1A1A1A]">
+                  <div className="text-sm font-bold text-[#1A1A1A]">
                     Arrastra tu archivo aquí o haz clic para examinar
                   </div>
                   <p className="text-xs text-[#5C5C5C] mt-1.5 max-w-sm mx-auto font-normal">
                     Formatos recomendados: <strong className="text-[#1A1A1A]">.AI, .PDF, .SVG, .EPS</strong> (vectorial) o imágenes en alta resolución <strong className="text-[#1A1A1A]">.PNG / .JPG</strong>
                   </p>
-                  <div className="mt-3.5 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-[#E8E4DF] text-[11px] text-[#5C5C5C]">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                  <div className="mt-4 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#E8E4DF] text-[11px] text-[#5C5C5C] shadow-xs">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                     <span>Opcional: Si no tienes el arte listo, puedes avanzar a la proforma y coordinarlo por WhatsApp</span>
                   </div>
                 </>
               ) : (
-                <div className="flex flex-col items-center justify-center gap-3">
+                <div className="flex flex-col items-center justify-center gap-4 py-1">
                   {artFilePreview ? (
-                    <div className="w-28 h-28 rounded-2xl overflow-hidden border border-[#E8E4DF] shadow-md relative bg-white">
-                      <img src={artFilePreview} alt="Preview de archivo" className="w-full h-full object-contain p-1" />
+                    <div className="relative group">
+                      <div className="w-32 h-32 rounded-2xl overflow-hidden border border-[#E8E4DF] shadow-md relative bg-white flex items-center justify-center">
+                        <img src={artFilePreview} alt="Preview de archivo" className="w-full h-full object-contain p-2" />
+                      </div>
+                      <span className="absolute -bottom-2 -right-2 px-2 py-0.5 rounded-md bg-emerald-600 text-white text-[10px] font-mono font-bold shadow-xs">
+                        Vista Previa
+                      </span>
                     </div>
                   ) : (
                     <div className="w-16 h-16 rounded-2xl bg-red-50 border border-red-200 flex items-center justify-center text-[#C41E3A] shadow-sm">
@@ -720,21 +736,39 @@ ${clientEmail.trim() ? `📧 *Email:* ${clientEmail.trim()}\n` : ''}
                     </div>
                   )}
 
-                  <div>
-                    <div className="text-sm font-bold text-[#1A1A1A] flex items-center justify-center gap-2">
-                      <span>{artFileName}</span>
-                      <span className="text-[10px] font-mono text-[#5C5C5C]">({artFileSize})</span>
+                  <div className="space-y-1">
+                    <div className="text-sm font-bold text-[#1A1A1A] flex items-center justify-center gap-2 flex-wrap">
+                      <span className="max-w-[260px] sm:max-w-md truncate font-mono">{artFileName}</span>
+                      <span className="text-[11px] font-mono text-[#5C5C5C] px-2 py-0.5 rounded bg-white border border-[#E8E4DF]">
+                        {artFileSize}
+                      </span>
                     </div>
-                    <span className="text-xs text-emerald-600 font-medium">Archivo listo para adjuntar a la proforma</span>
+                    <div className="flex items-center justify-center gap-1.5 text-xs text-emerald-700 font-semibold">
+                      <Check className="w-3.5 h-3.5 stroke-[2.5]" />
+                      <span>Archivo cargado y listo para adjuntar a la proforma</span>
+                    </div>
                   </div>
 
-                  <button
-                    onClick={handleRemoveFile}
-                    className="mt-1 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-[#E8E4DF] text-xs text-[#C41E3A] hover:text-[#A81830] cursor-pointer shadow-sm transition-colors"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                    <span>Cambiar archivo</span>
-                  </button>
+                  <div className="flex items-center gap-2.5 pt-1">
+                    <label className="btn-secondary-glass inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-[#1A1A1A] cursor-pointer shadow-xs hover:border-[#C41E3A]">
+                      <Upload className="w-3.5 h-3.5 text-[#C41E3A]" />
+                      <span>Reemplazar archivo</span>
+                      <input
+                        type="file"
+                        accept=".png,.jpg,.jpeg,.ai,.pdf,.svg,.eps,.psd,.cdr"
+                        onChange={handleFileInputChange}
+                        className="hidden"
+                      />
+                    </label>
+                    <button
+                      type="button"
+                      onClick={handleRemoveFile}
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white border border-[#E8E4DF] text-xs text-[#C41E3A] hover:bg-red-50 hover:border-red-200 cursor-pointer shadow-xs transition-colors font-semibold"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span>Eliminar</span>
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
@@ -805,7 +839,7 @@ ${clientEmail.trim() ? `📧 *Email:* ${clientEmail.trim()}\n` : ''}
 
         {/* ===================== PASO 4: PROFORMA PROFESIONAL REAL Y WHATSAPP ===================== */}
         {step === 4 && (
-          <div className="space-y-8 animate-in fade-in duration-200">
+          <div key="step-4" className="space-y-8 step-transition">
             <div>
               <div className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#C41E3A] mb-1">
                 Paso 4 / Resumen de Taller
