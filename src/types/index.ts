@@ -22,6 +22,7 @@ export interface ProductItem {
   availableFinishes: string[];
   badge?: string;
   imageUrl: string;
+  images?: string[];
   active: boolean;
 }
 
@@ -42,6 +43,8 @@ export interface QuoteRecord {
   quantity: number;
   notes?: string;
   artFileName?: string;
+  artFilePreview?: string;
+  colors?: string;
   estimatedTotalUsd?: number;
   status: QuoteStatus;
   adminNotes?: string;

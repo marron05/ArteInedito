@@ -298,9 +298,71 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
               </div>
             </div>
 
-            {/* Tabla de Cotizaciones en Glass Panel */}
+            {/* Contenedor de Cotizaciones: Desktop Table + Mobile Cards */}
             <div className="glass-panel rounded-3xl overflow-hidden shadow-2xl">
-              <div className="overflow-x-auto">
+              
+              {/* Vista Móvil (Cards) */}
+              <div className="block md:hidden divide-y divide-white/[0.06] p-4 space-y-4">
+                {filteredQuotes.length === 0 ? (
+                  <div className="py-12 text-center text-neutral-500 text-xs">
+                    No se encontraron cotizaciones con los criterios seleccionados.
+                  </div>
+                ) : (
+                  filteredQuotes.map((q) => (
+                    <div 
+                      key={q.id} 
+                      style={glassCardStyle}
+                      className="p-5 rounded-2xl space-y-3.5 relative"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="font-mono font-bold text-sm text-white">{q.id}</span>
+                        <select
+                          value={q.status}
+                          onChange={(e) => handleStatusChange(q.id, e.target.value as QuoteStatus)}
+                          className="text-[10px] font-bold uppercase rounded-lg px-2.5 py-1 bg-black/60 border border-white/20 text-neutral-200 focus:outline-none"
+                        >
+                          <option value="Nueva">Nueva</option>
+                          <option value="En Revisión">En Revisión</option>
+                          <option value="En Producción">En Producción</option>
+                          <option value="Entregada">Entregada</option>
+                        </select>
+                      </div>
+
+                      <div className="space-y-1">
+                        <div className="text-sm font-semibold text-white">{q.clientName}</div>
+                        <div className="text-xs text-neutral-400">
+                          {q.clientCompany ? `${q.clientCompany} · ` : ''}{q.clientPhone}
+                        </div>
+                      </div>
+
+                      <div className="text-xs p-3 rounded-xl bg-white/[0.03] space-y-1">
+                        <div className="font-bold text-neutral-200">{q.productName}</div>
+                        <div className="text-neutral-400 text-[11px]">{q.material} · {q.finish}</div>
+                        {q.dimensions && <div className="text-neutral-500 text-[10px]">{q.dimensions}</div>}
+                      </div>
+
+                      <div className="flex items-center justify-between pt-1 text-xs">
+                        <div>
+                          <span className="text-neutral-500 text-[10px] block font-mono">Total Ref:</span>
+                          <span className="font-mono-numbers font-black text-sm text-white">${q.estimatedTotalUsd || 0} USD</span>
+                        </div>
+                        <button
+                          onClick={() => {
+                            setSelectedQuoteDetail(q);
+                            setEditNotesText(q.adminNotes || '');
+                          }}
+                          className="btn-secondary-glass px-4 py-2 text-xs font-semibold text-white cursor-pointer"
+                        >
+                          Ver Detalle
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+
+              {/* Vista Desktop (Tabla) */}
+              <div className="hidden md:block overflow-x-auto">
                 <table className="w-full text-left text-xs">
                   <thead className="bg-white/[0.03] border-b border-white/[0.08] text-neutral-400 uppercase font-mono tracking-wider text-[10px]">
                     <tr>
@@ -309,7 +371,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                       <th className="px-5 py-4">Servicio & Soporte</th>
                       <th className="px-5 py-4 text-center">Cant.</th>
                       <th className="px-5 py-4">Total Ref.</th>
-                      <th className="px-5 py-4">Estado</th>
+                      <th className="px-5 py-4">Estado (Cambiar directo)</th>
                       <th className="px-5 py-4 text-right">Acción</th>
                     </tr>
                   </thead>
@@ -341,23 +403,29 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                           <td className="px-5 py-4 text-center font-mono-numbers font-bold">
                             {q.quantity}
                           </td>
-                          <td className="px-5 py-4 font-mono-numbers font-bold text-white">
+                          <td className="px-5 py-4 font-mono-numbers font-bold text-white whitespace-nowrap">
                             ${q.estimatedTotalUsd || 0} USD
                           </td>
                           <td className="px-5 py-4">
-                            <span
-                              className={`glass-pill px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider font-mono ${
+                            {/* Selector directo de estado en la fila */}
+                            <select
+                              value={q.status}
+                              onChange={(e) => handleStatusChange(q.id, e.target.value as QuoteStatus)}
+                              className={`text-[11px] font-bold uppercase rounded-xl px-3 py-1.5 border transition-all cursor-pointer focus:outline-none ${
                                 q.status === 'Nueva'
-                                  ? 'text-blue-400 border-blue-500/30 bg-blue-950/40'
+                                  ? 'text-blue-400 border-blue-500/40 bg-blue-950/60'
                                   : q.status === 'En Revisión'
-                                  ? 'text-amber-400 border-amber-500/30 bg-amber-950/40'
+                                  ? 'text-amber-400 border-amber-500/40 bg-amber-950/60'
                                   : q.status === 'En Producción'
-                                  ? 'text-red-400 border-red-500/40 bg-red-950/40'
-                                  : 'text-emerald-400 border-emerald-500/30 bg-emerald-950/40'
+                                  ? 'text-red-400 border-red-500/40 bg-red-950/60'
+                                  : 'text-emerald-400 border-emerald-500/40 bg-emerald-950/60'
                               }`}
                             >
-                              {q.status}
-                            </span>
+                              <option value="Nueva">Nueva</option>
+                              <option value="En Revisión">En Revisión</option>
+                              <option value="En Producción">En Producción</option>
+                              <option value="Entregada">Entregada</option>
+                            </select>
                           </td>
                           <td className="px-5 py-4 text-right whitespace-nowrap">
                             <button

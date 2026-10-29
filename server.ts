@@ -38,6 +38,7 @@ app.get('/api/products', (req, res) => {
       availableFinishes: JSON.parse(r.available_finishes || '[]'),
       badge: r.badge,
       imageUrl: r.image_url,
+      images: JSON.parse(r.images || '[]'),
       active: Boolean(r.active)
     }));
     res.json(products);
@@ -55,8 +56,8 @@ app.post('/api/products', (req, res) => {
     const insert = db.prepare(`
       INSERT INTO products (
         id, category, name, tagline, description, base_price_usd, price_note,
-        unit, turnaround_days, available_materials, available_finishes, badge, image_url, active
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        unit, turnaround_days, available_materials, available_finishes, badge, image_url, images, active
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
     insert.run(
@@ -73,6 +74,7 @@ app.post('/api/products', (req, res) => {
       JSON.stringify(p.availableFinishes || []),
       p.badge ?? null,
       p.imageUrl || '/assets/images/hero_workshop_craft_1793205546075.jpg',
+      JSON.stringify(p.images || [p.imageUrl || '/assets/images/hero_workshop_craft_1793205546075.jpg']),
       p.active !== false ? 1 : 0
     );
 
@@ -92,7 +94,7 @@ app.put('/api/products/:id', (req, res) => {
       UPDATE products SET
         category = ?, name = ?, tagline = ?, description = ?, base_price_usd = ?, price_note = ?,
         unit = ?, turnaround_days = ?, available_materials = ?, available_finishes = ?,
-        badge = ?, image_url = ?, active = ?
+        badge = ?, image_url = ?, images = ?, active = ?
       WHERE id = ?
     `);
 
@@ -109,6 +111,7 @@ app.put('/api/products/:id', (req, res) => {
       JSON.stringify(p.availableFinishes || []),
       p.badge ?? null,
       p.imageUrl,
+      JSON.stringify(p.images || [p.imageUrl]),
       p.active ? 1 : 0,
       id
     );

@@ -44,6 +44,7 @@ export function initDatabase() {
       available_finishes TEXT NOT NULL,
       badge TEXT,
       image_url TEXT NOT NULL,
+      images TEXT,
       active INTEGER DEFAULT 1
     );
 
@@ -69,6 +70,11 @@ export function initDatabase() {
     );
   `);
 
+  // Asegurar columna images si ya existía la tabla
+  try {
+    db.exec('ALTER TABLE products ADD COLUMN images TEXT');
+  } catch {}
+
   // Semilla de configuración si no existe
   const settingsCount = (db.prepare('SELECT COUNT(*) as count FROM settings').get() as { count: number }).count;
   if (settingsCount === 0) {
@@ -77,41 +83,39 @@ export function initDatabase() {
     console.log('[SQLite] Configuración inicial de Arte Inédito insertada.');
   }
 
-  // Semilla de productos si está vacía
-  const productCount = (db.prepare('SELECT COUNT(*) as count FROM products').get() as { count: number }).count;
-  if (productCount === 0) {
-    const insertProduct = db.prepare(`
-      INSERT INTO products (
-        id, category, name, tagline, description, base_price_usd, price_note,
-        unit, turnaround_days, available_materials, available_finishes,
-        badge, image_url, active
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `);
+  // Poblar / actualizar catálogo completo en SQLite
+  const upsertProduct = db.prepare(`
+    INSERT OR REPLACE INTO products (
+      id, category, name, tagline, description, base_price_usd, price_note,
+      unit, turnaround_days, available_materials, available_finishes,
+      badge, image_url, images, active
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `);
 
-    const transaction = db.transaction((products) => {
-      for (const p of products) {
-        insertProduct.run(
-          p.id,
-          p.category,
-          p.name,
-          p.tagline,
-          p.description,
-          p.basePriceUsd ?? null,
-          p.priceNote ?? null,
-          p.unit,
-          p.turnaroundDays,
-          JSON.stringify(p.availableMaterials),
-          JSON.stringify(p.availableFinishes),
-          p.badge ?? null,
-          p.imageUrl,
-          p.active ? 1 : 0
-        );
-      }
-    });
+  const transaction = db.transaction((products) => {
+    for (const p of products) {
+      upsertProduct.run(
+        p.id,
+        p.category,
+        p.name,
+        p.tagline,
+        p.description,
+        p.basePriceUsd ?? null,
+        p.priceNote ?? null,
+        p.unit,
+        p.turnaroundDays,
+        JSON.stringify(p.availableMaterials),
+        JSON.stringify(p.availableFinishes),
+        p.badge ?? null,
+        p.imageUrl,
+        JSON.stringify(p.images || [p.imageUrl]),
+        p.active ? 1 : 0
+      );
+    }
+  });
 
-    transaction(INITIAL_PRODUCTS);
-    console.log(`[SQLite] ${INITIAL_PRODUCTS.length} productos del catálogo insertados.`);
-  }
+  transaction(INITIAL_PRODUCTS);
+  console.log(`[SQLite] ${INITIAL_PRODUCTS.length} productos del catálogo sincronizados.`);
 
   // Semilla de cotizaciones si está vacía
   const quoteCount = (db.prepare('SELECT COUNT(*) as count FROM quotes').get() as { count: number }).count;

@@ -70,6 +70,18 @@ export const WorkshopShowcase: React.FC<WorkshopShowcaseProps> = ({
                 <div>
                   <span className="font-bold text-white block">Dirección Showroom:</span>
                   <span className="text-neutral-300 leading-relaxed">{settings.address}</span>
+                  <div className="mt-2">
+                    <a
+                      href="https://www.google.com/maps/search/?api=1&query=Avenida+Principal+de+Lecheria+Anzoategui+Venezuela"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-xs text-red-400 hover:text-red-300 font-semibold"
+                    >
+                      <MapPin className="w-3.5 h-3.5" />
+                      <span>Cómo llegar en Google Maps</span>
+                      <ArrowRight className="w-3 h-3" />
+                    </a>
+                  </div>
                 </div>
               </div>
 
@@ -78,8 +90,9 @@ export const WorkshopShowcase: React.FC<WorkshopShowcaseProps> = ({
                   <Clock className="w-4 h-4" />
                 </div>
                 <div>
-                  <span className="font-bold text-white block">Horario de Taller:</span>
-                  <span className="text-neutral-300">{settings.openingHours}</span>
+                  <span className="font-bold text-white block">Horario de Taller & Showroom:</span>
+                  <span className="text-neutral-200 font-medium">{settings.openingHours}</span>
+                  <span className="block text-[11px] text-emerald-400 mt-0.5">● Muestrarios físicos disponibles al público</span>
                 </div>
               </div>
 
@@ -111,15 +124,25 @@ export const WorkshopShowcase: React.FC<WorkshopShowcaseProps> = ({
               </div>
             </div>
 
-            <div className="pt-4 border-t border-white/[0.08]">
+            <div className="pt-4 border-t border-white/[0.08] space-y-3">
               <a
                 href="https://wa.link/alpo7z"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-primary-material w-full py-3.5 px-6 text-xs font-bold uppercase tracking-wider text-white flex items-center justify-center gap-2 cursor-pointer"
+                className="btn-primary-material w-full py-3.5 px-6 text-xs font-bold uppercase tracking-wider text-white flex items-center justify-center gap-2 cursor-pointer shadow-lg"
               >
                 <span>Escribir por WhatsApp (wa.link/alpo7z)</span>
                 <ArrowRight className="w-4 h-4" />
+              </a>
+
+              <a
+                href="https://www.google.com/maps/search/?api=1&query=Avenida+Principal+de+Lecheria+Anzoategui+Venezuela"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-secondary-glass w-full py-3 px-6 text-xs font-semibold text-neutral-300 flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <MapPin className="w-4 h-4 text-red-400" />
+                <span>Abrir Ubicación en GPS / Maps</span>
               </a>
             </div>
           </div>
@@ -177,6 +200,48 @@ export const WorkshopShowcase: React.FC<WorkshopShowcaseProps> = ({
                 <p className="text-xs text-neutral-400 mt-2 leading-relaxed">
                   Equipo especializado para montaje en altura de corpóreos, rotulaciones y vallas en locales comerciales.
                 </p>
+              </div>
+            </div>
+
+            {/* Mini Galería de Taller & Showroom */}
+            <div 
+              style={glassCardStyle}
+              className="glass-card p-5 rounded-3xl space-y-3"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-white uppercase tracking-wider font-mono">
+                  Visuales del Showroom & Taller Físico
+                </span>
+                <span className="text-[10px] text-neutral-400">Esquina Inédita, Lechería</span>
+              </div>
+              <div className="grid grid-cols-3 gap-3">
+                <div className="h-28 rounded-2xl overflow-hidden border border-white/10 relative group">
+                  <img
+                    src="/assets/images/hero_workshop_craft_1793205546075.jpg"
+                    alt="Muestrario de acrílico y corte"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80" />
+                  <span className="absolute bottom-2 left-2 text-[10px] font-bold text-white font-mono">Muestrarios 3D</span>
+                </div>
+                <div className="h-28 rounded-2xl overflow-hidden border border-white/10 relative group">
+                  <img
+                    src="/assets/images/laser_wood_craft_1793214061392.jpg"
+                    alt="Área de grabado láser"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80" />
+                  <span className="absolute bottom-2 left-2 text-[10px] font-bold text-white font-mono">Láser de Fibra</span>
+                </div>
+                <div className="h-28 rounded-2xl overflow-hidden border border-white/10 relative group">
+                  <img
+                    src="/assets/images/sublimacion_full_apparel_1793214135069.jpg"
+                    alt="Showroom de textiles y sublimación"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80" />
+                  <span className="absolute bottom-2 left-2 text-[10px] font-bold text-white font-mono">Textiles & POP</span>
+                </div>
               </div>
             </div>
 
