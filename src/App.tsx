@@ -11,7 +11,7 @@ import { Footer } from './components/Footer';
 import { api } from './services/api';
 import { ProductItem, QuoteRecord, CompanySettings, ProductCategory, QuoteStatus } from './types';
 import { INITIAL_PRODUCTS, INITIAL_QUOTES, INITIAL_SETTINGS } from './data/initialCatalog';
-import { CheckCircle2, ArrowRight, MessageCircle, Sparkles } from 'lucide-react';
+import { CheckCircle2, ArrowRight } from 'lucide-react';
 
 // Import glass definitions
 import { glassCardStyle, glassPillStyle, glassHeaderStyle } from './styles/glass';
@@ -140,15 +140,15 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#08080A] text-neutral-100 flex flex-col font-sans selection:bg-[#C41E3A] selection:text-white relative overflow-x-hidden ambient-mesh-glow">
+    <div className="min-h-screen bg-[#F7F5F2] text-[#1A1A1A] flex flex-col font-sans selection:bg-[#C41E3A] selection:text-white relative overflow-x-hidden ambient-mesh-glow">
       
       {/* Luz ambiental sutil global */}
       <div 
-        className="pointer-events-none fixed top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-red-600/[0.04] blur-[160px] rounded-full -z-20"
+        className="pointer-events-none fixed top-0 left-1/2 -translate-x-1/2 w-[900px] h-[400px] bg-red-600/[0.02] blur-[140px] rounded-full -z-20"
         aria-hidden="true" 
       />
 
-      {/* Floating Island Navigation (Liquid Glass 2026) */}
+      {/* Floating Island Navigation */}
       <Navbar
         currentView={currentView}
         onNavigate={handleNavigate}
@@ -156,21 +156,21 @@ export default function App() {
         onToggleAdmin={handleToggleAdmin}
       />
 
-      {/* Notificación flotante de cotización en Liquid Glass */}
+      {/* Notificación flotante de cotización */}
       {lastSubmittedFolio && currentView !== 'quote' && (
         <div className="fixed bottom-6 right-6 z-50 max-w-md animate-in slide-in-from-bottom-5 duration-300">
           <div 
             style={glassHeaderStyle}
-            className="liquid-glass-nav p-4 rounded-2xl border border-red-500/40 shadow-2xl flex items-center justify-between gap-4"
+            className="liquid-glass-nav p-4 rounded-2xl border border-[#E8E4DF] shadow-xl flex items-center justify-between gap-4"
           >
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-xl bg-red-600 flex items-center justify-center text-white shrink-0 shadow-md">
+              <div className="w-8 h-8 rounded-xl bg-[#C41E3A] flex items-center justify-center text-white shrink-0 shadow-sm">
                 <CheckCircle2 className="w-5 h-5" />
               </div>
               <div>
-                <div className="text-xs font-bold text-white">Cotización registrada</div>
-                <div className="text-[11px] text-neutral-400">
-                  Folio <strong className="text-red-400 font-mono-numbers">{lastSubmittedFolio}</strong>
+                <div className="text-xs font-bold text-[#1A1A1A]">Cotización registrada</div>
+                <div className="text-[11px] text-[#5C5C5C]">
+                  Folio <strong className="text-[#C41E3A] font-mono-numbers">{lastSubmittedFolio}</strong>
                 </div>
               </div>
             </div>
@@ -181,13 +181,13 @@ export default function App() {
                   setIsAdmin(true);
                   setCurrentView('admin');
                 }}
-                className="btn-secondary-glass px-3 py-1.5 text-[11px] font-bold text-white cursor-pointer"
+                className="btn-secondary-glass px-3 py-1.5 text-[11px] font-bold text-[#1A1A1A] cursor-pointer"
               >
                 Ver en Taller
               </button>
               <button
                 onClick={() => setLastSubmittedFolio(null)}
-                className="p-1 text-neutral-400 hover:text-white cursor-pointer"
+                className="p-1 text-[#9A9A9A] hover:text-[#1A1A1A] cursor-pointer"
                 aria-label="Cerrar notificación"
               >
                 ✕
@@ -206,7 +206,7 @@ export default function App() {
               onExploreCatalog={() => handleNavigate('catalog')}
             />
 
-            <div className="gradient-divider max-w-6xl mx-auto my-8" />
+            <div className="gradient-divider max-w-6xl mx-auto my-6" />
             
             <CategoryGrid
               onSelectCategory={(cat) => {
@@ -216,34 +216,34 @@ export default function App() {
               onOpenQuoteWithCategory={handleOpenQuoteWithCategory}
             />
 
-            <div className="gradient-divider max-w-6xl mx-auto my-8" />
+            <div className="gradient-divider max-w-6xl mx-auto my-6" />
 
             {/* Sección de Casos / Trabajos Recientes con Identidad Inédita (Showroom Digital) */}
-            <section className="py-24 relative">
+            <section className="py-20 relative bg-[#FAF8F5]">
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-16 gap-6">
+                <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-14 gap-6">
                   <div className="space-y-3">
                     <div 
                       style={glassPillStyle}
-                      className="glass-pill inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold text-neutral-300"
+                      className="glass-pill inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold text-[#5C5C5C]"
                     >
-                      <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#C41E3A]" />
                       <span>Portfolio Seleccionado</span>
                     </div>
-                    <h2 className="text-3xl sm:text-5xl font-black text-white tracking-[-0.03em]">
+                    <h2 className="text-3xl sm:text-5xl font-black text-[#1A1A1A] tracking-[-0.03em]">
                       Proyectos en Oriente
                     </h2>
-                    <p className="text-neutral-400 text-sm max-w-lg">
+                    <p className="text-[#5C5C5C] text-sm max-w-lg">
                       Una muestra de ideas construidas y montadas para marcas y comercios en Anzoátegui.
                     </p>
                   </div>
 
                   <button
                     onClick={() => handleNavigate('catalog')}
-                    className="btn-secondary-glass inline-flex items-center gap-2 px-5 py-3 text-xs font-bold text-neutral-200 uppercase tracking-wider cursor-pointer"
+                    className="btn-secondary-glass inline-flex items-center gap-2 px-5 py-3 text-xs font-bold text-[#1A1A1A] uppercase tracking-wider cursor-pointer"
                   >
                     <span>Ver Catálogo Completo</span>
-                    <ArrowRight className="w-4 h-4" />
+                    <ArrowRight className="w-4 h-4 text-[#C41E3A]" />
                   </button>
                 </div>
 
@@ -251,28 +251,27 @@ export default function App() {
                   {/* Proyecto 1: Corpóreo */}
                   <div 
                     style={glassCardStyle}
-                    className="glass-card group rounded-3xl overflow-hidden p-2"
+                    className="glass-card group rounded-3xl overflow-hidden p-3.5"
                   >
-                    <div className="h-64 rounded-2xl overflow-hidden relative">
+                    <div className="h-64 rounded-2xl overflow-hidden relative bg-[#F0EEEC]">
                       <img
                         src="/assets/images/corporeo_3d_signage_1793205547566.jpg"
                         alt="Corpóreo 3D para ATECO Global"
                         referrerPolicy="no-referrer"
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#08080A] via-black/20 to-transparent opacity-85" />
                       <div 
                         style={glassPillStyle}
-                        className="absolute top-3 left-3 glass-pill px-3 py-1 rounded-full text-[10px] font-mono text-red-400 font-bold uppercase"
+                        className="absolute top-3 left-3 glass-pill px-3 py-1 rounded-full text-[10px] font-mono text-[#C41E3A] font-bold uppercase shadow-sm"
                       >
                         Corpóreos & Fachadas
                       </div>
                     </div>
-                    <div className="p-5">
-                      <h3 className="text-lg font-bold text-white group-hover:text-red-400 transition-colors">
+                    <div className="p-4">
+                      <h3 className="text-lg font-bold text-[#1A1A1A] group-hover:text-[#C41E3A] transition-colors">
                         Logo 3D Retroiluminado LED
                       </h3>
-                      <p className="text-xs text-neutral-400 mt-2 leading-relaxed">
+                      <p className="text-xs text-[#5C5C5C] mt-2 leading-relaxed">
                         Acrílico cristal con halo de luz LED cálida perimetral instalado en lobby corporativo en Lechería.
                       </p>
                     </div>
@@ -281,28 +280,27 @@ export default function App() {
                   {/* Proyecto 2: Rotulación Vehicular */}
                   <div 
                     style={glassCardStyle}
-                    className="glass-card group rounded-3xl overflow-hidden p-2"
+                    className="glass-card group rounded-3xl overflow-hidden p-3.5"
                   >
-                    <div className="h-64 rounded-2xl overflow-hidden relative">
+                    <div className="h-64 rounded-2xl overflow-hidden relative bg-[#F0EEEC]">
                       <img
                         src="/assets/images/rotulacion_vehicular_wrap_1793205547214.jpg"
                         alt="Rotulación vehicular comercial"
                         referrerPolicy="no-referrer"
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#08080A] via-black/20 to-transparent opacity-85" />
                       <div 
                         style={glassPillStyle}
-                        className="absolute top-3 left-3 glass-pill px-3 py-1 rounded-full text-[10px] font-mono text-red-400 font-bold uppercase"
+                        className="absolute top-3 left-3 glass-pill px-3 py-1 rounded-full text-[10px] font-mono text-[#C41E3A] font-bold uppercase shadow-sm"
                       >
                         Rotulación Móvil
                       </div>
                     </div>
-                    <div className="p-5">
-                      <h3 className="text-lg font-bold text-white group-hover:text-red-400 transition-colors">
+                    <div className="p-4">
+                      <h3 className="text-lg font-bold text-[#1A1A1A] group-hover:text-[#C41E3A] transition-colors">
                         Branding Flotas Comerciales
                       </h3>
-                      <p className="text-xs text-neutral-400 mt-2 leading-relaxed">
+                      <p className="text-xs text-[#5C5C5C] mt-2 leading-relaxed">
                         Vinil polimérico con laminación UV protectora contra el salitre costero y alta temperatura.
                       </p>
                     </div>
@@ -311,28 +309,27 @@ export default function App() {
                   {/* Proyecto 3: Merchandising */}
                   <div 
                     style={glassCardStyle}
-                    className="glass-card group rounded-3xl overflow-hidden p-2"
+                    className="glass-card group rounded-3xl overflow-hidden p-3.5"
                   >
-                    <div className="h-64 rounded-2xl overflow-hidden relative">
+                    <div className="h-64 rounded-2xl overflow-hidden relative bg-[#F0EEEC]">
                       <img
                         src="/assets/images/sublimacion_merch_showcase_1793205546710.jpg"
                         alt="Powerbanks y Termos con Grabado Láser"
                         referrerPolicy="no-referrer"
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#08080A] via-black/20 to-transparent opacity-85" />
                       <div 
                         style={glassPillStyle}
-                        className="absolute top-3 left-3 glass-pill px-3 py-1 rounded-full text-[10px] font-mono text-red-400 font-bold uppercase"
+                        className="absolute top-3 left-3 glass-pill px-3 py-1 rounded-full text-[10px] font-mono text-[#C41E3A] font-bold uppercase shadow-sm"
                       >
                         Láser & Merchandising
                       </div>
                     </div>
-                    <div className="p-5">
-                      <h3 className="text-lg font-bold text-white group-hover:text-red-400 transition-colors">
+                    <div className="p-4">
+                      <h3 className="text-lg font-bold text-[#1A1A1A] group-hover:text-[#C41E3A] transition-colors">
                         Powerbanks & Termos Grabados
                       </h3>
-                      <p className="text-xs text-neutral-400 mt-2 leading-relaxed">
+                      <p className="text-xs text-[#5C5C5C] mt-2 leading-relaxed">
                         Kits corporativos con grabado láser de fibra óptica de precisión milimétrica indeleble.
                       </p>
                     </div>
@@ -341,7 +338,7 @@ export default function App() {
               </div>
             </section>
 
-            <div className="gradient-divider max-w-6xl mx-auto my-8" />
+            <div className="gradient-divider max-w-6xl mx-auto my-6" />
 
             {/* Banner de Sede Física */}
             <WorkshopShowcase

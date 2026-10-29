@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, X, ArrowUpRight, ShieldCheck, Sparkles } from 'lucide-react';
+import { Menu, X, ArrowUpRight, ShieldCheck } from 'lucide-react';
 import { glassHeaderStyle, glassPillStyle, glassPillActiveStyle } from '../styles/glass';
 
 interface NavbarProps {
@@ -29,33 +29,33 @@ export const Navbar: React.FC<NavbarProps> = ({
         className="liquid-glass-nav rounded-2xl sm:rounded-3xl px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-6 transition-all"
       >
         
-        {/* Zone 1: Brand Wordmark with refined glow */}
+        {/* Zone 1: Brand Wordmark */}
         <button
           onClick={() => handleNavClick('home')}
           className="flex items-center gap-3.5 text-left focus:outline-none group whitespace-nowrap shrink-0 cursor-pointer"
         >
           <div className="relative">
-            <div className="absolute -inset-1 rounded-xl bg-red-600/30 blur-md opacity-70 group-hover:opacity-100 transition-opacity" />
+            <div className="absolute -inset-1 rounded-xl bg-red-600/10 blur-sm opacity-60 group-hover:opacity-100 transition-opacity" />
             <img
               src="/assets/aistudio/image_b216ff69.png"
               alt="Arte Inédito"
-              className="relative w-10 h-10 rounded-xl object-contain bg-[#C41E3A] p-0.5 border border-white/20 shadow-md"
+              className="relative w-10 h-10 rounded-xl object-contain bg-[#C41E3A] p-0.5 border border-[#E8E4DF] shadow-sm"
             />
           </div>
           <div className="flex flex-col">
-            <span className="text-base sm:text-lg font-black tracking-[-0.02em] text-white group-hover:text-red-400 transition-colors">
+            <span className="text-base sm:text-lg font-black tracking-[-0.02em] text-[#1A1A1A] group-hover:text-[#C41E3A] transition-colors">
               Arte Inédito
             </span>
-            <span className="text-[10px] font-semibold text-neutral-400 tracking-[0.16em] uppercase">
+            <span className="text-[10px] font-semibold text-[#5C5C5C] tracking-[0.16em] uppercase">
               Publicidad & Textiles
             </span>
           </div>
         </button>
 
-        {/* Zone 2: Navigation Links (Liquid Glass Segmented) */}
+        {/* Zone 2: Navigation Links (Liquid Glass Segmented Claro) */}
         <nav 
           style={glassPillStyle}
-          className="hidden md:flex items-center gap-1.5 p-1.5 rounded-full text-xs font-semibold text-neutral-300 shadow-inner"
+          className="hidden md:flex items-center gap-1.5 p-1.5 rounded-full text-xs font-semibold text-[#5C5C5C]"
         >
           <button
             onClick={() => handleNavClick('home')}
@@ -63,7 +63,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             className={`px-4 py-2 rounded-full transition-all duration-200 cursor-pointer whitespace-nowrap ${
               currentView === 'home'
                 ? 'glass-pill-active text-white font-bold'
-                : 'text-neutral-400 hover:text-white hover:bg-white/[0.06]'
+                : 'text-[#5C5C5C] hover:text-[#1A1A1A] hover:bg-[#F7F5F2]'
             }`}
           >
             Inicio
@@ -74,7 +74,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             className={`px-4 py-2 rounded-full transition-all duration-200 cursor-pointer whitespace-nowrap ${
               currentView === 'catalog'
                 ? 'glass-pill-active text-white font-bold'
-                : 'text-neutral-400 hover:text-white hover:bg-white/[0.06]'
+                : 'text-[#5C5C5C] hover:text-[#1A1A1A] hover:bg-[#F7F5F2]'
             }`}
           >
             Catálogo & Servicios
@@ -85,7 +85,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             className={`px-4 py-2 rounded-full transition-all duration-200 cursor-pointer whitespace-nowrap ${
               currentView === 'workshop'
                 ? 'glass-pill-active text-white font-bold'
-                : 'text-neutral-400 hover:text-white hover:bg-white/[0.06]'
+                : 'text-[#5C5C5C] hover:text-[#1A1A1A] hover:bg-[#F7F5F2]'
             }`}
           >
             Esquina Inédita
@@ -96,7 +96,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             className={`px-4 py-2 rounded-full transition-all duration-200 cursor-pointer whitespace-nowrap ${
               currentView === 'quote'
                 ? 'glass-pill-active text-white font-bold'
-                : 'text-neutral-400 hover:text-white hover:bg-white/[0.06]'
+                : 'text-[#5C5C5C] hover:text-[#1A1A1A] hover:bg-[#F7F5F2]'
             }`}
           >
             Cotizador Guiado
@@ -107,11 +107,11 @@ export const Navbar: React.FC<NavbarProps> = ({
             className={`px-3.5 py-2 rounded-full transition-all duration-200 cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
               isAdmin
                 ? 'glass-pill-active text-white font-bold'
-                : 'text-neutral-500 hover:text-neutral-300 hover:bg-white/[0.06]'
+                : 'text-[#5C5C5C] hover:text-[#1A1A1A] hover:bg-[#F7F5F2]'
             }`}
             title="Alternar panel de gestión y taller"
           >
-            <ShieldCheck className="w-3.5 h-3.5 text-red-400" />
+            <ShieldCheck className={`w-3.5 h-3.5 ${isAdmin ? 'text-white' : 'text-[#C41E3A]'}`} />
             <span>{isAdmin ? 'Taller' : 'Gestión'}</span>
           </button>
         </nav>
@@ -132,7 +132,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             style={glassPillStyle}
-            className="p-2 text-neutral-400 hover:text-white rounded-xl"
+            className="p-2 text-[#5C5C5C] hover:text-[#1A1A1A] rounded-xl cursor-pointer"
             aria-label="Abrir menú"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -145,29 +145,29 @@ export const Navbar: React.FC<NavbarProps> = ({
       {mobileMenuOpen && (
         <div 
           style={glassHeaderStyle}
-          className="md:hidden mt-2 p-5 rounded-2xl liquid-glass-nav space-y-3 animate-in fade-in slide-in-from-top-2 duration-200"
+          className="md:hidden mt-2 p-5 rounded-2xl liquid-glass-nav space-y-3 animate-in fade-in slide-in-from-top-2 duration-200 bg-white"
         >
           <button
             onClick={() => handleNavClick('home')}
-            className="block w-full text-left py-2.5 px-3 rounded-lg text-sm font-semibold text-neutral-200 hover:bg-white/[0.06]"
+            className="block w-full text-left py-2.5 px-3 rounded-lg text-sm font-semibold text-[#1A1A1A] hover:bg-[#F7F5F2]"
           >
             Inicio
           </button>
           <button
             onClick={() => handleNavClick('catalog')}
-            className="block w-full text-left py-2.5 px-3 rounded-lg text-sm font-semibold text-neutral-200 hover:bg-white/[0.06]"
+            className="block w-full text-left py-2.5 px-3 rounded-lg text-sm font-semibold text-[#1A1A1A] hover:bg-[#F7F5F2]"
           >
             Catálogo & Servicios
           </button>
           <button
             onClick={() => handleNavClick('workshop')}
-            className="block w-full text-left py-2.5 px-3 rounded-lg text-sm font-semibold text-neutral-200 hover:bg-white/[0.06]"
+            className="block w-full text-left py-2.5 px-3 rounded-lg text-sm font-semibold text-[#1A1A1A] hover:bg-[#F7F5F2]"
           >
             Esquina Inédita (Sede Lechería)
           </button>
           <button
             onClick={() => handleNavClick('quote')}
-            className="block w-full text-left py-2.5 px-3 rounded-lg text-sm font-semibold text-red-400 bg-red-950/30 border border-red-900/40"
+            className="block w-full text-left py-2.5 px-3 rounded-lg text-sm font-semibold text-[#C41E3A] bg-red-50 border border-red-200"
           >
             Cotizador Guiado (4 Pasos)
           </button>
@@ -176,9 +176,9 @@ export const Navbar: React.FC<NavbarProps> = ({
               onToggleAdmin();
               setMobileMenuOpen(false);
             }}
-            className="flex items-center gap-2 w-full text-left py-2.5 px-3 rounded-lg text-sm font-medium text-neutral-400 hover:bg-white/[0.06]"
+            className="flex items-center gap-2 w-full text-left py-2.5 px-3 rounded-lg text-sm font-medium text-[#5C5C5C] hover:bg-[#F7F5F2]"
           >
-            <ShieldCheck className="w-4 h-4 text-red-400" />
+            <ShieldCheck className="w-4 h-4 text-[#C41E3A]" />
             <span>{isAdmin ? 'Salir de Modo Taller' : 'Panel de Taller & Gestión'}</span>
           </button>
           <div className="pt-2">
