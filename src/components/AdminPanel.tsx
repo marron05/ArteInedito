@@ -26,7 +26,8 @@ import {
   Filter,
   Eye,
   ExternalLink,
-  X
+  X,
+  Flame
 } from 'lucide-react';
 
 interface AdminPanelProps {
@@ -57,6 +58,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   const [quoteSearch, setQuoteSearch] = useState<string>('');
   const [selectedQuoteDetail, setSelectedQuoteDetail] = useState<QuoteRecord | null>(null);
   const [editNotesText, setEditNotesText] = useState<string>('');
+  const [notesSavedMsg, setNotesSavedMsg] = useState<boolean>(false);
 
   // Estado para producto modal / edición
   const [editingProduct, setEditingProduct] = useState<Partial<ProductItem> | null>(null);
@@ -97,6 +99,8 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
     if (!selectedQuoteDetail) return;
     await onUpdateQuoteStatus(selectedQuoteDetail.id, selectedQuoteDetail.status, editNotesText);
     setSelectedQuoteDetail({ ...selectedQuoteDetail, adminNotes: editNotesText });
+    setNotesSavedMsg(true);
+    setTimeout(() => setNotesSavedMsg(false), 2500);
   };
 
   // Exportar a CSV
@@ -302,7 +306,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
             <div className="glass-panel rounded-3xl overflow-hidden shadow-2xl">
               
               {/* Vista Móvil (Cards) */}
-              <div className="block md:hidden divide-y divide-white/[0.06] p-4 space-y-4">
+              <div className="block md:hidden p-3.5 sm:p-4 space-y-4">
                 {filteredQuotes.length === 0 ? (
                   <div className="py-12 text-center text-neutral-500 text-xs">
                     No se encontraron cotizaciones con los criterios seleccionados.
@@ -312,14 +316,30 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                     <div 
                       key={q.id} 
                       style={glassCardStyle}
-                      className="p-5 rounded-2xl space-y-3.5 relative"
+                      className="p-5 rounded-2xl space-y-3.5 relative border border-white/10"
                     >
-                      <div className="flex items-center justify-between">
-                        <span className="font-mono font-bold text-sm text-white">{q.id}</span>
+                      {/* Top Bar: Folio & Status Selector */}
+                      <div className="flex items-center justify-between gap-2 pb-3 border-b border-white/[0.08]">
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono font-bold text-sm text-red-400 font-mono-numbers">{q.id}</span>
+                          <span className="text-[10px] text-neutral-500 font-mono">
+                            {new Date(q.createdAt).toLocaleDateString()}
+                          </span>
+                        </div>
+
+                        {/* Selector directo de estado con feedback de color */}
                         <select
                           value={q.status}
                           onChange={(e) => handleStatusChange(q.id, e.target.value as QuoteStatus)}
-                          className="text-[10px] font-bold uppercase rounded-lg px-2.5 py-1 bg-black/60 border border-white/20 text-neutral-200 focus:outline-none"
+                          className={`text-[10px] font-bold uppercase rounded-xl px-2.5 py-1.5 border transition-all cursor-pointer focus:outline-none ${
+                            q.status === 'Nueva'
+                              ? 'text-blue-400 border-blue-500/40 bg-blue-950/80'
+                              : q.status === 'En Revisión'
+                              ? 'text-amber-400 border-amber-500/40 bg-amber-950/80'
+                              : q.status === 'En Producción'
+                              ? 'text-red-400 border-red-500/40 bg-red-950/80'
+                              : 'text-emerald-400 border-emerald-500/40 bg-emerald-950/80'
+                          }`}
                         >
                           <option value="Nueva">Nueva</option>
                           <option value="En Revisión">En Revisión</option>
@@ -328,23 +348,62 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                         </select>
                       </div>
 
-                      <div className="space-y-1">
-                        <div className="text-sm font-semibold text-white">{q.clientName}</div>
-                        <div className="text-xs text-neutral-400">
-                          {q.clientCompany ? `${q.clientCompany} · ` : ''}{q.clientPhone}
+                      {/* Datos del Cliente */}
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <div className="text-sm font-bold text-white tracking-tight">{q.clientName}</div>
+                          <div className="text-xs text-neutral-400 mt-0.5">
+                            {q.clientCompany ? `${q.clientCompany} · ` : ''}{q.clientPhone}
+                          </div>
                         </div>
+                        <a
+                          href={`https://wa.me/${q.clientPhone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
+                            `Hola ${q.clientName}, te escribimos de Arte Inédito respecto a tu cotización ${q.id}.`
+                          )}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-2 rounded-xl bg-emerald-950/60 border border-emerald-500/40 text-emerald-400 hover:text-white shrink-0"
+                          title="Abrir WhatsApp"
+                        >
+                          <MessageSquare className="w-4 h-4" />
+                        </a>
                       </div>
 
-                      <div className="text-xs p-3 rounded-xl bg-white/[0.03] space-y-1">
-                        <div className="font-bold text-neutral-200">{q.productName}</div>
-                        <div className="text-neutral-400 text-[11px]">{q.material} · {q.finish}</div>
-                        {q.dimensions && <div className="text-neutral-500 text-[10px]">{q.dimensions}</div>}
+                      {/* Especificaciones Técnicas */}
+                      <div className="text-xs p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.05] space-y-1.5">
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-white text-xs">{q.productName}</span>
+                          <span 
+                            style={glassPillStyle}
+                            className="glass-pill px-2 py-0.5 rounded-md text-[9px] font-mono uppercase text-neutral-400"
+                          >
+                            {q.category}
+                          </span>
+                        </div>
+                        <div className="text-neutral-300 text-[11px] font-medium">
+                          {q.material} · {q.finish}
+                        </div>
+                        {q.dimensions && (
+                          <div className="text-neutral-400 text-[10px] font-mono">
+                            Medidas: {q.dimensions}
+                          </div>
+                        )}
+                        {q.artFileName && (
+                          <div className="text-red-400 text-[10px] font-mono truncate">
+                            Arte: {q.artFileName}
+                          </div>
+                        )}
                       </div>
 
+                      {/* Footer de Card: Precio, Cantidad y Botón Detalle */}
                       <div className="flex items-center justify-between pt-1 text-xs">
                         <div>
-                          <span className="text-neutral-500 text-[10px] block font-mono">Total Ref:</span>
-                          <span className="font-mono-numbers font-black text-sm text-white">${q.estimatedTotalUsd || 0} USD</span>
+                          <span className="text-neutral-500 text-[10px] uppercase font-mono block">
+                            {q.quantity} uds · Total Ref:
+                          </span>
+                          <span className="font-mono-numbers font-black text-sm text-white">
+                            ${q.estimatedTotalUsd || 0} USD
+                          </span>
                         </div>
                         <button
                           onClick={() => {
@@ -353,7 +412,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                           }}
                           className="btn-secondary-glass px-4 py-2 text-xs font-semibold text-white cursor-pointer"
                         >
-                          Ver Detalle
+                          Ver Ficha Completa
                         </button>
                       </div>
                     </div>
@@ -630,8 +689,8 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
       {/* Modal de Detalle de Cotización en Liquid Glass */}
       {selectedQuoteDetail && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in">
-          <div className="glass-panel rounded-3xl max-w-xl w-full p-6 sm:p-8 relative max-h-[90vh] overflow-y-auto space-y-6">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-3 sm:p-4 animate-in fade-in">
+          <div className="glass-panel rounded-3xl max-w-2xl w-full p-5 sm:p-8 relative max-h-[92vh] overflow-y-auto space-y-6 border border-white/10 shadow-2xl">
             <button
               onClick={() => setSelectedQuoteDetail(null)}
               className="absolute top-5 right-5 p-2 rounded-xl glass-pill text-neutral-400 hover:text-white cursor-pointer"
@@ -639,115 +698,191 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
               <X className="w-5 h-5" />
             </button>
 
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="glass-pill px-3 py-1 rounded-full text-xs font-mono font-bold text-red-400">
+            {/* Header de la Ficha */}
+            <div className="border-b border-white/[0.08] pb-5">
+              <div className="flex flex-wrap items-center gap-2 mb-2">
+                <span className="glass-pill px-3 py-1 rounded-full text-xs font-mono font-bold text-red-400 font-mono-numbers">
                   {selectedQuoteDetail.id}
                 </span>
-                <span className="text-xs text-neutral-400 font-mono-numbers">
-                  {new Date(selectedQuoteDetail.createdAt).toLocaleDateString()}
+                <span 
+                  className={`text-[10px] font-bold uppercase rounded-full px-2.5 py-0.5 border ${
+                    selectedQuoteDetail.status === 'Nueva'
+                      ? 'text-blue-400 border-blue-500/40 bg-blue-950/60'
+                      : selectedQuoteDetail.status === 'En Revisión'
+                      ? 'text-amber-400 border-amber-500/40 bg-amber-950/60'
+                      : selectedQuoteDetail.status === 'En Producción'
+                      ? 'text-red-400 border-red-500/40 bg-red-950/60'
+                      : 'text-emerald-400 border-emerald-500/40 bg-emerald-950/60'
+                  }`}
+                >
+                  {selectedQuoteDetail.status}
+                </span>
+                <span className="text-xs text-neutral-400 font-mono-numbers ml-auto pr-8 sm:pr-0">
+                  Ingreso: {new Date(selectedQuoteDetail.createdAt).toLocaleDateString('es-VE', { day: '2-digit', month: 'short', year: 'numeric' })}
                 </span>
               </div>
-              <h3 className="text-2xl font-black text-white mt-2">
+              <h3 className="text-2xl font-black text-white">
                 {selectedQuoteDetail.clientName}
               </h3>
-              <p className="text-xs text-neutral-400">
-                {selectedQuoteDetail.clientCompany || 'Particular'} · {selectedQuoteDetail.clientPhone}
+              <p className="text-xs text-neutral-400 mt-0.5">
+                {selectedQuoteDetail.clientCompany ? `${selectedQuoteDetail.clientCompany} · ` : 'Particular · '}
+                Tel: {selectedQuoteDetail.clientPhone}
+                {selectedQuoteDetail.clientEmail && ` · ${selectedQuoteDetail.clientEmail}`}
               </p>
             </div>
 
-            {/* Ficha técnica del pedido */}
-            <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/10 text-xs space-y-2.5">
-              <div className="flex justify-between">
-                <span className="text-neutral-400">Servicio:</span>
-                <span className="text-white font-bold">{selectedQuoteDetail.productName}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-neutral-400">Soporte:</span>
-                <span className="text-white font-medium">{selectedQuoteDetail.material}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-neutral-400">Acabado:</span>
-                <span className="text-white font-medium">{selectedQuoteDetail.finish}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-neutral-400">Medidas:</span>
-                <span className="text-white font-medium">{selectedQuoteDetail.dimensions || 'A definir'}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-neutral-400">Cantidad:</span>
-                <span className="text-white font-bold font-mono-numbers">{selectedQuoteDetail.quantity}</span>
-              </div>
-              <div className="flex justify-between border-t border-white/[0.08] pt-2.5">
-                <span className="text-neutral-400">Total Referencial:</span>
-                <span className="text-red-400 font-bold font-mono-numbers text-sm">
-                  ${selectedQuoteDetail.estimatedTotalUsd || 0} USD
-                </span>
+            {/* HISTORIAL / LÍNEA DE TIEMPO DEL ESTADO */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-white/[0.02] border border-white/[0.06] space-y-3">
+              <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-300 font-mono flex items-center justify-between">
+                <span>Historial de Estado & Flujo de Taller</span>
+                <span className="text-[10px] text-neutral-500 font-normal">Toca un estado para cambiar</span>
+              </label>
+
+              {/* Stepper visual interactivo de 4 etapas */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                {[
+                  { key: 'Nueva', desc: '1. Recibida', icon: Inbox },
+                  { key: 'En Revisión', desc: '2. Medidas/Arte', icon: Eye },
+                  { key: 'En Producción', desc: '3. En Taller', icon: Flame },
+                  { key: 'Entregada', desc: '4. Entregada', icon: CheckCircle }
+                ].map((stepItem, idx) => {
+                  const isCurrent = selectedQuoteDetail.status === stepItem.key;
+                  const statusOrder = ['Nueva', 'En Revisión', 'En Producción', 'Entregada'];
+                  const currentIndex = statusOrder.indexOf(selectedQuoteDetail.status);
+                  const isPassed = currentIndex >= idx;
+                  const Icon = stepItem.icon;
+
+                  return (
+                    <button
+                      key={stepItem.key}
+                      onClick={() => handleStatusChange(selectedQuoteDetail.id, stepItem.key as QuoteStatus)}
+                      className={`p-3 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
+                        isCurrent
+                          ? 'bg-red-600/20 border-red-500/60 text-white shadow-lg shadow-red-950/40 ring-1 ring-red-500/30'
+                          : isPassed
+                          ? 'bg-white/[0.04] border-white/10 text-neutral-200 hover:bg-white/[0.08]'
+                          : 'bg-black/40 border-white/[0.04] text-neutral-500 opacity-60 hover:opacity-100'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between mb-1">
+                        <Icon className={`w-3.5 h-3.5 ${isCurrent ? 'text-red-400' : isPassed ? 'text-emerald-400' : 'text-neutral-500'}`} />
+                        {isCurrent && (
+                          <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                        )}
+                      </div>
+                      <div className="font-bold text-xs">{stepItem.key}</div>
+                      <div className="text-[10px] text-neutral-400 font-mono mt-0.5">{stepItem.desc}</div>
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
+            {/* ESPECIFICACIONES TÉCNICAS COMPLETAS */}
+            <div className="space-y-3">
+              <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-300 font-mono">
+                Especificaciones de Fabricación
+              </label>
+
+              <div className="p-4 sm:p-5 rounded-2xl bg-white/[0.03] border border-white/10 text-xs space-y-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pb-3 border-b border-white/[0.06]">
+                  <div>
+                    <span className="text-neutral-500 block text-[10px] uppercase font-mono">Servicio / Producto:</span>
+                    <span className="text-white font-bold text-sm block mt-0.5">{selectedQuoteDetail.productName}</span>
+                    <span className="text-[10px] font-mono text-red-400 uppercase tracking-wider">{selectedQuoteDetail.category}</span>
+                  </div>
+
+                  <div>
+                    <span className="text-neutral-500 block text-[10px] uppercase font-mono">Cantidad Solicitada:</span>
+                    <span className="text-white font-black font-mono-numbers text-sm block mt-0.5">
+                      {selectedQuoteDetail.quantity} unidades
+                    </span>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div>
+                    <span className="text-neutral-500 block text-[10px] uppercase font-mono">Soporte / Material:</span>
+                    <span className="text-neutral-200 font-semibold">{selectedQuoteDetail.material}</span>
+                  </div>
+                  <div>
+                    <span className="text-neutral-500 block text-[10px] uppercase font-mono">Acabado / Técnica:</span>
+                    <span className="text-neutral-200 font-semibold">{selectedQuoteDetail.finish}</span>
+                  </div>
+                  <div>
+                    <span className="text-neutral-500 block text-[10px] uppercase font-mono">Medidas o Formato:</span>
+                    <span className="text-neutral-200 font-semibold">{selectedQuoteDetail.dimensions || 'A definir en taller'}</span>
+                  </div>
+                </div>
+
+                {selectedQuoteDetail.artFileName && (
+                  <div className="pt-2 border-t border-white/[0.06]">
+                    <span className="text-neutral-500 block text-[10px] uppercase font-mono">Archivo de Arte Adjunto:</span>
+                    <span className="text-red-400 font-mono text-xs font-semibold">{selectedQuoteDetail.artFileName}</span>
+                  </div>
+                )}
+
+                <div className="flex items-center justify-between border-t border-white/[0.08] pt-3">
+                  <span className="text-neutral-400 font-medium">Presupuesto Referencial Estimado:</span>
+                  <span className="text-xl font-black text-white font-mono-numbers">
+                    ${selectedQuoteDetail.estimatedTotalUsd || 0} <span className="text-xs text-neutral-400 font-normal">USD</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* OBSERVACIONES DEL CLIENTE */}
             {selectedQuoteDetail.notes && (
               <div>
-                <label className="block text-xs font-bold text-neutral-300 uppercase tracking-wider mb-1 font-mono">
+                <label className="block text-[11px] font-bold text-neutral-300 uppercase tracking-wider mb-1.5 font-mono">
                   Indicaciones del Cliente
                 </label>
-                <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] text-xs text-neutral-300">
-                  {selectedQuoteDetail.notes}
+                <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/[0.06] text-xs text-neutral-300 leading-relaxed italic">
+                  &ldquo;{selectedQuoteDetail.notes}&rdquo;
                 </div>
               </div>
             )}
 
-            {/* Selector de Estado */}
-            <div>
-              <label className="block text-xs font-bold text-neutral-300 uppercase tracking-wider mb-2 font-mono">
-                Actualizar Estado
-              </label>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                {(['Nueva', 'En Revisión', 'En Producción', 'Entregada'] as QuoteStatus[]).map((st) => (
-                  <button
-                    key={st}
-                    onClick={() => handleStatusChange(selectedQuoteDetail.id, st)}
-                    className={`py-2 px-2 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
-                      selectedQuoteDetail.status === st
-                        ? 'btn-primary-material text-white'
-                        : 'glass-pill text-neutral-400 hover:text-white'
-                    }`}
-                  >
-                    {st}
-                  </button>
-                ))}
+            {/* NOTAS INTERNAS DEL TALLER */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <label className="block text-[11px] font-bold text-neutral-300 uppercase tracking-wider font-mono">
+                  Notas Internas del Taller
+                </label>
+                {notesSavedMsg && (
+                  <span className="text-[11px] text-emerald-400 font-semibold flex items-center gap-1 animate-in fade-in">
+                    <CheckCircle className="w-3.5 h-3.5" />
+                    <span>Guardado en base de datos</span>
+                  </span>
+                )}
               </div>
-            </div>
-
-            {/* Notas Internas de Taller */}
-            <div>
-              <label className="block text-xs font-bold text-neutral-300 uppercase tracking-wider mb-1 font-mono">
-                Notas Internas de Taller
-              </label>
               <textarea
                 rows={2}
                 value={editNotesText}
                 onChange={(e) => setEditNotesText(e.target.value)}
-                placeholder="Ej: Prueba de corte lista, se envió muestra de acrílico..."
-                className="w-full px-4 py-2.5 text-xs rounded-2xl bg-white/[0.04] border border-white/10 text-white focus:outline-none focus:border-red-500/60"
+                placeholder="Ej: Muestra de acrílico aprobada por WhatsApp, corte CNC programado para el jueves..."
+                className="w-full px-4 py-2.5 text-xs rounded-2xl bg-white/[0.04] border border-white/10 text-white placeholder-neutral-500 focus:outline-none focus:border-red-500/60 leading-relaxed"
               />
-              <button
-                onClick={handleSaveAdminNotes}
-                className="mt-2 btn-secondary-glass px-4 py-2 text-xs font-semibold text-white cursor-pointer"
-              >
-                Guardar Notas Internas
-              </button>
+              <div className="flex justify-end">
+                <button
+                  onClick={handleSaveAdminNotes}
+                  className="btn-secondary-glass inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white cursor-pointer"
+                >
+                  <Save className="w-3.5 h-3.5 text-red-400" />
+                  <span>Guardar Notas Internas</span>
+                </button>
+              </div>
             </div>
 
-            {/* Botón WhatsApp directo */}
-            <div className="pt-2">
+            {/* BOTÓN WHATSAPP DIRECTO */}
+            <div className="pt-2 border-t border-white/[0.08]">
               <a
                 href={`https://wa.me/${selectedQuoteDetail.clientPhone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
-                  `Hola ${selectedQuoteDetail.clientName}, te escribimos desde Arte Inédito (Esquina Inédita, Lechería) con respecto a tu cotización ${selectedQuoteDetail.id} para ${selectedQuoteDetail.productName}.`
+                  `Hola ${selectedQuoteDetail.clientName}, te escribimos desde Arte Inédito (Esquina Inédita, Lechería) con respecto a tu cotización ${selectedQuoteDetail.id} para ${selectedQuoteDetail.productName} (Estado actual: ${selectedQuoteDetail.status}).`
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full inline-flex items-center justify-center gap-2 py-3.5 text-xs font-bold uppercase tracking-wider text-white bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 rounded-2xl transition-all cursor-pointer shadow-lg shadow-emerald-950/40"
+                className="w-full inline-flex items-center justify-center gap-2 py-4 text-xs font-bold uppercase tracking-wider text-white bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-600 hover:from-emerald-500 hover:to-teal-500 rounded-2xl transition-all cursor-pointer shadow-xl shadow-emerald-950/40"
               >
                 <MessageSquare className="w-4 h-4" />
                 <span>Contactar Cliente por WhatsApp</span>

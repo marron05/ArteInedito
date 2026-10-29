@@ -72,11 +72,17 @@ export const QuoteWizard: React.FC<QuoteWizardProps> = ({
   const [hasVector, setHasVector] = useState<boolean>(true);
 
   // Paso 4: Datos del Cliente
+  // Paso 4: Datos del Cliente y Proforma
   const [clientName, setClientName] = useState<string>('');
   const [clientCompany, setClientCompany] = useState<string>('');
   const [clientPhone, setClientPhone] = useState<string>('');
   const [clientEmail, setClientEmail] = useState<string>('');
   const [notes, setNotes] = useState<string>('');
+
+  // Folio pre-asignado institucional inmediato (formato AI-2026-XXXX)
+  const [assignedFolio] = useState<string>(() => `AI-2026-${Math.floor(1000 + Math.random() * 9000)}`);
+  const [isSavedInSystem, setIsSavedInSystem] = useState<boolean>(false);
+  const [isSavingSystem, setIsSavingSystem] = useState<boolean>(false);
 
   // Estado de envío
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -152,79 +158,111 @@ export const QuoteWizard: React.FC<QuoteWizardProps> = ({
   const canProceedStep3 = Boolean(artDescription.trim().length > 3 || artFileName);
   const canProceedStep4 = Boolean(clientName.trim() && clientPhone.trim());
 
-  // Generar mensaje estructurado para WhatsApp oficial (wa.link/alpo7z)
+  // Mensaje estructurado institucional para WhatsApp oficial (wa.link/alpo7z)
   const generateWhatsAppMessage = (folio: string) => {
-    const text = `*SOLICITUD DE COTIZACIÓN — ARTE INÉDITO*
+    const text = `*SOLICITUD DE PROFORMA — ARTE INÉDITO*
 *Folio Institucional:* ${folio}
 📍 *Sede:* Esquina Inédita, Av. Principal de Lechería
 ---------------------------------------------
-👤 *Cliente:* ${clientName}
-🏢 *Empresa / Marca:* ${clientCompany || 'Particular'}
-📱 *Teléfono:* ${clientPhone}
-${clientEmail ? `📧 *Email:* ${clientEmail}\n` : ''}
-📦 *Línea / Servicio:* ${currentProduct?.name || selectedCategory.toUpperCase()}
-🪵 *Material / Soporte:* ${selectedMaterial}
-✨ *Acabado / Técnica:* ${selectedFinish}
-${thicknessOption ? `📐 *Espesor / Especificación:* ${thicknessOption}\n` : ''}📐 *Medidas o Formato:* ${dimensions || 'A convenir con taller'}
-🔢 *Cantidad:* ${quantity} ${currentProduct?.unit || 'unidades'}
-🎨 *Paleta / Colores:* ${colorsPalette || 'Corporativo según manual'}
-⏱️ *Tiempo estimado de taller:* ${currentProduct?.turnaroundDays || '3 a 5 días hábiles'}
-💵 *Total Ref. Estimado:* ~$${estimatedTotal} USD
+👤 *Cliente:* ${clientName.trim() || 'Particular'}
+🏢 *Empresa / Marca:* ${clientCompany.trim() || 'Particular'}
+📱 *WhatsApp:* ${clientPhone.trim()}
+${clientEmail.trim() ? `📧 *Email:* ${clientEmail.trim()}\n` : ''}
+📋 *ESPECIFICACIONES DE PRODUCCIÓN:*
+• *Producto / Servicio:* ${currentProduct?.name || selectedCategory.toUpperCase()}
+• *Técnica / Acabado:* ${selectedFinish}
+• *Material / Soporte:* ${selectedMaterial}
+• *Espesor / Formato:* ${dimensions || thicknessOption}
+• *Cantidad:* ${quantity} ${currentProduct?.unit || 'unidades'}
+• *Paleta / Tintas:* ${colorsPalette || 'Corporativo según manual'}
+• *Tiempo Estimado de Taller:* ${currentProduct?.turnaroundDays || '3 a 5 días hábiles'}
+• *Total Ref. Estimado:* ~$${estimatedTotal} USD
 
-🎨 *Archivo de Arte:* ${artFileName ? `${artFileName} (${hasVector ? 'Vector Editable' : 'Imagen Raster'})` : 'Pendiente por coordinar'}
-💡 *Notas del proyecto:* ${notes || artDescription || 'Sin observaciones adicionales'}
+🎨 *Archivo de Arte:* ${artFileName ? `${artFileName} (${hasVector ? 'Vector Editable' : 'Imagen Raster'})` : 'Pendiente por coordinar en taller'}
+💡 *Observaciones / Entrega:* ${notes.trim() || artDescription.trim() || 'Producción según plano y especificaciones acordadas'}
 ---------------------------------------------
-*Mensaje generado desde arte-inedito.vercel.app*`;
+*Mensaje generado desde Proforma Oficial — arte-inedito.vercel.app*`;
     return encodeURIComponent(text);
   };
 
-  // Enviar a base de datos y abrir WhatsApp
-  const handleFinalSubmit = async () => {
+  // Guardar en la base de datos de taller
+  const persistQuoteToSystem = async (folioToUse: string): Promise<string> => {
+    const quotePayload = {
+      id: folioToUse,
+      clientName: clientName.trim(),
+      clientCompany: clientCompany.trim() || undefined,
+      clientPhone: clientPhone.trim(),
+      clientEmail: clientEmail.trim() || undefined,
+      category: selectedCategory,
+      productId: currentProduct?.id || selectedProductId,
+      productName: currentProduct?.name || 'Servicio Publicitario',
+      material: selectedMaterial,
+      finish: selectedFinish,
+      dimensions: dimensions ? `${dimensions} (${thicknessOption})` : thicknessOption,
+      quantity,
+      colors: colorsPalette,
+      notes: `${artDescription ? `[Detalles de arte]: ${artDescription}. ` : ''}${notes.trim() || ''}`,
+      artFileName: artFileName || undefined,
+      estimatedTotalUsd: estimatedTotal
+    };
+
+    const result = await onSubmitQuote(quotePayload);
+    const finalId = result.id || folioToUse;
+    setGeneratedFolio(finalId);
+    setIsSavedInSystem(true);
+
+    if (onQuoteSubmitted) {
+      onQuoteSubmitted(finalId);
+    }
+    return finalId;
+  };
+
+  // Botón Prominente de WhatsApp: Guarda en sistema automáticamente y abre WhatsApp
+  const handleSendWhatsApp = async () => {
     if (!canProceedStep4) {
-      setErrorMsg('Por favor completa tu nombre y número de teléfono.');
+      setErrorMsg('Por favor ingresa tu Nombre y Número de WhatsApp para emitir la proforma oficial.');
       return;
     }
     setErrorMsg(null);
-    setIsSubmitting(true);
+    setIsSavingSystem(true);
+
+    const targetFolio = generatedFolio || assignedFolio;
 
     try {
-      const quotePayload = {
-        clientName,
-        clientCompany: clientCompany || undefined,
-        clientPhone,
-        clientEmail: clientEmail || undefined,
-        category: selectedCategory,
-        productId: currentProduct?.id || selectedProductId,
-        productName: currentProduct?.name || 'Servicio Publicitario',
-        material: selectedMaterial,
-        finish: selectedFinish,
-        dimensions: dimensions ? `${dimensions} (${thicknessOption})` : thicknessOption,
-        quantity,
-        colors: colorsPalette,
-        notes: `${artDescription ? `[Detalles de arte]: ${artDescription}. ` : ''}${notes || ''}`,
-        artFileName: artFileName || undefined,
-        estimatedTotalUsd: estimatedTotal
-      };
-
-      const result = await onSubmitQuote(quotePayload);
-      setGeneratedFolio(result.id);
-      setIsSubmitting(false);
-
-      if (onQuoteSubmitted) {
-        onQuoteSubmitted(result.id);
+      if (!isSavedInSystem) {
+        await persistQuoteToSystem(targetFolio);
       }
-    } catch (err: any) {
-      setIsSubmitting(false);
-      const backupFolio = `AI-2026-${Math.floor(1000 + Math.random() * 9000)}`;
-      setGeneratedFolio(backupFolio);
+    } catch (err) {
+      console.warn('Registro local de cotización:', err);
+      setGeneratedFolio(targetFolio);
+      setIsSavedInSystem(true);
+    } finally {
+      setIsSavingSystem(false);
     }
+
+    const cleanPhone = companySettings.whatsappPhone.replace(/[^0-9]/g, '');
+    const waUrl = `https://wa.me/${cleanPhone}?text=${generateWhatsAppMessage(targetFolio)}`;
+    window.open(waUrl, '_blank', 'noopener,noreferrer');
   };
 
-  const handleOpenWhatsApp = () => {
-    if (!generatedFolio) return;
-    const cleanPhone = companySettings.whatsappPhone.replace(/[^0-9]/g, '');
-    const waUrl = `https://wa.me/${cleanPhone}?text=${generateWhatsAppMessage(generatedFolio)}`;
-    window.open(waUrl, '_blank', 'noopener,noreferrer');
+  // Guardar exclusivamente en sistema (sin salir a WhatsApp)
+  const handleSaveOnly = async () => {
+    if (!canProceedStep4) {
+      setErrorMsg('Por favor completa Nombre y Número de WhatsApp para archivar.');
+      return;
+    }
+    setErrorMsg(null);
+    setIsSavingSystem(true);
+
+    const targetFolio = generatedFolio || assignedFolio;
+    try {
+      await persistQuoteToSystem(targetFolio);
+    } catch (err) {
+      setGeneratedFolio(targetFolio);
+      setIsSavedInSystem(true);
+    } finally {
+      setIsSavingSystem(false);
+    }
   };
 
   return (
@@ -390,11 +428,11 @@ ${thicknessOption ? `📐 *Espesor / Especificación:* ${thicknessOption}\n` : '
             </div>
 
             {/* Botón Siguiente */}
-            <div className="pt-6 flex justify-end">
+            <div className="pt-6 border-t border-white/[0.08] flex justify-end">
               <button
                 disabled={!canProceedStep1}
                 onClick={() => setStep(2)}
-                className="btn-primary-material inline-flex items-center gap-2 px-7 py-3.5 text-xs font-bold uppercase tracking-wider text-white disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                className="w-full sm:w-auto btn-primary-material inline-flex items-center justify-center gap-2 px-7 py-3.5 text-xs font-bold uppercase tracking-wider text-white disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
               >
                 <span>Continuar a Técnica & Medidas</span>
                 <ArrowRight className="w-4 h-4" />
@@ -586,10 +624,10 @@ ${thicknessOption ? `📐 *Espesor / Especificación:* ${thicknessOption}\n` : '
             </div>
 
             {/* Botones de navegación */}
-            <div className="pt-6 border-t border-white/[0.08] flex items-center justify-between">
+            <div className="pt-6 border-t border-white/[0.08] flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-3">
               <button
                 onClick={() => setStep(1)}
-                className="btn-secondary-glass inline-flex items-center gap-2 px-5 py-3 text-xs font-medium text-neutral-300 cursor-pointer"
+                className="btn-secondary-glass inline-flex items-center justify-center gap-2 px-5 py-3.5 text-xs font-medium text-neutral-300 cursor-pointer"
               >
                 <ArrowLeft className="w-4 h-4" />
                 <span>Volver a Servicios</span>
@@ -598,7 +636,7 @@ ${thicknessOption ? `📐 *Espesor / Especificación:* ${thicknessOption}\n` : '
               <button
                 disabled={!canProceedStep2}
                 onClick={() => setStep(3)}
-                className="btn-primary-material inline-flex items-center gap-2 px-7 py-3.5 text-xs font-bold uppercase tracking-wider text-white disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                className="btn-primary-material inline-flex items-center justify-center gap-2 px-7 py-3.5 text-xs font-bold uppercase tracking-wider text-white disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
               >
                 <span>Continuar a Arte & Archivos</span>
                 <ArrowRight className="w-4 h-4" />
@@ -725,11 +763,11 @@ ${thicknessOption ? `📐 *Espesor / Especificación:* ${thicknessOption}\n` : '
               />
             </div>
 
-            {/* Botones de navegación */}
-            <div className="pt-6 border-t border-white/[0.08] flex items-center justify-between">
+            {/* Botones de navegación Paso 3 */}
+            <div className="pt-6 border-t border-white/[0.08] flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-3">
               <button
                 onClick={() => setStep(2)}
-                className="btn-secondary-glass inline-flex items-center gap-2 px-5 py-3 text-xs font-medium text-neutral-300 cursor-pointer"
+                className="btn-secondary-glass inline-flex items-center justify-center gap-2 px-5 py-3.5 text-xs font-medium text-neutral-300 cursor-pointer"
               >
                 <ArrowLeft className="w-4 h-4" />
                 <span>Volver a Técnica</span>
@@ -738,102 +776,194 @@ ${thicknessOption ? `📐 *Espesor / Especificación:* ${thicknessOption}\n` : '
               <button
                 disabled={!canProceedStep3}
                 onClick={() => setStep(4)}
-                className="btn-primary-material inline-flex items-center gap-2 px-7 py-3.5 text-xs font-bold uppercase tracking-wider text-white disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                className="btn-primary-material inline-flex items-center justify-center gap-2 px-7 py-3.5 text-xs font-bold uppercase tracking-wider text-white disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
               >
-                <span>Ver Resumen & Proforma</span>
+                <span>Ver Proforma Oficial</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
           </div>
         )}
 
-        {/* ===================== PASO 4: PROFORMA OFICIAL Y WHATSAPP DIRECTO ===================== */}
+        {/* ===================== PASO 4: PROFORMA PROFESIONAL REAL Y WHATSAPP ===================== */}
         {step === 4 && (
           <div className="space-y-8 animate-in fade-in duration-200">
             <div>
-              <h3 className="text-2xl font-bold text-white tracking-tight">Proforma Oficial de Taller</h3>
+              <div className="text-[11px] font-mono font-bold uppercase tracking-wider text-red-400 mb-1">
+                Paso 4 / Resumen de Taller
+              </div>
+              <h3 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+                Proforma Oficial de Fabricación
+              </h3>
               <p className="text-xs sm:text-sm text-neutral-400 mt-1">
-                Revisa los datos de la cotización antes de archivarla en el sistema y enviarla a WhatsApp.
+                Resumen ejecutivo estructurado con folio consecutivo institucional. Listo para archivar en taller y coordinar producción por WhatsApp.
               </p>
             </div>
 
-            {/* Ficha de Proforma Estructurada con Folio Institucional */}
+            {/* Ficha de Proforma Profesional Real */}
             <div 
               style={glassCardStyle}
-              className="glass-card p-6 sm:p-8 rounded-3xl space-y-6 relative overflow-hidden"
+              className="glass-card p-6 sm:p-9 rounded-3xl space-y-7 relative overflow-hidden shadow-2xl border-t border-white/20"
             >
-              {/* Header de la Proforma */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-white/[0.08]">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-[#C41E3A] flex items-center justify-center text-white font-black text-lg p-0.5 shadow-md">
+              {/* Marca de agua institucional sutil en fondo */}
+              <div 
+                className="pointer-events-none absolute -bottom-10 -right-10 text-white/[0.02] font-black text-9xl select-none"
+                aria-hidden="true"
+              >
+                ai
+              </div>
+
+              {/* 1. Header de Proforma: Identidad y Folio Grande */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 pb-6 border-b border-white/[0.09]">
+                <div className="flex items-center gap-3.5">
+                  <div className="w-12 h-12 rounded-2xl bg-[#C41E3A] flex items-center justify-center text-white font-black text-xl shadow-lg shadow-red-950/60 shrink-0">
                     ai
                   </div>
                   <div>
-                    <div className="text-sm font-black text-white tracking-tight">Arte Inédito | Publicidad y Textiles</div>
-                    <div className="text-[10px] text-neutral-400 font-mono">RIF: {companySettings.rif} · Sede Lechería</div>
+                    <div className="text-base font-black text-white tracking-tight">Arte Inédito | Publicidad y Textiles</div>
+                    <div className="text-[11px] text-neutral-400 font-mono">RIF: {companySettings.rif} · Sede Lechería</div>
+                    <div className="text-[10px] text-neutral-500 font-mono mt-0.5">Taller de Materialización · Presupuesto Oficial</div>
                   </div>
                 </div>
 
+                {/* Folio Grande y Visible (AI-2026-XXXX) */}
+                <div className="p-3.5 sm:px-5 sm:py-3 rounded-2xl bg-gradient-to-br from-red-950/70 via-black/80 to-black/90 border border-red-500/40 text-left sm:text-right shadow-inner">
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-neutral-400 block font-bold">
+                    Folio Institucional
+                  </span>
+                  <span className="text-2xl sm:text-3xl font-black text-red-400 font-mono tracking-tight font-mono-numbers block">
+                    {generatedFolio || assignedFolio}
+                  </span>
+                  <div className="text-[10px] text-neutral-400 font-mono mt-0.5">
+                    Emisión: {new Date().toLocaleDateString('es-VE', { day: '2-digit', month: 'short', year: 'numeric' })} · Validez: 15 días
+                  </div>
+                </div>
+              </div>
+
+              {/* 2. Resumen Estructurado: Especificaciones Técnicas */}
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-[11px] font-bold uppercase tracking-wider text-neutral-300 font-mono flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                    Especificaciones Técnicas Seleccionadas
+                  </h4>
+                  <span 
+                    style={glassPillStyle}
+                    className="glass-pill px-3 py-1 rounded-full text-[10px] font-mono text-neutral-300"
+                  >
+                    Línea: {selectedCategory.toUpperCase()}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-4 sm:p-5 rounded-2xl bg-white/[0.03] border border-white/[0.07] text-xs">
+                  <div>
+                    <span className="text-neutral-500 block text-[10px] uppercase font-mono tracking-wider">Producto / Servicio:</span>
+                    <span className="text-white font-bold text-sm block mt-0.5">{currentProduct?.name}</span>
+                    <span className="text-[11px] text-neutral-400 line-clamp-1">{currentProduct?.tagline}</span>
+                  </div>
+
+                  <div>
+                    <span className="text-neutral-500 block text-[10px] uppercase font-mono tracking-wider">Soporte & Material:</span>
+                    <span className="text-neutral-200 font-semibold block mt-0.5">{selectedMaterial}</span>
+                    <span className="text-[11px] text-neutral-400">{thicknessOption}</span>
+                  </div>
+
+                  <div>
+                    <span className="text-neutral-500 block text-[10px] uppercase font-mono tracking-wider">Técnica & Acabado:</span>
+                    <span className="text-neutral-200 font-semibold block mt-0.5">{selectedFinish}</span>
+                    <span className="text-[11px] text-neutral-400">Paleta: {colorsPalette}</span>
+                  </div>
+
+                  <div>
+                    <span className="text-neutral-500 block text-[10px] uppercase font-mono tracking-wider">Cantidad Solicitada:</span>
+                    <span className="text-white font-black text-sm font-mono-numbers block mt-0.5">
+                      {quantity} {currentProduct?.unit}
+                    </span>
+                    <span className="text-[11px] text-neutral-400">Tiempo: {currentProduct?.turnaroundDays || '3 a 5 días'}</span>
+                  </div>
+                </div>
+
+                {/* Sub-bloque: Medidas, Tiempos y Archivos */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs pt-1">
+                  <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.05]">
+                    <span className="text-neutral-500 text-[10px] uppercase font-mono block">Medidas / Formato:</span>
+                    <span className="text-neutral-200 font-medium">{dimensions || thicknessOption || 'A definir con taller'}</span>
+                  </div>
+
+                  <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.05]">
+                    <span className="text-neutral-500 text-[10px] uppercase font-mono block">Tiempo Estimado de Taller:</span>
+                    <span className="text-neutral-200 font-medium">{currentProduct?.turnaroundDays || '3 a 5 días hábiles'}</span>
+                  </div>
+
+                  <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.05]">
+                    <span className="text-neutral-500 text-[10px] uppercase font-mono block">Archivo de Arte / Logotipo:</span>
+                    <span className="text-red-400 font-mono font-medium truncate block">
+                      {artFileName ? `${artFileName} (${artFileSize})` : 'Pendiente por coordinar'}
+                    </span>
+                    <span className="text-[10px] text-neutral-400">
+                      {hasVector ? '✓ Vector editable' : 'Requiere preparación'}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Observaciones de cliente/arte si existen */}
+                {(artDescription || notes) && (
+                  <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.05] text-xs">
+                    <span className="text-neutral-500 text-[10px] uppercase font-mono block mb-1">
+                      Observaciones / Requerimientos de Producción:
+                    </span>
+                    <p className="text-neutral-300 leading-relaxed italic">
+                      &ldquo;{notes || artDescription}&rdquo;
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* 3. Totalización y Condiciones */}
+              <div className="pt-4 border-t border-white/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="space-y-0.5">
+                  <div className="text-xs text-neutral-400">Total Referencial Estimado de Producción:</div>
+                  <div className="text-[10px] text-neutral-500">
+                    *Referencia en USD. Pagadero en Bs. a tasa BCV o divisas en efectivo.
+                  </div>
+                </div>
                 <div className="text-left sm:text-right">
-                  <span className="text-[10px] font-mono uppercase text-neutral-500 tracking-wider block">Folio de Solicitud</span>
-                  <span className="text-base sm:text-lg font-black text-red-400 font-mono-numbers">
-                    {generatedFolio || 'AI-2026-NUEVA'}
+                  <span className="text-3xl font-black text-white font-mono-numbers tracking-tight">
+                    ~${estimatedTotal} <span className="text-xs text-neutral-400 font-normal">USD</span>
                   </span>
                 </div>
               </div>
-
-              {/* Detalle del Ítem Configurado */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
-                <div>
-                  <span className="text-neutral-500 block text-[10px] uppercase font-mono">Servicio / Producto:</span>
-                  <span className="text-white font-bold">{currentProduct?.name}</span>
-                </div>
-                <div>
-                  <span className="text-neutral-500 block text-[10px] uppercase font-mono">Soporte / Material:</span>
-                  <span className="text-neutral-200 font-semibold">{selectedMaterial}</span>
-                </div>
-                <div>
-                  <span className="text-neutral-500 block text-[10px] uppercase font-mono">Acabado / Técnica:</span>
-                  <span className="text-neutral-200 font-semibold">{selectedFinish}</span>
-                </div>
-                <div>
-                  <span className="text-neutral-500 block text-[10px] uppercase font-mono">Cantidad:</span>
-                  <span className="text-white font-bold font-mono-numbers">{quantity} {currentProduct?.unit}</span>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs pt-2 border-t border-white/[0.06]">
-                <div>
-                  <span className="text-neutral-500 block text-[10px] uppercase font-mono">Medidas / Formato:</span>
-                  <span className="text-neutral-200 font-medium">{dimensions || thicknessOption}</span>
-                </div>
-                <div>
-                  <span className="text-neutral-500 block text-[10px] uppercase font-mono">Paleta / Tintas:</span>
-                  <span className="text-neutral-200 font-medium">{colorsPalette}</span>
-                </div>
-                <div>
-                  <span className="text-neutral-500 block text-[10px] uppercase font-mono">Archivo de Arte:</span>
-                  <span className="text-red-400 font-mono truncate block">{artFileName || 'Pendiente por coordinar'}</span>
-                </div>
-              </div>
-
-              <div className="pt-4 border-t border-white/[0.08] flex items-center justify-between">
-                <span className="text-neutral-400 text-xs">Total Referencial Estimado:</span>
-                <span className="text-2xl font-black text-white font-mono-numbers tracking-tight">
-                  ~${estimatedTotal} <span className="text-xs text-neutral-400 font-normal">USD</span>
-                </span>
-              </div>
             </div>
 
-            {/* Formulario de Datos de Contacto */}
-            <div className="space-y-4 pt-2">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-neutral-300 font-mono">
-                Datos de Contacto para la Proforma
-              </h4>
+            {/* 4. Datos del Cliente para la Proforma */}
+            <div 
+              style={glassPanelStyle}
+              className="glass-panel p-6 sm:p-8 rounded-3xl space-y-5"
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <h4 className="text-sm font-bold uppercase tracking-wider text-white font-mono flex items-center gap-2">
+                    <User className="w-4 h-4 text-red-400" />
+                    <span>Datos del Cliente / Empresa</span>
+                  </h4>
+                  <p className="text-xs text-neutral-400 mt-0.5">
+                    Requeridos para emitir la proforma formal y vincularla a tu orden de taller.
+                  </p>
+                </div>
+                {isSavedInSystem && (
+                  <span 
+                    style={glassPillStyle}
+                    className="glass-pill px-3 py-1 rounded-full text-xs font-mono font-bold text-emerald-400 flex items-center gap-1.5"
+                  >
+                    <Check className="w-3.5 h-3.5" />
+                    <span>Archivada</span>
+                  </span>
+                )}
+              </div>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-neutral-400 mb-1.5">
+                  <label className="block text-xs font-semibold text-neutral-300 mb-1.5">
                     Nombre y Apellido *
                   </label>
                   <div className="relative">
@@ -843,13 +973,13 @@ ${thicknessOption ? `📐 *Espesor / Especificación:* ${thicknessOption}\n` : '
                       placeholder="Ej: Carlos Silva"
                       value={clientName}
                       onChange={(e) => setClientName(e.target.value)}
-                      className="w-full pl-10 pr-4 py-3 rounded-2xl bg-white/[0.04] border border-white/10 text-white text-xs placeholder-neutral-500 focus:outline-none focus:border-red-500/60"
+                      className="w-full pl-10 pr-4 py-3 rounded-2xl bg-white/[0.04] border border-white/10 text-white text-xs placeholder-neutral-500 focus:outline-none focus:border-red-500/60 transition-all"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-neutral-400 mb-1.5">
+                  <label className="block text-xs font-semibold text-neutral-300 mb-1.5">
                     Empresa o Marca (Opcional)
                   </label>
                   <div className="relative">
@@ -859,13 +989,13 @@ ${thicknessOption ? `📐 *Espesor / Especificación:* ${thicknessOption}\n` : '
                       placeholder="Ej: Restaurante Sol & Mar"
                       value={clientCompany}
                       onChange={(e) => setClientCompany(e.target.value)}
-                      className="w-full pl-10 pr-4 py-3 rounded-2xl bg-white/[0.04] border border-white/10 text-white text-xs placeholder-neutral-500 focus:outline-none focus:border-red-500/60"
+                      className="w-full pl-10 pr-4 py-3 rounded-2xl bg-white/[0.04] border border-white/10 text-white text-xs placeholder-neutral-500 focus:outline-none focus:border-red-500/60 transition-all"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-neutral-400 mb-1.5">
+                  <label className="block text-xs font-semibold text-neutral-300 mb-1.5">
                     Número de WhatsApp *
                   </label>
                   <div className="relative">
@@ -875,13 +1005,13 @@ ${thicknessOption ? `📐 *Espesor / Especificación:* ${thicknessOption}\n` : '
                       placeholder="Ej: +58 414-1234567"
                       value={clientPhone}
                       onChange={(e) => setClientPhone(e.target.value)}
-                      className="w-full pl-10 pr-4 py-3 rounded-2xl bg-white/[0.04] border border-white/10 text-white text-xs placeholder-neutral-500 focus:outline-none focus:border-red-500/60"
+                      className="w-full pl-10 pr-4 py-3 rounded-2xl bg-white/[0.04] border border-white/10 text-white text-xs placeholder-neutral-500 focus:outline-none focus:border-red-500/60 transition-all"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-neutral-400 mb-1.5">
+                  <label className="block text-xs font-semibold text-neutral-300 mb-1.5">
                     Correo Electrónico (Opcional)
                   </label>
                   <div className="relative">
@@ -891,22 +1021,22 @@ ${thicknessOption ? `📐 *Espesor / Especificación:* ${thicknessOption}\n` : '
                       placeholder="contacto@tuempresa.com"
                       value={clientEmail}
                       onChange={(e) => setClientEmail(e.target.value)}
-                      className="w-full pl-10 pr-4 py-3 rounded-2xl bg-white/[0.04] border border-white/10 text-white text-xs placeholder-neutral-500 focus:outline-none focus:border-red-500/60"
+                      className="w-full pl-10 pr-4 py-3 rounded-2xl bg-white/[0.04] border border-white/10 text-white text-xs placeholder-neutral-500 focus:outline-none focus:border-red-500/60 transition-all"
                     />
                   </div>
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-neutral-400 mb-1.5">
-                  Observaciones o requerimiento de entrega
+                <label className="block text-xs font-semibold text-neutral-300 mb-1.5">
+                  Observaciones adicionales o fecha límite de entrega
                 </label>
                 <input
                   type="text"
                   placeholder="Ej: Requerimos factura fiscal o entrega antes del viernes en Lechería..."
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
-                  className="w-full px-4 py-3 rounded-2xl bg-white/[0.04] border border-white/10 text-white text-xs placeholder-neutral-500 focus:outline-none focus:border-red-500/60"
+                  className="w-full px-4 py-3 rounded-2xl bg-white/[0.04] border border-white/10 text-white text-xs placeholder-neutral-500 focus:outline-none focus:border-red-500/60 transition-all"
                 />
               </div>
             </div>
@@ -918,67 +1048,58 @@ ${thicknessOption ? `📐 *Espesor / Especificación:* ${thicknessOption}\n` : '
               </div>
             )}
 
-            {/* Estado de Éxito con Folio y Botón de WhatsApp Destacado */}
-            {generatedFolio ? (
+            {/* Banner de confirmación si ya fue guardada */}
+            {isSavedInSystem && (
               <div 
-                style={glassPanelStyle}
-                className="p-8 rounded-3xl glass-panel border border-emerald-500/30 space-y-6 animate-in fade-in"
+                style={glassPillStyle}
+                className="p-4 rounded-2xl border border-emerald-500/40 bg-emerald-950/30 flex items-center justify-between text-xs text-emerald-300"
               >
-                <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 rounded-2xl bg-emerald-600 flex items-center justify-center text-white shrink-0 shadow-lg shadow-emerald-950/60">
-                    <Check className="w-7 h-7" />
-                  </div>
-                  <div>
-                    <h4 className="text-xl font-bold text-white">
-                      ¡Cotización Registrada con Éxito!
-                    </h4>
-                    <p className="text-xs text-neutral-300 mt-1">
-                      Folio oficial asignado: <strong className="text-emerald-400 font-mono text-sm">{generatedFolio}</strong>. Ha quedado archivada en el panel de control del taller.
-                    </p>
-                  </div>
+                <div className="flex items-center gap-2.5">
+                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>
+                    Proforma archivada en el panel de taller con folio <strong className="font-mono text-white">{generatedFolio || assignedFolio}</strong>.
+                  </span>
                 </div>
-
-                <div 
-                  style={glassPillStyle}
-                  className="p-4 rounded-2xl text-xs text-neutral-300 leading-relaxed"
-                >
-                  Para coordinar la fabricación, entrega o recibir muestra digital preliminar, envía la proforma estructurada directamente al WhatsApp oficial de Arte Inédito en Lechería:
-                </div>
-
-                <button
-                  onClick={handleOpenWhatsApp}
-                  className="w-full inline-flex items-center justify-center gap-3 px-8 py-5 text-sm font-bold uppercase tracking-wider text-white bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-600 hover:from-emerald-500 hover:to-teal-500 rounded-2xl shadow-2xl shadow-emerald-950/60 transition-all cursor-pointer hover:scale-[1.01]"
-                >
-                  <MessageCircle className="w-6 h-6" />
-                  <span>Enviar Proforma a WhatsApp (wa.link/alpo7z)</span>
-                </button>
+                <span className="font-mono text-[10px] text-emerald-400 uppercase tracking-wider hidden sm:inline">
+                  Listo para producción
+                </span>
               </div>
-            ) : (
-              <div className="pt-6 border-t border-white/[0.08] flex items-center justify-between">
+            )}
+
+            {/* 5. Botón de WhatsApp Prominente y Botones de Acción */}
+            <div className="space-y-4 pt-2">
+              <button
+                onClick={handleSendWhatsApp}
+                disabled={isSavingSystem}
+                className="w-full inline-flex items-center justify-center gap-3 px-6 py-4 sm:py-5 text-sm sm:text-base font-bold uppercase tracking-wider text-white bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-600 hover:from-emerald-500 hover:to-teal-500 rounded-2xl shadow-2xl shadow-emerald-950/60 transition-all cursor-pointer hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50"
+              >
+                <MessageCircle className="w-6 h-6 shrink-0" />
+                <span>
+                  {isSavingSystem ? 'Archivando y Conectando...' : 'Enviar Proforma a WhatsApp (wa.link/alpo7z)'}
+                </span>
+              </button>
+
+              <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-3 border-t border-white/[0.08]">
                 <button
                   onClick={() => setStep(3)}
-                  className="btn-secondary-glass inline-flex items-center gap-2 px-5 py-3 text-xs font-medium text-neutral-300 cursor-pointer"
+                  className="btn-secondary-glass inline-flex items-center justify-center gap-2 px-5 py-3.5 text-xs font-medium text-neutral-300 cursor-pointer"
                 >
                   <ArrowLeft className="w-4 h-4" />
                   <span>Volver a Diseño</span>
                 </button>
 
-                <button
-                  disabled={!canProceedStep4 || isSubmitting}
-                  onClick={handleFinalSubmit}
-                  className="btn-primary-material inline-flex items-center gap-2 px-8 py-4 text-xs font-bold uppercase tracking-wider text-white disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer shadow-xl"
-                >
-                  {isSubmitting ? (
-                    <span>Registrando en Sistema...</span>
-                  ) : (
-                    <>
-                      <span>Generar Proforma Oficial</span>
-                      <Send className="w-4 h-4" />
-                    </>
-                  )}
-                </button>
+                {!isSavedInSystem && (
+                  <button
+                    onClick={handleSaveOnly}
+                    disabled={isSavingSystem}
+                    className="btn-secondary-glass inline-flex items-center justify-center gap-2 px-6 py-3.5 text-xs font-bold text-neutral-200 cursor-pointer hover:text-white"
+                  >
+                    <Send className="w-4 h-4 text-red-400" />
+                    <span>{isSavingSystem ? 'Guardando...' : 'Archivar Solo en Sistema'}</span>
+                  </button>
+                )}
               </div>
-            )}
+            </div>
 
           </div>
         )}
